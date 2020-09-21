@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0056)http://www-personal.umich.edu/~wylguan/using-jemdoc.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/">
+
+<link rel="stylesheet" href="./Making your own Jemdoc website_files/jemdoc.css" type="text/css">
+<title>Making your own Jemdoc website</title>
+</head>
+<body>
+<table summary="Table for page layout." id="tlayout">
+<tbody><tr valign="top">
+<td id="layout-menu">
+<div class="menu-category">Menu</div>
+<div class="menu-item"><a href="http://www-personal.umich.edu/~wylguan/index.html">Home</a></div>
+<div class="menu-category">Useful Links</div>
+<div class="menu-item"><a href="http://www-personal.umich.edu/~wylguan/flux.html">Flux</a></div>
+<div class="menu-item"><a href="http://www-personal.umich.edu/~wylguan/using-jemdoc.html" class="current">Using&nbsp;Jemdoc</a></div>
+</td>
+<td id="layout-content">
+<div id="toptitle">
+<h1>Making your own Jemdoc website</h1>
+<div id="subtitle">for your personal website…at least based on my experiences</div>
+</div>
+<div class="infoblock">
+<div class="blockcontent">
+<h2>Main websites used</h2>
+<ul>
+<li><p><a href="http://jemdoc.jaboc.net/download.html">http://jemdoc.jaboc.net/download.html</a> - For download, example code, cheat sheet</p>
+</li>
+<li><p><a href="https://orfe.princeton.edu/help/article-1388">https://orfe.princeton.edu/help/article-1388</a> - Thanks Princeton ORFE!</p>
+</li>
+<li><p><a href="https://people.kth.se/~euhanna/description.html">https://people.kth.se/~euhanna/description.html</a> - For sweet example code</p>
+</li>
+<li><p><a href="http://www.umich.edu/~umweb/how-to/homepage.html">http://www.umich.edu/~umweb/how-to/homepage.html</a> - For directions on how to publish websites</p>
+</li>
+</ul>
+</div></div>
+<div class="codeblock">
+<div class="blockcontent"><pre>### 1. Download jemdoc.py to right place
+[http://jemdoc.jaboc.net/download.html] tells you to run:
+sudo cp jemdoc.py /usr/bin/jemdoc # so that you can just type jemdoc
+# but this can fail even if you are the superuser
+*** note the difference between /usr/bin/jemdoc and /usr/local/bin/jemdoc
+you can’t always makes changes to /usr/bin/jemdoc
+
+# instead, do:
+sudo curl -O -s /usr/local/bin/jemdoc http://jemdoc.jaboc.net/dist/jemdoc.py ; sudo chmod a+rx /usr/local/bin/jemdoc
+
+# if this breaks, just download jemdoc.py manually and move it to /usr/local/bin/ using the terminal
+mv ./jemdoc.py /usr/local/bin/jemdoc/jemdoc.py
+
+# then run:
+chmod +x jemdoc.py # to make it executable.
+
+## I put the css file, jemdoc files, etc. into my home directory (~/), at ~/site-folder,
+## but site-folder can be anywhere
+
+### 2. Add jemdoc.py code as jemdoc command in terminal
+vi ~/.bash_profile # or nano ~/.bash_profile
+## nano is easier, but vi worth learning [http://documentation.its.umich.edu/node/242/]
+# add this line to .bash_profile file
+alias jemdoc='/usr/local/bin/jemdoc/jemdoc.py'
+
+## if added to ~/.bashrc file instead,
+## you always have to run this command in the terminal
+source ~/.bashrc
+
+### 3. Run jemdoc
+## Essentially you want to run this command in the terminal
+jemdoc.py filename.jemdoc
+
+# But you, like me, have both Python 2 and 3 on your Mac, but it defaults to Python 3
+## YOU CANNOT convert jemdoc.py Python 2 code into Python 3… IT BREAKS
+
+# You still need to run python 2.7 to use jemdoc.py, run it virtually
+
+#####
+# Use this to create your temporary python "install"
+# (Assuming that is the correct path to the python interpreter you want to use.)
+virtualenv -p /usr/bin/python2.7 --distribute temp-python
+
+# Type this command when you want to use your temporary python.
+# While you are using your temporary python you will also have access to a temporary pip,
+# which will keep all packages installed with it separate from your main python install.
+# A shorter version of this command would be ". temp-python/bin/activate"
+source temp-python/bin/activate
+
+# When you no longer wish to use you temporary python type
+deactivate
+#####
+
+### 4. Write jemdoc file using GOOD EXAMPLE CODE
+# Download 2 example source files from here:
+[https://people.kth.se/~euhanna/description.html]
+
+# Execute .jemdoc file to make .html file
+jemdoc *.jemdoc
+
+# Use [http://jemdoc.jaboc.net/download.html] for its sample code, cheat sheet, and syntax tips to refine example code for your own website
+
+# Create MENU file (yes, “MENU” with no file extension)
+## Different options:
+### Option 1:
+menu
+    Home                [index.html]
+### Option 2:
+menu
+    Home                [index.html]
+    Research			[research.html]
+	Publications         [publications.html]
+	Teaching			[teaching.html]
+	Courses				[courses.html]
+    Activities			[activities.html]
+
+usefull links
+   Jemdoc   		[http://jemdoc.jaboc.net/]
+
+### REMEMBER: about jemdoc file:
+# jemdoc: menu{MENU}{index.html}
+# The first line of this file is a special command that tells jemdoc which menu
+# entry in the file named MENU to associate this page with.
+
+# “index.html” = name of html file created by executing your jemdoc file
+
+### 5. Preview the local HTML files generated by the jemdoc command (e.g. on Google Chrome). Return to any .jemdoc file to make changes, then repeat the compile process.
+
+### 6. Publish website
+!!!! Goal - RUN SIMILAR CODE:
+
+rsync -avze ssh --exclude '*.jemdoc' --exclude 'MENU' ~/site-folder/ [login_name]@sftp.itd.umich.edu:/afs/umich.edu/user/[login_name]/Public/html
+
+## BUT YOU NEED TO MODIFY THE HYPERLINK FOR YOUR USE
+# Use these two links together:
+# MFile is easy GUI for transferring files
+[http://mfile.umich.edu/]
+[http://www.umich.edu/~umweb/how-to/homepage.html]
+# Follow directions in link above.  NO NEED TO CREATE PRIVATE WORKSPACE.  Public is fine.  Assume you have what you need and go ahead and find your CORRESPONDING
+
+/afs/umich.edu/user/[login name]/Public/html
+
+
+**** COPY AND PASTE link info from upper left corner of webpage seen after logging into [http://mfile.umich.edu/]
+
+### 7. Repeat steps 4–6 as you continually make updates to your site.
+</pre></div></div>
+<div id="footer">
+<div id="footer-text">
+Page generated 2020-09-18 11:24:22 EDT, by <a href="http://jemdoc.jaboc.net/">jemdoc</a>.
+</div>
+</div>
+</td>
+</tr>
+</tbody></table>
+
+
+</body></html>

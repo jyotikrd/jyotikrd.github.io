@@ -1,0 +1,70 @@
+# jemdoc: menu{MENU}{publications.html}
+# jemdoc: addcss{./jemdoc.css}
+# jemdoc: title{Publications}
+# jemdoc: analytics{|}
+# jemdoc: nofooter
+= Publications
+
+# === Books / Book Chapters
+
+== Journal
+
+~~~
+Distributed Training of Support Vector Machine on a Multiple-FPGA system \n
+*J. Dass*, Y. Narawane, R. N. Mahapatra and V. Sarin \n 
+IEEE Transactions on Computers (+TC+), 2020 \n 
+*Impact factor: 3.131* with *Acceptance rate: 21%* in /Special Issue on Machine-Learning Architectures and Accelerators/ \n \[[https://ieeexplore.ieee.org/abstract/document/9091048 Paper]\]
+~~~
+
+~~~
+Fast and Communication-Efficient Algorithm for Distributed Support Vector Machine Training \n 
+*J. Dass*, V. Sarin and R. N. Mahapatra, \n
+IEEE Transactions on Parallel and Distributed Systems (+TPDS+), 2018 \n
+*Impact factor: 3.402* \n
+\[[https://ieeexplore.ieee.org/abstract/document/8526323 Paper]\]
+~~~
+
+== Conference
+
+~~~
+FPGA-based Distributed Edge Training of SVM \n 
+*J. Dass*, Y. Narawane, R. N. Mahapatra and V. Sarin \n 
+ACM/SIGDA International Symposium on Field Programmable Gate Arrays (+FPGA+), 2019 \n
+\[[https://dl.acm.org/doi/10.1145/3289602.3293954 Abstract] | [documents/FPGA2019_Slide.pdf Slide] | [documents/FPGA2019_Poster.pdf Poster]\]
+~~~
+
+~~~
+ConvLight: A Convolutional Accelerator with Memristor Integrated Photonic Computing \n
+D. Dang, *J. Dass* and R. Mahapatra \n
+IEEE International Conference on High Performance Computing (+HiPC+), 2017 \n
+*Acceptance rate: 23%* \n
+\[[https://ieeexplore.ieee.org/document/8287741 Paper] | [https://drive.google.com/file/d/1OU77VXCgVKQD9LWLUXgBNAugJjKLFVh_/view Slide]\]
+~~~
+
+~~~
+Distributed QR Decomposition Framework for Training Support Vector Machines \n
+*J. Dass*, V. N. S. P. Sakuru, V. Sarin and R. N. Mahapatra \n
+IEEE International Conference on Distributed Computing Systems (+ICDCS+), 2017 \n
+*Acceptance rate: 16.9%* \n
+\[[http://ieeexplore.ieee.org/document/7980018/ Paper] | [documents/ICDCS2017_Slide.pdf Slide]\]
+~~~
+
+~~~
+A Relaxed Synchronization Approach for Solving Parallel Quadratic Programming Problems with Guaranteed Convergence \n
+K. Lee, R. Bhattacharya, *J. Dass*, V. N. S. P. Sakuru and R. N. Mahapatra \n 
+IEEE International Parallel and Distributed Processing Symposium (+IPDPS+), 2016 \n
+*Acceptance rate: 23%* \n
+\[[http://ieeexplore.ieee.org/document/7516014/ Paper] | [documents/IPDPS2016_Slide.pdf Slide] | [documents/IPDPS2016_Poster.pdf Poster]\]
+~~~
+
+~~~
+A density based method for automatic hairstyle discovery and recognition \n
+*J. Dass*, M. Sharma, E. Hassan and H. Ghosh \n
+National Conference on Computer Vision, Pattern Recognition, Image Processing and Graphics (+NCVPRIPG+), 2013 \n
+\[[https://ieeexplore.ieee.org/document/6776234 Paper]\]
+
+~~~
+
+# === Dissertation
+
+# === Seminars / Talks

@@ -53,6 +53,7 @@ tt {
 pre, tt {
 	font-size: 90%;
 	font-family: monaco, monospace;
+
 }
 
 a, a > tt {
@@ -82,6 +83,7 @@ div.menu-category {
 	padding-top: 0.2em;
 	padding-bottom: 0.1em;
 	font-weight: bold;
+
 }
 
 div.menu-item {

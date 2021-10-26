@@ -5,7 +5,14 @@
 # jemdoc: nofooter
 = Publications
 
-# === Books / Book Chapters
+== PhD Dissertation
+
+~~~
+Efficient and Scalable Machine Learning for Distributed Edge Intelligence \n
+*J. Dass* \n
+PhD Committee: Prof. Rabi Mahapatra (Chair), Dr. Xia Hu, Dr. Eun Jung Kim, Dr. Raktim Bhattacharya \n
+\[[documents/DefenseSlidesFinalCopy.pdf Slide] | [https://youtu.be/JwUSCyhsnKA Video]\]
+~~~
 
 == Journal
 
@@ -25,6 +32,15 @@ IEEE Transactions on Parallel and Distributed Systems (+TPDS+), 2018 \n
 ~~~
 
 == Conference
+
+~~~
+Householder Sketch for Accurate and Accelerated Least-Mean-Squares Solvers \n 
+*J. Dass* and R. N. Mahapatra \n 
+International Conference on Machine Learning (+ICML+), 2021 \n
+*Acceptance rate: 21.47%* \n
+\[[http://proceedings.mlr.press/v139/dass21a.html Paper+Supplementary] | [https://github.com/jyotikrd/Householder-Sketch-for-Accurate-and-Accelerated-Least-Mean-Squares-Solvers Code] [https://icml.cc/media/icml-2021/Slides/9399.pdf Slide] | [documents/ICML2021_poster.pdf Poster] | [https://slideslive.com/38959125/householder-sketch-for-accurate-and-accelerated-leastmeansquares-solvers?ref=speaker-78845-latest Video] \]
+~~~
+
 
 ~~~
 FPGA-based Distributed Edge Training of SVM \n 

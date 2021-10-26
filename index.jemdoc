@@ -3,25 +3,26 @@
 
 ~~~
 {}{img_left}{photos/jd.jpg}{JD pic}{200}{200}
-PhD Candidate \n [https://engineering.tamu.edu/cse/index.html Department of Computer Science & Engineering] \n Texas A&M University (TAMU)\n
-514A Harvey R. Bright Building \n
-College Station, TX 77843 \n\n 
-# Phone: \+46 8 790 7000 \n
-E-mail: /dass.jyotikrishna/ \[@\] tamu \[DOT\] edu \n
+Postdoctoral Associate \n [https://www.ece.rice.edu/ Department of Electrical & Computer Engineering] \n Rice University
+# PhD \n [https://engineering.tamu.edu/cse/index.html Department of Computer Science & Engineering] \n Texas A&M University (TAMU)\n
+514A 6100 Main St, MS-366 \n
+Houston, TX \n\n 
+
+E-mail: /jdass/ \[@\] rice \[DOT\] edu \n
 [https://scholar.google.com/citations?user=JNAxzigAAAAJ&hl=en&authuser=1 Google Scholar] | [https://orcid.org/0000-0002-7552-8753 ORCID] \n
 [https://www.linkedin.com/in/jyotikrishnadass LinkedIn] |
 [https://twitter.com/jyotikrd Twitter] 
 #\n [documents/CV_JyotikrishnaDass.pdf CV]
 ~~~
 
-~~~
-I am seeking academic positions starting Fall 2021
-~~~
+#~~~
+#I joined Rice University as a Postdoctoral Associate starting September 2021
+#~~~
 
 
 == Biography
 Howdy ! \n
-I am a PhD Candidate and Graduate Assistant Lecturer in the Department of Computer Science & Engineering, Texas A&M University. My research broadly focusses on integrating ideas from Machine Learning, Parallel and Distributed computing, and Hardware design to develop algorithms and architecture to train large-scale distributed machine learning models. I am advised by [https://codes.engr.tamu.edu/rabi/ Prof. Rabi Mahapatra]. I am also passionate about teaching and mentoring which involves sharing knowledge and exchanging ideas with students. I have been appointed as *Graduate Assistant Lecturer* in Fall 2018 and Fall 2020 and was recently awarded *Graduate Teaching Fellowship* in Spring 2020. I am also recipient of *Teaching Assistantship Excellence Award* in Spring 2018. Before starting my PhD, I completed my Bachelor of Technology programme from [https://www.iitg.ac.in/ Indian Institute of Technology(IIT), Guwahati] majoring in Electronics and Communication Engineering with minor in Computer Science and Engineering in 2014.
+I am currently a Postdoctoral Associate in Efficient and Intelligent Computing Lab headed by Dr. Yingyan Lin at Rice University. My research broadly focusses on integrating ideas from Machine Learning, Parallel and Distributed computing, and Hardware design to develop algorithms and architecture for large-scale distributed and federated machine learning. Previously, I completed my PhD in Computer Engineering at the Department of Computer Science & Engineering, Texas A&M University. I am also passionate about teaching and mentoring which involves sharing knowledge and exchanging ideas with students. At Texas A&M, I had been appointed as *Graduate Assistant Lecturer* in Fall 2018 and Fall 2020 and was awarded *Graduate Teaching Fellowship* in Spring 2020. I am also recipient of *Teaching Assistantship Excellence Award* in Spring 2018. Before starting my PhD, I completed my Bachelor of Technology programme from [https://www.iitg.ac.in/ Indian Institute of Technology(IIT), Guwahati] majoring in Electronics and Communication Engineering with minor in Computer Science and Engineering.
 
 == Research
 My research interests include 
@@ -33,7 +34,13 @@ Find out more in [documents/Dissertation_Proposal.pdf Dissertation Proposal]
 
 # [research.html Find out more].
 == News
-+\[Dec,2020\]+ Invited eviewer for ICML 2021
++\[Sep,2021\]+ I moved to Houston and joined Rice University as a Postdoctoral Associate \n
++\[Aug,2021\]+ I graduated from Texas A&M University with a PhD degree in Computer Engineering \n
++\[June,2021\]+ I defended my PhD disertation on "Efficient and Scalable Machine Learning for Distributed Edge Intelligence" \n\n
++\[May,2021\]+ Our work on "Householder Sketch for Accurate and Accelerated Least-Mean-Squares Solvers" has been accepted at ICML 2021 \n
++\[May,2021\]+ I will be joining Dr. Yingyan Lin at Rice University as a postdoc in Fall 2021 \n
++\[Apr,2021\]+ I will serve as invited reviewer in the Program Committee for NeurIPS 2021 \n
++\[Dec,2020\]+ I will serve as invited reviewer for ICML 2021 \n
 +\[Aug,2020\]+ Teaching /CSCE 312: Computer Organization/ as Graduate Assistant Lecturer for Fall 2020 | [documents/Fall2020_CSCE312_501to504_syllabus.pdf Syllabus] \n
 +\[May,2020\]+ Our work on distributed training of SVM on multiple-FPGA system has been accepted for publication in [https://scholar.google.com/citations?view_op=top_venues&hl=en&vq=eng_computerhardwaredesign IEEE Transactions on Computers], Impact factor: 3.131 with acceptance rate 21% in /Special Issue on Machine-Learning Architectures and Accelerators/ \n
 +\[Apr,2020\]+ As a part of community service during COVID-19, 

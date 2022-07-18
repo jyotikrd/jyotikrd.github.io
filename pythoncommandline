@@ -1,1 +1,7 @@
+Desktop/My/MyWebsite/website-jemdoc/
+
+/usr/bin/python3 jemdoc2.py *.jemdoc
+
+
+old:
 /usr/bin/python2.7 /usr/local/bin/jemdoc/jemdoc.py *.jemdoc

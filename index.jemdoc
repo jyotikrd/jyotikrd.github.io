@@ -4,8 +4,9 @@
 #{200}{200}
 ~~~
 {}{img_left}{photos/jdpicture.jpg}{JD pic}{180}{200}  
-Postdoctoral Research Associate \n [https://www.ece.rice.edu/ Department of Electrical & Computer Engineering] \n Rice University \n 6100 Main St, MS-366 \n Houston, TX \n
-# PhD \n [https://engineering.tamu.edu/cse/index.html Department of Computer Science & Engineering] \n Texas A&M University (TAMU)\n514A \n 
+Research Scientist \n [https://d2k.rice.edu/ The Rice University Data to Knowledge (D2K) Lab] \n Rice University \n 6100 Main St, MS-366 \n Houston, TX \n
+# Postdoc \n Department of Electrical and Computer Engineering \n Rice University
+# PhD \n Department of Computer Science & Engineering \n Texas A&M University (TAMU)\n514A \n 
 
 E-mail: /jdass/ \[@\] rice \[DOT\] edu \n
 [https://scholar.google.com/citations?user=JNAxzigAAAAJ&hl=en&authuser=1 Google Scholar] | [https://orcid.org/0000-0002-7552-8753 ORCID] \n
@@ -15,30 +16,31 @@ E-mail: /jdass/ \[@\] rice \[DOT\] edu \n
 ~~~
 
 ~~~
-I joined Rice University as a Postdoctoral Associate starting September 2021
+I joined The Rice University Data to Knowledge (Rice D2K) Lab as a Research Scientist starting August 2022
 ~~~
 
 
 == Biography
 Howdy ! \n
-I am currently a Postdoctoral Research Associate in the [https://eiclab.net/ Efficient and Intelligent Computing Lab] headed by Dr. Yingyan Lin at Rice University. My research broadly focuses on integrating ideas from machine learning, parallel and distributed computing, and hardware design to develop algorithms and architecture for large-scale distributed and federated machine learning. Previously, I completed my Ph.D. in Computer Engineering at the Department of Computer Science & Engineering, Texas A&M University. I am also passionate about teaching and mentoring which involves sharing knowledge and exchanging ideas with students. At Texas A&M, I had been appointed as *Graduate Assistant Lecturer* in Fall 2018 and Fall 2020 and was awarded *Graduate Teaching Fellowship* in Spring 2020. I am also the recipient of the *Teaching Assistant Excellence Award* in Spring 2018. Before starting my Ph.D., I completed my Bachelor of Technology program from the Indian Institute of Technology (IIT Guwahati) majoring in Electronics and Communication Engineering with a minor in Computer Science and Engineering.
+I am currently a Research Scientist in [https://d2k.rice.edu/ The Rice University Data to Knowledge Lab (Rice D2K Lab)] with a focus on interdisciplinary data science Research, Innovation, Collaboration, and Education (RICE). Previously, I was a Postdoctoral Research Associate in the [https://eiclab.net/ Efficient and Intelligent Computing Lab] headed by Dr. Yingyan Lin at Rice University. My research broadly focuses on integrating ideas from machine learning, parallel and distributed computing, and hardware design to develop algorithms and architecture for large-scale distributed and federated machine learning. Previously, I completed my Ph.D. in Computer Engineering at the Department of Computer Science & Engineering, Texas A&M University. I am also passionate about teaching and mentoring which involves sharing knowledge and exchanging ideas with students. At Texas A&M, I had been appointed as *Graduate Assistant Lecturer* in Fall 2018 and Fall 2020 and was awarded *Graduate Teaching Fellowship* in Spring 2020. I am also the recipient of the *Teaching Assistant Excellence Award* in Spring 2018. Before starting my Ph.D., I completed my Bachelor of Technology program from the Indian Institute of Technology (IIT Guwahati) majoring in Electronics and Communication Engineering with a minor in Computer Science and Engineering.
 
 == Research
 My research interests include 
 - Machine Learning
 - Parallel Computing
-- Computer Architecture
+- Systems for Machine Learning
 
 
 # [research.html Find out more].
 == News
++\[Aug,2022\]+ I joined The Rice University Data to Knowledge (Rice D2K) Lab as a Research Scientist\n
 +\[Aug,2022\]+ Our proposal "MILES: Multi-device Incremental Learning on Edge via Summarization" has been accepted for META:Network for AI funding ($50,000) \n
 +\[Jul,2022\]+ Our proposal "Tutorial on Automated Tools for Fast Development of Deep Learning Networks and Accelerators" has been accepted for MICRO 2022, Chicago, IL \n
 +\[Jul,2022\]+ I chaired the research session on "Machine Learning for Resource Management: From Edge to Cloud" at DAC 2022 in San Francisco, CA \n
-+\[Mar,2022\]+ Our proposal "Workshop on Automated AI Tools for Computing and Communication" has been accepted for Creative Ventures Fund: Conference and Workshop Development ($10,000) from Rice University \n
++\[Mar,2022\]+ Our proposal "Workshop on Automated AI Tools for Computing and Communication" has been accepted for Creative Ventures Fund: Conference and Workshop Development ($10,000) from Rice University \n\n
 +\[Sep,2021\]+ I moved to Houston and joined Rice University as a Postdoctoral Associate \n
 +\[Aug,2021\]+ I graduated from Texas A&M University with a PhD degree in Computer Engineering \n
-+\[June,2021\]+ I defended my PhD disertation on "Efficient and Scalable Machine Learning for Distributed Edge Intelligence" \n\n
++\[June,2021\]+ I defended my PhD disertation on "Efficient and Scalable Machine Learning for Distributed Edge Intelligence" \n
 +\[May,2021\]+ Our work on "Householder Sketch for Accurate and Accelerated Least-Mean-Squares Solvers" has been accepted at ICML 2021 \n
 +\[May,2021\]+ I will be joining Dr. Yingyan Lin at Rice University as a postdoc in Fall 2021 \n
 +\[Apr,2021\]+ I will serve as invited reviewer in the Program Committee for NeurIPS 2021 \n

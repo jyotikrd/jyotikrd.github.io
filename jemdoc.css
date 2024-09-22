@@ -375,7 +375,19 @@ table.imgtable, table.imgtable td {
   width: 50%;
 }
 
+
 img {
   max-width: 100%;
   height: auto;
 }
+
+
+/*
+img {
+    max-width: 100%;
+    height: auto;
+    margin-left: 800px;
+    position: relative;
+    top: 10px
+}
+*/

@@ -1,87 +1,400 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<link rel="stylesheet" href="jemdoc.css" type="text/css" />
-<link rel="stylesheet" href="./jemdoc.css" type="text/css" />
-<title>Open Positions</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jyotikrishna Dass - Open Positions</title>
+    
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("|");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Base Styles & Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f8;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background-color: #0c2340;
+            padding: 3rem 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .sidebar-brand {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .sidebar-brand span {
+            color: #ab0520;
+        }
+
+        .menu-item { margin-bottom: 0.5rem; }
+        .menu-item a {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #e2e9eb; 
+            display: block;
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+        }
+        .menu-item a:hover, .menu-item a.current {
+            background-color: rgba(255, 255, 255, 0.08); 
+            color: #fff;
+            border-left: 4px solid #ab0520;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 260px;
+            padding: 4rem 5rem;
+            max-width: 1100px;
+            width: 100%;
+            background-color: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.02);
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #0c2340;
+            margin-bottom: 0.5rem;
+            border-bottom: 3px solid #ab0520;
+            padding-bottom: 0.8rem;
+            display: inline-block;
+        }
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Announcement Card */
+        .announcement-card {
+            background: linear-gradient(to right bottom, #ffffff, #fdfbfb);
+            border: 1px solid #e5e7eb;
+            border-top: 5px solid #ab0520;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .badge {
+            background: #fee2e2;
+            color: #991b1b;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .announcement-card h2 {
+            font-size: 1.8rem;
+            color: #0c2340;
+            margin-bottom: 1rem;
+        }
+        .announcement-card p {
+            color: #4b5563;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .highlight-text {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #854d0e;
+        }
+        
+        /* Action Buttons */
+        .action-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f3f4f6;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #ab0520;
+            color: white;
+            box-shadow: 0 4px 6px rgba(171, 5, 32, 0.2);
+        }
+        .btn-primary:hover {
+            background: #8a041a;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #0c2340;
+            color: white;
+            box-shadow: 0 4px 6px rgba(12, 35, 64, 0.2);
+        }
+        .btn-secondary:hover {
+            background: #08172b;
+            transform: translateY(-2px);
+        }
+
+        /* Section Titles */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 3.5rem 0 2rem 0;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: #0c2340;
+        }
+        .section-header .icon-wrapper {
+            background: #eef2f6;
+            color: #0c2340;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* Media Layouts (Videos & Iframe) */
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .flyer-wrapper {
+            width: 100%;
+            height: 800px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            border: 1px solid #e5e7eb;
+        }
+        .flyer-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-auto-rows: 200px;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        .photo-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .photo-gallery img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+        /* Make the map span wider if it's the specific map image */
+        .photo-gallery img[src*="TucsonConnectionMap"] {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        /* Footer / Flag counter */
+        .footer-counters {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #f3f4f6;
+            text-align: center;
+        }
+        .footer-counters img {
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; padding: 1.5rem; }
+            .sidebar-brand { margin-bottom: 1rem; }
+            .main-content { margin-left: 0; padding: 2rem; }
+            .video-grid { grid-template-columns: 1fr; }
+            .flyer-wrapper { height: 600px; }
+            .photo-gallery img[src*="TucsonConnectionMap"] { grid-column: span 1; grid-row: span 1; }
+        }
+    </style>
 </head>
 <body>
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-    var pageTracker = _gat._getTracker("|");
-    pageTracker._trackPageview();
-} catch(err) {}</script>
-<table summary="Table for page layout." id="tlayout">
-<tr valign="top">
-<td id="layout-menu">
-<div class="menu-item"><a href="index.html">Home</a></div>
-<div class="menu-item"><a href="research.html">Research</a></div>
-<div class="menu-item"><a href="publications.html">Publications</a></div>
-<div class="menu-item"><a href="dasslab.html">DASS Lab</a></div>
-<div class="menu-item"><a href="teaching.html">Teaching</a></div>
-<div class="menu-item"><a href="awards.html">Awards</a></div>
-<div class="menu-item"><a href="openpositions.html" class="current">Open Positions</a></div>
-<div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf">CV (Sep'25)</a></div>
-</td>
-<td id="layout-content">
-<div id="toptitle">
-<h1>Open Positions</h1>
-</div>
 
-	
-<div class="infoblock">
-<div class="blockcontent">
-<p>
-<b>Multiple Positions for PhD with Funding!</b>
-I am actively looking for motivated students with strong background in any (or several) of mathematics (optimization, linear algebra, matrix analysis, etc.), computer programming, machine (or deep) learning, and computer architecture to join our newly established research group at DASS Lab for a PhD. If you are enthusiastic about research in topics related to machine learning, parallel and distributed computing, and computer systems for efficient edge computing, and deeply interested in building a research group as a founding member, please consider submitting <a href="https://uarizona.co1.qualtrics.com/jfe/form/SV_9MKtBjblpyNvr1A" target=&ldquo;blank&rdquo;><b>Research Interest Form</b></a>.
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            Jyotikrishna Dass<br><span>U of A</span>
+        </div>
+        <div class="menu-item"><a href="index.html">Home</a></div>
+        <div class="menu-item"><a href="research.html">Research</a></div>
+        <div class="menu-item"><a href="publications.html">Publications</a></div>
+        <div class="menu-item"><a href="dasslab.html">DASS Lab</a></div>
+        <div class="menu-item"><a href="teaching.html">Teaching</a></div>
+        <div class="menu-item"><a href="awards.html">Awards</a></div>
+        <div class="menu-item"><a href="openpositions.html" class="current">Open Positions</a></div>
+        <div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf" target="_blank">CV (Sep'25)</a></div>
+    </aside>
 
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Join the Team</h1>
+        <p class="subtitle">Looking for motivated students to innovate in distributed AI and edge computing.</p>
 
-To complete the formal application, you MUST apply to the PhD program (Direct or Post-MS) offered in the ECE Department at the UofA - <em>Computer Science and Engineering (CSE)</em> or <em>Electrical and Computer Engineering (ECE)</em> or <em>Software Engineering (SFWE)</em>. The department processes graduate applications throughout the year. TA and scholarships for the Fall semester are determined by the pool of Fall applicants who apply by priority deadline of <strong>December 1, 2025</strong>. More details about our graduate admissions can be found <a href="https://ece.engineering.arizona.edu/grad-programs" target=&ldquo;blank&rdquo;><b>here</b></a>. Our lab also warmly welcomes highly motivated M.S. students and undergraduates at UofA to explore research opportunities with us.
-</p> 
-</div></div>
+        <!-- Main Announcement Card -->
+        <div class="announcement-card">
+            <div class="badge"><i class="fas fa-star"></i> Funding Available</div>
+            <h2>Multiple Positions for PhD</h2>
+            
+            <p>
+                I am actively looking for motivated students with a strong background in any (or several) of <strong>mathematics</strong> (optimization, linear algebra, matrix analysis, etc.), <strong>computer programming</strong>, <strong>machine (or deep) learning</strong>, and <strong>computer architecture</strong> to join our newly established research group at DASS Lab for a PhD.
+            </p>
+            <p>
+                If you are enthusiastic about research in topics related to machine learning, parallel and distributed computing, and computer systems for efficient edge computing, and deeply interested in building a research group as a founding member, please consider submitting our Research Interest Form.
+            </p>
+            <p style="background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid #0c2340;">
+                <i class="fas fa-info-circle" style="color:#0c2340; margin-right:5px;"></i> To complete the formal application, you MUST apply to the PhD program (Direct or Post-MS) offered in the ECE Department at the UofA — <em>Computer Science and Engineering (CSE)</em>, <em>Electrical and Computer Engineering (ECE)</em>, or <em>Software Engineering (SFWE)</em>. 
+                <br><br>
+                The department processes graduate applications throughout the year. TA and scholarships for the Fall semester are determined by the pool of Fall applicants who apply by the priority deadline of <span class="highlight-text">December 1, 2025</span>. Our lab also warmly welcomes highly motivated M.S. students and undergraduates at UofA to explore research opportunities with us.
+            </p>
 
-
-<p>
-
-	
-<iframe 
-	src="https://drive.google.com/file/d/16dxr5eJ5UGR78bVTZKf5lVDUhfaBbnla/preview" 
-	width="60%" 
-	height="1080" 
-	allow="autoplay"
-	class="center"
-></iframe>
+            <div class="action-group">
+                <a href="https://uarizona.co1.qualtrics.com/jfe/form/SV_9MKtBjblpyNvr1A" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-clipboard-list"></i> Submit Interest Form
+                </a>
+                <a href="https://ece.engineering.arizona.edu/grad-programs" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-university"></i> Graduate Admissions Info
+                </a>
+            </div>
+        </div>
 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/KV8xTwLZ0Yc?si=wZUiIokqDPj9aSXs" title="YouTube video player" frameborder="0" allowfullscreen="allowfullscreen">
-</iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2KZYfskKcTg?si=Rz1aZwBy9gEHsDK3" title="YouTube video player" frameborder="0"  allowfullscreen="allowfullscreen">
-</iframe>
-
-<img src="photos/Az4.png" width="200px" height="200px">
-<img src="photos/TucsonConnectionMap-800x742.jpg" width="200px" height="300px">
-
-
-<img src="photos/Az2.png" width="300px" height="300px">
-<img src="photos/Az5.png" width="250px" height="250px">
-<img src="photos/Az1.png" width="180px" height="180px">
-<img src="photos/Az3.png" width="180px" height="180px">
-<img src="photos/Az6.png" width="180px" height="180px">
-
-</p>
+        <!-- DASS Lab Flyer -->
+        <div class="section-header">
+            <div class="icon-wrapper"><i class="fas fa-file-alt"></i></div>
+            <h2>DASS Lab Overview</h2>
+        </div>
+        <div class="flyer-wrapper">
+            <iframe src="https://drive.google.com/file/d/16dxr5eJ5UGR78bVTZKf5lVDUhfaBbnla/preview" allow="autoplay"></iframe>
+        </div>
 
 
+        <!-- Videos Section -->
+        <div class="section-header">
+            <div class="icon-wrapper"><i class="fab fa-youtube" style="color: #ff0000;"></i></div>
+            <h2>Discover UofA & Tucson</h2>
+        </div>
+        <div class="video-grid">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/watch?v=KV8xTwLZ0Yc" title="YouTube video player" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/watch?v=2KZYfskKcTg" title="YouTube video player" allowfullscreen></iframe>
+            </div>
+        </div>
 
-<br />	
-<a href="https://info.flagcounter.com/V5dH"><img src="https://s11.flagcounter.com/count2/V5dH/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_9/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
 
+        <!-- Photo Gallery -->
+        <div class="section-header">
+            <div class="icon-wrapper"><i class="fas fa-camera"></i></div>
+            <h2>Life in Arizona</h2>
+        </div>
+        <div class="photo-gallery">
+            <img src="photos/TucsonConnectionMap-800x742.jpg" alt="Tucson Connection Map">
+            <img src="photos/Az4.png" alt="Arizona Gallery Image 4">
+            <img src="photos/Az2.png" alt="Arizona Gallery Image 2">
+            <img src="photos/Az5.png" alt="Arizona Gallery Image 5">
+            <img src="photos/Az1.png" alt="Arizona Gallery Image 1">
+            <img src="photos/Az3.png" alt="Arizona Gallery Image 3">
+            <img src="photos/Az6.png" alt="Arizona Gallery Image 6">
+        </div>
 
+        <!-- Footer / Analytics -->
+        <div class="footer-counters">
+            <a href="https://info.flagcounter.com/V5dH">
+                <img src="https://s11.flagcounter.com/count2/V5dH/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_9/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0">
+            </a>
+        </div>
+
+    </main>
+
+</body>
 </html>

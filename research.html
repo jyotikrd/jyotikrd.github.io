@@ -1,62 +1,283 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<link rel="stylesheet" href="jemdoc.css" type="text/css" />
-<link rel="stylesheet" href="./jemdoc.css" type="text/css" />
-<title>Research</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jyotikrishna Dass - Research</title>
+    
+    <!-- Google Analytics from original file -->
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("|");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
+
+    <!-- Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Base Styles & Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f8; /* Very light gray background */
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Navigation - Arizona Blue */
+        .sidebar {
+            width: 260px;
+            background-color: #0c2340; /* UA Navy */
+            padding: 3rem 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        .sidebar-brand {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .sidebar-brand span {
+            color: #ab0520; /* UA Red */
+        }
+
+        .menu-item { margin-bottom: 0.5rem; }
+        .menu-item a {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #e2e9eb; /* Light grayish white */
+            display: block;
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+        }
+        .menu-item a:hover, .menu-item a.current {
+            background-color: rgba(255, 255, 255, 0.08); 
+            color: #fff;
+            border-left: 4px solid #ab0520; /* UA Red Accent */
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 260px;
+            padding: 4rem 5rem;
+            max-width: 1100px;
+            width: 100%;
+            background-color: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.02);
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #0c2340; /* UA Navy */
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #ab0520; /* UA Red */
+            padding-bottom: 0.8rem;
+            display: inline-block;
+        }
+
+        /* Research Specific Styles */
+        .research-section p {
+            font-size: 1.1rem;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+        
+        .research-intro {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        
+        .research-img-right {
+            max-width: 350px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(12, 35, 64, 0.1);
+        }
+        
+        .research-strategy {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background-color: #fbfbfc;
+            border-radius: 12px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .research-img-center {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+            margin: 2rem auto; /* Adjusted to balance spacing both above and below */
+            display: block;
+        }
+
+        .research-areas {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .area-item {
+            background: #fff;
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(12, 35, 64, 0.06);
+            border-left: 6px solid #0c2340; /* UA Navy */
+            transition: all 0.3s ease;
+        }
+
+        .area-item:hover {
+            transform: translateY(-4px);
+            border-left-color: #ab0520; /* UA Red */
+            box-shadow: 0 8px 25px rgba(12, 35, 64, 0.1);
+        }
+
+        .area-item h3 {
+            color: #0c2340;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .area-item h3 i {
+            color: #ab0520;
+        }
+
+        .area-item p {
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; display: flex; flex-direction: column; padding: 1.5rem; }
+            .sidebar-brand { margin-bottom: 1rem; }
+            .menu-item { margin-bottom: 2px; }
+            .main-content { margin-left: 0; padding: 2rem; }
+            
+            .research-intro {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            .research-intro p {
+                text-align: left;
+            }
+            .research-img-right {
+                max-width: 100%;
+                margin-bottom: 1.5rem;
+            }
+            .area-item {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-    var pageTracker = _gat._getTracker("|");
-    pageTracker._trackPageview();
-} catch(err) {}</script>
-<table summary="Table for page layout." id="tlayout">
-<tr valign="top">
-<td id="layout-menu">
-<div class="menu-item"><a href="index.html">Home</a></div>
-<div class="menu-item"><a href="research.html" class="current">Research</a></div>
-<div class="menu-item"><a href="publications.html">Publications</a></div>
-<div class="menu-item"><a href="dasslab.html">DASS Lab</a></div>
-<div class="menu-item"><a href="teaching.html">Teaching</a></div>
-<div class="menu-item"><a href="awards.html">Awards</a></div>
-<div class="menu-item"><a href="openpositions.html">Open Positions</a></div>
-<div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf">CV (Sep'25)</a></div>
-</td>
-<td id="layout-content">
-<div id="toptitle">
-<h1>Research</h1>
-</div>
-<table class="imgtable"><tr><td>
-<!--<img src="photos/ResearchVision.png" alt="Research Vision" width="300" height="300"style="margin-left: 500px;" />&nbsp;</td>-->
-<img src="photos/ResearchVision.png" alt="Research Vision" width="300" height="300" style="margin-left: 500px;"/>&nbsp;</td>
-<p>
-Our research focuses on advancing distributed edge intelligence and optimizing efficiency within the increasingly interconnected digital landscape. We achieve this through the implementation of distributed machine learning, designing scalable algorithms and efficient architectures to democratize artificial intelligence (AI) and foster green AI at the edge. This approach enables local processing of decentralized data streams at source devices while facilitating distributed computations with minimal communication overhead, thereby enhancing the performance, efficiency, and resiliency of machine learning systems.
-</p>
-<img src="photos/distributed-AI.png" alt="DistributedAI" width="200" height="200" class="center">  
-<p>
-Our research strategy is structured around interplay of three key areas:
-</p>
-<ul>
-<li><p><b>Distributed Network:</b> We develop optimization techniques tailored to the unique requirements of edge environments. Our efforts include minimizing synchronization time to optimize processor utilization and reduce latency. Additionally, we have worked on transforming dense, large-scale problems into memory-efficient (sparse) and separable problems suitable for parallel computations.
-</p>
-</li>
-<li><p><b>Parallel Machine Learning Algorithms:</b> Our work focuses on training and updating machine learning models with an emphasis on low memory cost, improved latency, and privacy. We have developed a scalable distributed algorithm that minimizes communication costs for parallelizing model training. Furthermore, we have demonstrated the effectiveness of constructing memory-efficient data summaries and their parallel implementation as potential solutions for accelerating model learning.
-</p>
-</li>
-<li><p><b>Computer Systems:</b> We co-design energy-efficient computing systems to make AI accessible at the edge, promoting green AI. Our contributions include co-designing software and hardware accelerators for energy-efficient distributed training of Support Vector Machines across multiple FPGAs. Additionally, our ViTALiTy project enhances the efficiency of Vision Transformers by overcoming the quadratic cost through the decomposition of attention into low-rank linear and sparse components, followed by the design of a pipelined hardware-level accelerator for fast execution of the static linear Taylor attention component. Our NetDistiller framework improves the task accuracy of Tiny Neural Networks for edge deployment without additional inference overhead. Looking beyond traditional silicon-based computing, our collaboration on ConvLight has resulted in a novel hardware accelerator for convolutional neural networks, leveraging memristor-integrated photonic computing to achieve high performance, low power consumption, and high density.
-</p>
-</li>
-</ul>
-</td>
-</tr>
-</table>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            Jyotikrishna Dass<br><span>U of A</span>
+        </div>
+        <div class="menu-item"><a href="index.html">Home</a></div>
+        <div class="menu-item"><a href="research.html" class="current">Research</a></div>
+        <div class="menu-item"><a href="publications.html">Publications</a></div>
+        <div class="menu-item"><a href="dasslab.html">DASS Lab</a></div>
+        <div class="menu-item"><a href="teaching.html">Teaching</a></div>
+        <div class="menu-item"><a href="awards.html">Awards</a></div>
+        <div class="menu-item"><a href="openpositions.html">Open Positions</a></div>
+        <div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf" target="_blank">CV (Sep'25)</a></div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Research</h1>
+
+        <section class="research-section">
+            
+            <!-- Intro & Vision Image -->
+            <div class="research-intro">
+                <div>
+                    <p>
+                        Our research pioneers the frontier of distributed edge intelligence, driven by the vision of a seamlessly interconnected world powered by ubiquitous, sustainable computing. By synergistically co-designing scalable distributed machine learning algorithms and highly efficient hardware architectures, we aim to democratize Artificial Intelligence (AI) and champion the paradigm of Green AI at the edge.
+                    </p>
+                    
+                    <img src="photos/distributed-AI.png" alt="Distributed AI" class="research-img-center" />
+                    
+                    <p>
+                        This paradigm shift empowers resource-constrained source devices to process decentralized data streams locally. By orchestrating complex distributed computations with minimal communication overhead, our work fundamentally enhances the performance, efficiency, and resiliency of next-generation machine learning systems, ensuring that advanced AI is both broadly accessible and ecologically responsible.
+                    </p>
+                </div>
+              
+            </div>
+
+            <!-- Strategy -->
+            <div class="research-strategy">
+                <p style="text-align: center; font-size: 1.25rem; font-weight: 600; color: #0c2340; margin-bottom: 0;">
+                    Our research strategy is structured around the interplay of three key areas:
+					<img src="photos/ResearchVision.png" alt="Research Vision" class="research-img-right" />
+                </p>
+            </div>
+
+            <!-- Key Research Areas inside modern cards -->
+            <div class="research-areas">
+                
+                <div class="area-item">
+                    <h3><i class="fas fa-network-wired"></i> Distributed Network</h3>
+                    <p>
+                        We engineer advanced optimization frameworks meticulously tailored for the stringent constraints of edge environments. Our research systematically minimizes synchronization overhead to maximize processor utilization and achieve ultra-low latency. Furthermore, we innovate by mathematically transforming dense, large-scale challenges into memory-efficient, sparse, and separable structures that are highly amenable to massively parallel computation.
+                    </p>
+                </div>
+
+                <div class="area-item">
+                    <h3><i class="fas fa-brain"></i> Parallel Machine Learning Algorithms</h3>
+                    <p>
+                        We design and deploy next-generation machine learning paradigms that prioritize minimal memory footprint, accelerated inference latency, and robust data privacy. Our pioneering scalable distributed algorithms drastically reduce communication bottlenecks inherent in parallel model training. By leveraging memory-efficient data summarization and highly concurrent implementations, we provide transformative solutions to rapidly accelerate on-device model learning and adaptation.
+                    </p>
+                </div>
+
+                <div class="area-item">
+                    <h3><i class="fas fa-microchip"></i> Computer Systems</h3>
+                    <p>
+                        We champion the Green AI movement by synergistically co-designing energy-efficient computing architectures that bring powerful AI capabilities directly to the edge. Our impactful contributions span software-hardware co-design, including multi-FPGA accelerators for distributed machine learning, and the ViTALiTy project, which shatters the quadratic complexity of Vision Transformers via innovative low-rank and sparse attention decomposition paired with pipelined hardware acceleration. Through frameworks like NetDistiller, we elevate the accuracy of Tiny Neural Networks without incurring inference penalties. Pushing the boundaries of conventional silicon, our interdisciplinary ConvLight collaboration pioneers memristor-integrated photonic computing, delivering unprecedented performance, extreme energy efficiency, and ultra-high compute density.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </body>
 </html>

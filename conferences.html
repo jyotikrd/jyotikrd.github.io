@@ -208,6 +208,16 @@
         }
 
         .expired .conf-occurrence { background: #f8fafc; color: #94a3b8; }
+		
+		/* --- CENTERED FOOTER FIX --- */
+		        .credits {
+		            width: 100%;
+		            text-align: center;
+		            padding: 4rem 0 2rem;
+		            color: #334155;
+		            font-size: 0.95rem;
+		            margin-top: auto; /* Pushes to bottom */
+		        }
 
         .tag-row { margin-top: auto; padding-top: 1rem; display: flex; gap: 0.4rem; }
         .badge { font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
@@ -253,6 +263,13 @@
             <p>Syncing with CCF-DDL community repository.</p>
         </div>
     </div>
+	
+	<div class="grid" id="confGrid"></div>
+	
+</div>
+
+<div class="credits">
+    Data format inspired by the <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" style="color: #64748b; font-weight: bold; text-decoration: none;">ccf-deadlines</a> community project.
 </div>
 
 <script>

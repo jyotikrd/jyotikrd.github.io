@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Deadlines - DASS Lab</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --ua-navy: #0c2340;
+            --ua-red: #ab0520;
+            --bg-gray: #f1f5f9;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --ai-color: #6366f1;
+            --sys-color: #f59e0b;
+            --urgent-color: #ef4444;
+            --success-color: #22c55e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-gray);
+            color: #1e293b;
+            line-height: 1.5;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin: 2rem 0 3rem 0;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 800;
+            color: var(--ua-navy);
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.25rem;
+            background: #f1f5f9;
+            padding: 0.35rem;
+            border-radius: 10px;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.4rem;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.85rem;
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: var(--ua-navy);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--ua-navy);
+            box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.05);
+        }
+
+        .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        /* Grid & Sections */
+        .section-divider {
+            grid-column: 1 / -1;
+            margin: 2.5rem 0 1.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 800;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .section-divider::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+        }
+
+        .deadline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Card Styling */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+        }
+
+        .card.cat-ai::before { background: var(--ai-color); }
+        .card.cat-sys::before { background: var(--sys-color); }
+
+        .card.urgent { border: 2px solid var(--urgent-color); }
+        .card.expired { opacity: 0.75; filter: grayscale(0.5); }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); filter: none; opacity: 1; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .conf-name { font-size: 1.6rem; font-weight: 800; color: var(--ua-navy); line-height: 1.2; }
+        
+        .conf-link { 
+            color: #cbd5e1; 
+            font-size: 1.1rem; 
+            transition: color 0.2s;
+            padding: 5px;
+        }
+        .conf-link:hover { color: var(--ua-red); }
+
+        .conf-full { font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.4; font-weight: 500; }
+
+        /* Countdown Timer */
+        .countdown-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .timer-display {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            border: 1px solid #f1f5f9;
+        }
+
+        .urgent .timer-display { background: #fff1f2; border-color: #fecdd3; }
+
+        .time-box { text-align: center; }
+        .time-val { display: block; font-size: 1.25rem; font-weight: 800; color: var(--ua-navy); }
+        .urgent .time-val { color: var(--urgent-color); }
+        .time-label { font-size: 0.65rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
+
+        /* Details */
+        .details-list {
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .detail-row { display: flex; justify-content: space-between; align-items: center; }
+        .detail-label { color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        .detail-value { color: #1e293b; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .text-passed { text-decoration: line-through; color: #cbd5e1; font-weight: 400; }
+
+        .status-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .badge-urgent { background: var(--urgent-color); color: white; animation: pulse 2s infinite; }
+        .badge-passed { background: #64748b; color: white; }
+
+        .tag-row { margin-top: auto; padding-top: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+        .pill { font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .pill-ai { background: #e0e7ff; color: var(--ai-color); }
+        .pill-sys { background: #fef3c7; color: var(--sys-color); }
+        
+        .location-info { font-size: 0.75rem; color: #94a3b8; font-weight: 500; margin-left: auto; }
+
+        /* Loading & Error */
+        .state-container { grid-column: 1 / -1; text-align: center; padding: 6rem 2rem; color: #64748b; }
+        .state-container i { margin-bottom: 1.5rem; opacity: 0.5; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: none; }
+            .deadline-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>DASS Lab Deadlines</h1>
+        <p class="subtitle">
+            <i class="fas fa-university"></i> University of Arizona 
+            <span style="color: #cbd5e1;">|</span> 
+            AI/ML & Systems Research
+        </p>
+    </header>
+
+    <div class="controls">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="updateCategory('all', this)">All</button>
+            <button class="filter-btn" onclick="updateCategory('ai', this)">AI/ML</button>
+            <button class="filter-btn" onclick="updateCategory('sys', this)">Systems</button>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Filter by acronym or name..." onkeyup="handleSearch()">
+        </div>
+    </div>
+
+    <div class="deadline-grid" id="deadlineGrid">
+        <div class="state-container">
+            <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+            <h3>Syncing with CCF-DDL...</h3>
+            <p>Gathering latest community updates.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let conferences = [];
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    const TARGETS = {
+        "ICML": "ai", "NeurIPS": "ai", "ICLR": "ai", "CVPR": "ai", "ACL": "ai", 
+        "ECCV": "ai", "ICCV": "ai", "ECML-PKDD": "ai", "EMNLP": "ai", "NAACL": "ai", 
+        "MLSys": "ai", "KDD": "ai", "AAAI": "ai", "CPAL": "ai",
+        "ISCA": "sys", "HPCA": "sys", "MICRO": "sys", "IPDPS": "sys", "DAC": "sys", 
+        "SC": "sys", "ICDCS": "sys", "ASPLOS": "sys", "USENIX ATC": "sys", "EuroSys": "sys"
+    };
+
+    // Resilient Data Fetching
+    async function init() {
+        try {
+            const resp = await fetch('https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/allconf.json');
+            if (!resp.ok) throw new Error('Network fail');
+            const raw = await resp.json();
+            
+            conferences = raw
+                .filter(c => TARGETS[c.title])
+                .map(c => {
+                    const latest = (c.confs && c.confs[0]) || {};
+                    const timeline = (latest.timeline && latest.timeline[0]) || {};
+                    
+                    return {
+                        id: c.title.toLowerCase().replace(/\s/g, '-'),
+                        name: c.title,
+                        full: c.description || c.title,
+                        category: TARGETS[c.title],
+                        abstract: timeline.abstract_deadline || null,
+                        paper: timeline.deadline || null,
+                        date: latest.date || "TBA",
+                        venue: latest.place || "TBA",
+                        url: latest.link || c.url || "#"
+                    };
+                });
+            
+            render();
+            // Start high-precision timer loop
+            setInterval(renderCountdownOnly, 1000);
+        } catch (e) {
+            document.getElementById('deadlineGrid').innerHTML = `
+                <div class="state-container">
+                    <i class="fas fa-exclamation-triangle fa-3x" style="color:var(--ua-red)"></i>
+                    <h3>Data Sync Failed</h3>
+                    <p>Unable to reach community repository. Please check your connection.</p>
+                </div>`;
+        }
+    }
+
+    function getTimeRemaining(endtime) {
+        if (!endtime) return null;
+        const total = Date.parse(endtime.replace(' ', 'T')) - Date.parse(new Date());
+        return {
+            total,
+            days: Math.floor(total / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((total / (1000 * 60 * 60)) % 24),
+            minutes: Math.floor((total / 1000 / 60) % 60),
+            seconds: Math.floor((total / 1000) % 60)
+        };
+    }
+
+    function render() {
+        const grid = document.getElementById('deadlineGrid');
+        const now = new Date().getTime();
+
+        const filtered = conferences.filter(c => {
+            const catMatch = currentCategory === 'all' || c.category === currentCategory;
+            const searchMatch = c.name.toLowerCase().includes(searchQuery) || c.full.toLowerCase().includes(searchQuery);
+            return catMatch && searchMatch;
+        });
+
+        // Split active and past
+        const active = filtered.filter(c => !c.paper || Date.parse(c.paper.replace(' ', 'T')) > now)
+                               .sort((a,b) => (Date.parse(a.paper) || 9e15) - (Date.parse(b.paper) || 9e15));
+        const past = filtered.filter(c => c.paper && Date.parse(c.paper.replace(' ', 'T')) <= now)
+                             .sort((a,b) => Date.parse(b.paper) - Date.parse(a.paper));
+
+        let html = '';
+        if (active.length) {
+            html += `<div class="section-divider">Upcoming Opportunities</div>`;
+            html += active.map(c => generateCardHtml(c, false)).join('');
+        }
+        if (past.length) {
+            html += `<div class="section-divider">Past Deadlines</div>`;
+            html += past.map(c => generateCardHtml(c, true)).join('');
+        }
+
+        grid.innerHTML = html || `<div class="state-container"><h3>No matches found</h3><p>Try a different keyword or category.</p></div>`;
+    }
+
+    // Performance optimization: Only update timers, not the whole grid
+    function renderCountdownOnly() {
+        document.querySelectorAll('.timer-display').forEach(display => {
+            const endtime = display.dataset.deadline;
+            const t = getTimeRemaining(endtime);
+            if (t && t.total > 0) {
+                display.querySelector('.d-val').innerText = t.days;
+                display.querySelector('.h-val').innerText = t.hours;
+                display.querySelector('.m-val').innerText = t.minutes;
+                display.querySelector('.s-val').innerText = t.seconds;
+            }
+        });
+    }
+
+    function generateCardHtml(c, isExpired) {
+        const t = getTimeRemaining(c.paper);
+        const isUrgent = t && t.total > 0 && t.total < (1000 * 60 * 60 * 24 * 14);
+        
+        const abstractPassed = c.abstract && Date.parse(c.abstract.replace(' ', 'T')) < Date.now();
+        const paperPassed = isExpired;
+
+        return `
+            <div class="card cat-${c.category} ${isUrgent ? 'urgent' : ''} ${isExpired ? 'expired' : ''}">
+                ${isUrgent ? '<span class="status-badge badge-urgent">Urgent</span>' : ''}
+                ${isExpired ? '<span class="status-badge badge-passed">Closed</span>' : ''}
+                
+                <div class="card-header">
+                    <h2 class="conf-name">${c.name}</h2>
+                    <a href="${c.url}" target="_blank" class="conf-link" title="Official Website">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+                <p class="conf-full">${c.full}</p>
+
+                <div class="countdown-container">
+                    <div class="timer-display" data-deadline="${c.paper || ''}">
+                        <div class="time-box"><span class="time-val d-val">${t ? t.days : '--'}</span><span class="time-label">Days</span></div>
+                        <div class="time-box"><span class="time-val h-val">${t ? t.hours : '--'}</span><span class="time-label">Hrs</span></div>
+                        <div class="time-box"><span class="time-val m-val">${t ? t.minutes : '--'}</span><span class="time-label">Min</span></div>
+                        <div class="time-box"><span class="time-val s-val">${t ? t.seconds : '--'}</span><span class="time-label">Sec</span></div>
+                    </div>
+                </div>
+
+                <div class="details-list">
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-file-alt"></i> Abstract</span>
+                        <span class="detail-value ${abstractPassed ? 'text-passed' : ''}">${c.abstract ? c.abstract.split(' ')[0] : 'TBA'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-paper-plane"></i> Full Paper</span>
+                        <span class="detail-value ${paperPassed ? 'text-passed' : ''}">${c.paper ? c.paper.split(' ')[0] : 'TBA'}</span>
+                    </div>
+                    <div class="detail-row" style="margin-top:0.5rem">
+                        <span class="detail-label"><i class="fas fa-calendar-check"></i> Conference</span>
+                        <span class="detail-value" style="font-family:inherit; font-size:0.75rem">${c.date}</span>
+                    </div>
+                </div>
+
+                <div class="tag-row">
+                    <span class="pill pill-${c.category}">${c.category === 'ai' ? 'AI / ML' : 'Systems'}</span>
+                    <span class="location-info"><i class="fas fa-map-marker-alt"></i> ${c.venue}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateCategory(cat, btn) {
+        currentCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    function handleSearch() {
+        searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        render();
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>

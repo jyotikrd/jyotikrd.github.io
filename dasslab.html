@@ -1,146 +1,419 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="jemdoc.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <title>DASS Lab - Team</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jyotikrishna Dass - DASS Lab</title>
+    
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("|");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Modern Layout Styling */
-        .student-grid {
+        /* Base Styles & Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f8;
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
+            min-height: 100vh;
         }
-        .student-card {
-            width: 220px;
-            border: 1px solid #eee;
-            padding: 15px;
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background-color: #0c2340; /* UA Navy */
+            padding: 3rem 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .sidebar-brand {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
             text-align: center;
-            border-radius: 8px;
-            background: #fcfcfc;
-            transition: transform 0.2s;
+            letter-spacing: 0.5px;
         }
-        .student-card:hover {
+        .sidebar-brand span {
+            color: #ab0520; /* UA Crimson */
+        }
+
+        .menu-item { margin-bottom: 0.5rem; }
+        .menu-item a {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #e2e9eb; 
+            display: block;
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+        }
+        .menu-item a:hover, .menu-item a.current {
+            background-color: rgba(255, 255, 255, 0.08); 
+            color: #fff;
+            border-left: 4px solid #ab0520;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 260px;
+            padding: 4rem 5rem;
+            max-width: 1100px;
+            width: 100%;
+            background-color: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.02);
+        }
+
+        /* Header & Banner */
+        .lab-banner {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #0c2340;
+            margin-bottom: 0.5rem;
+            border-bottom: 3px solid #ab0520;
+            padding-bottom: 0.8rem;
+            display: inline-block;
+        }
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Section Titles */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 3.5rem 0 2rem 0;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #0c2340;
+        }
+        .section-header .icon-wrapper {
+            background: #eef2f6;
+            color: #0c2340;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Student Grid & Cards */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .team-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2.5rem 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .team-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
         }
-        .student-photo {
-            width: 150px;
-            height: 150px;
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: #ab0520; 
+        }
+        .team-photo {
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 10px;
-            border: 3px solid #f0f0f0;
+            margin-bottom: 1.2rem;
+            border: 4px solid #f8fafc;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #e5e7eb; /* Fallback color */
         }
-        .student-name {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin: 5px 0;
-            display: block;
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0c2340;
+            margin-bottom: 0.2rem;
         }
-        .student-info {
-            font-size: 0.85em;
-            color: #555;
-            margin-bottom: 10px;
-            min-height: 40px;
+        .team-role {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 0.2rem;
+        }
+        .team-coadvisor {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 1.2rem;
+            font-style: italic;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
         }
         .social-links a {
-            margin: 0 8px;
-            font-size: 1.2em;
-            color: #444;
-            text-decoration: none;
+            color: #94a3b8;
+            font-size: 1.3rem;
+            transition: all 0.2s;
         }
         .social-links a:hover {
             color: #0077b5; /* LinkedIn Blue */
+            transform: scale(1.1);
         }
-        .award-tag {
-            font-size: 0.75em;
-            color: blue;
-            display: block;
-            margin-top: 5px;
-            font-style: italic;
+        .social-links a[title="Website"]:hover {
+            color: #ab0520;
         }
-        .footnote {
-            margin-top: 30px;
-            font-size: 0.85em;
-            color: #666;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
+        
+        .award-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eff6ff;
+            color: #2563eb; /* distinct blue as requested */
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-top: auto;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Masters Section */
+        .masters-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 3rem;
+        }
+        .masters-list li {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #0c2340;
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .masters-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .masters-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0c2340;
+        }
+        .masters-role {
+            color: #64748b;
+            font-size: 0.95rem;
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .masters-award {
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Footnote */
+        .footnote-box {
+            background: #f3f4f6;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            margin-top: 4rem;
+            border-left: 4px solid #9ca3af;
+            line-height: 1.6;
+        }
+        .footnote-box i {
+            color: #6b7280;
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; padding: 1.5rem; }
+            .sidebar-brand { margin-bottom: 1rem; }
+            .main-content { margin-left: 0; padding: 2rem; }
+            .masters-list li { flex-direction: column; align-items: flex-start; }
+            .lab-banner { height: 180px; }
         }
     </style>
 </head>
 <body>
 
-<table summary="Table for page layout." id="tlayout">
-<tr valign="top">
-<td id="layout-menu">
-    <div class="menu-item"><a href="index.html">Home</a></div>
-    <div class="menu-item"><a href="research.html">Research</a></div>
-    <div class="menu-item"><a href="publications.html">Publications</a></div>
-    <div class="menu-item"><a href="dasslab.html" class="current">DASS Lab</a></div>
-    <div class="menu-item"><a href="teaching.html">Teaching</a></div>
-    <div class="menu-item"><a href="awards.html">Awards</a></div>
-    <div class="menu-item"><a href="openpositions.html">Open Positions</a></div>
-    <div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf">CV (Sep'25)</a></div>
-</td>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            Jyotikrishna Dass<br><span>U of A</span>
+        </div>
+        <div class="menu-item"><a href="index.html">Home</a></div>
+        <div class="menu-item"><a href="research.html">Research</a></div>
+        <div class="menu-item"><a href="publications.html">Publications</a></div>
+        <div class="menu-item"><a href="dasslab.html" class="current">DASS Lab</a></div>
+        <div class="menu-item"><a href="teaching.html">Teaching</a></div>
+        <div class="menu-item"><a href="awards.html">Awards</a></div>
+        <div class="menu-item"><a href="openpositions.html">Open Positions</a></div>
+        <div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf" target="_blank">CV (Sep'25)</a></div>
+    </aside>
 
-<td id="layout-content">
-    <div id="toptitle">
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Lab Banner Image -->
+        <img src="distributed-AI.png" alt="DASS Lab - Distributed AI" class="lab-banner" onerror="this.style.display='none'">
+
         <h1>DASS Lab</h1>
-    </div>
+        <p class="subtitle">Meet the research team driving innovation in Distributed AI and Scalable Systems.</p>
 
-    <h2>PhD Students</h2>
-    <div class="student-grid">
-        
-        <div class="student-card">
-            <img src="photos/hari.jpeg" alt="Hariharan Ramesh" class="student-photo" />
-            <span class="student-name">Hariharan Ramesh</span>
-            <div class="student-info">2025 - Present</div>
-            <div class="social-links">
-                <a href="#" title="Website"><i class="fas fa-globe"></i></a>
-                <a href="https://www.linkedin.com/in/hariharan-ramesh-a6420a1a8/" target=&ldquo;blank&rdquo;  title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <span class="award-tag">Outstanding GTA Award (CSE)</span>
+        <!-- PhD Students Section -->
+        <div class="section-header">
+            <div class="icon-wrapper"><i class="fas fa-user-graduate"></i></div>
+            <h2>PhD Students</h2>
         </div>
 
-        <div class="student-card">
-            <img src="photos/lydia.jpeg" alt="Lydia Obeng" class="student-photo" />
-            <span class="student-name">Lydia Obeng</span>
-            <div class="student-info">2025 - Present</div>
-            <div class="social-links">
-                <a href="#" title="Website"><i class="fas fa-globe"></i></a>
-                <a href="https://www.linkedin.com/in/lydia-obeng/" target=&ldquo;blank&rdquo; title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <div class="team-grid">
+            <!-- Hariharan Ramesh -->
+            <div class="team-card">
+                <img src="photos/hari.jpeg" alt="Hariharan Ramesh" class="team-photo" onerror="this.src='https://via.placeholder.com/150/e2e8f0/94a3b8?text=HR'">
+                <div class="team-name">Hariharan Ramesh</div>
+                <div class="team-role">2025 - Present</div>
+                <div class="team-coadvisor">&nbsp;</div> <!-- Spacer for alignment -->
+                
+                <div class="social-links">
+                    <a href="#" title="Website"><i class="fas fa-globe"></i></a>
+                    <a href="https://www.linkedin.com/in/hariharan-ramesh-a6420a1a8/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+                
+                <div class="award-badge">
+                    <i class="fas fa-award"></i> Outstanding GTA Award (CSE)
+                </div>
             </div>
-            <span class="award-tag">Herbold Fellow (Tier 1) *</span>
+
+            <!-- Lydia Obeng -->
+            <div class="team-card">
+                <img src="photos/lydia.jpeg" alt="Lydia Obeng" class="team-photo" onerror="this.src='https://via.placeholder.com/150/e2e8f0/94a3b8?text=LO'">
+                <div class="team-name">Lydia Obeng</div>
+                <div class="team-role">2025 - Present</div>
+                <div class="team-coadvisor">&nbsp;</div> <!-- Spacer for alignment -->
+                
+                <div class="social-links">
+                    <a href="#" title="Website"><i class="fas fa-globe"></i></a>
+                    <a href="https://www.linkedin.com/in/lydia-obeng/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+                
+                <div class="award-badge">
+                    <i class="fas fa-star"></i> Herbold Fellow (Tier 1) *
+                </div>
+            </div>
+
+            <!-- Vimal William -->
+            <div class="team-card">
+                <img src="photos/vimal.jpeg" alt="Vimal William" class="team-photo" onerror="this.src='https://via.placeholder.com/150/e2e8f0/94a3b8?text=VW'">
+                <div class="team-name">Vimal William</div>
+                <div class="team-role">2025 - Present</div>
+                <div class="team-coadvisor">co-advised with Prof. Ravi Tandon</div>
+                
+                <div class="social-links">
+                    <a href="#" title="Website"><i class="fas fa-globe"></i></a>
+                    <a href="https://www.linkedin.com/in/vimal-william-6b24b0165/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+                
+                <div class="award-badge">
+                    <i class="fas fa-star"></i> Herbold Fellow (Tier 1) *
+                </div>
+            </div>
         </div>
 
-        <div class="student-card">
-            <img src="photos/vimal.jpeg" alt="Vimal William" class="student-photo" />
-            <span class="student-name">Vimal William</span>
-            <div class="student-info">2025 - Present<br/>co-advised with Prof. Ravi Tandon</div>
-            <div class="social-links">
-                <a href="#" title="Website"><i class="fas fa-globe"></i></a>
-                <a href="https://www.linkedin.com/in/vimal-william-6b24b0165/" target=&ldquo;blank&rdquo;  title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <span class="award-tag">Herbold Fellow (Tier 1)*</span>
+
+        <!-- Masters Students Section -->
+        <div class="section-header">
+            <div class="icon-wrapper"><i class="fas fa-book-reader"></i></div>
+            <h2>Masters Students</h2>
         </div>
 
-    </div>
+        <ul class="masters-list">
+            <li>
+                <div class="masters-info">
+                    <span class="masters-name">Hariharan Ramesh</span>
+                    <span class="masters-role">2024 - 2025</span>
+                </div>
+                <div class="masters-award">
+                    <i class="fas fa-medal"></i> Distinguished Graduate Scholar 2025
+                </div>
+            </li>
+        </ul>
 
-    <div class="footnote">
-        <p><em>*The Herbold Foundation provides scholarship funds for master’s and early career doctoral students studying engineering, computer science, and data science at select universities throughout the United States. Robert I. (Bob) Herbold is president of The Herbold Foundation and former COO of Microsoft. Each year a handful of outstanding students at the UofA College of Engineering receive significant funding (Tier 1: full tuition and stipend covered with travel and research support) in their first year of study including summer.</em></p>
-    </div>
 
-    <h2>Masters Students</h2>
-    <ul>
-        <li><strong>Hariharan Ramesh</strong> (2024-2025) | <span style="color:blue;">Distinguished Graduate Scholar 2025</span></li>
-    </ul>
-</td>
-</tr>
-</table>
+        <!-- Footnote -->
+        <div class="footnote-box">
+            <i class="fas fa-info-circle"></i>
+            <em>*The Herbold Foundation provides scholarship funds for master’s and early career doctoral students studying engineering, computer science, and data science at select universities throughout the United States. Robert I. (Bob) Herbold is president of The Herbold Foundation and former COO of Microsoft. Each year a handful of outstanding students at the UofA College of Engineering receive significant funding (Tier 1: full tuition and stipend covered with travel and research support) in their first year of study including summer.</em>
+        </div>
+
+    </main>
 
 </body>
 </html>

@@ -170,6 +170,103 @@
             border-bottom: 1px solid #ab0520;
             background-color: rgba(171, 5, 32, 0.05);
         }
+		
+		/* Activity Feed Widget */
+		        .activity-feed-widget {
+		            background: #fff;
+		            border-radius: 12px;
+		            margin-bottom: 3rem;
+		            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+		            border: 1px solid #e2e8f0;
+		            overflow: hidden;
+		            display: flex;
+		            flex-direction: column;
+		            max-height: 480px;
+		        }
+		        .feed-header {
+		            background: #f8fafc;
+		            padding: 1.2rem 1.5rem;
+		            border-bottom: 1px solid #e2e8f0;
+		            display: flex;
+		            align-items: center;
+		            justify-content: space-between;
+		            font-weight: 700;
+		            color: #0c2340;
+		            z-index: 2;
+		        }
+		        .feed-header div { display: flex; align-items: center; gap: 0.75rem; }
+		        .feed-header i { color: #0077b5; font-size: 1.3rem; }
+		        .feed-status {
+		            font-size: 0.75rem;
+		            color: #10b981;
+		            background: #ecfdf5;
+		            padding: 2px 8px;
+		            border-radius: 12px;
+		            text-transform: uppercase;
+		        }
+		        .feed-viewport {
+		            position: relative;
+		            flex: 1;
+		            overflow: hidden;
+		            background: #fafbfc;
+		        }
+		        .feed-viewport::before, .feed-viewport::after {
+		            content: '';
+		            position: absolute;
+		            left: 0; right: 0; height: 40px; z-index: 1; pointer-events: none;
+		        }
+		        .feed-viewport::before { top: 0; background: linear-gradient(to bottom, #fafbfc, transparent); }
+		        .feed-viewport::after { bottom: 0; background: linear-gradient(to top, #fafbfc, transparent); }
+
+		        .feed-content {
+		            display: flex;
+		            flex-direction: column;
+		            animation: feedScroll 45s linear infinite;
+		        }
+		        .feed-content:hover { animation-play-state: paused; }
+
+		        .feed-item {
+		            padding: 1.25rem 1.5rem;
+		            border-bottom: 1px solid #e2e8f0;
+		            background: #fff;
+		            display: flex;
+		            gap: 1.25rem;
+		            align-items: flex-start;
+		            transition: all 0.3s ease;
+		            box-sizing: border-box;
+		        }
+		        .feed-item:hover { background: #f8fafc; border-left: 4px solid #0077b5; padding-left: calc(1.5rem - 4px); }
+
+		        .feed-date {
+		            flex-shrink: 0;
+		            width: 60px;
+		            text-align: center;
+		            padding: 0.4rem;
+		            background: #f1f5f9;
+		            border-radius: 8px;
+		            border: 1px solid #e2e8f0;
+		        }
+		        .feed-date .month {
+		            display: block; font-size: 0.65rem; font-weight: 800; color: #0077b5; text-transform: uppercase; line-height: 1;
+		        }
+		        .feed-date .year {
+		            display: block; font-size: 0.8rem; font-weight: 700; color: #1e293b; margin-top: 2px;
+		        }
+
+		        .feed-info { flex: 1; }
+		        .feed-item-title {
+		            font-weight: 700; color: #1e293b; text-decoration: none; font-size: 0.95rem; line-height: 1.4; display: block; margin-bottom: 4px;
+		        }
+		        .feed-item-title:hover { color: #0077b5; }
+		        .feed-item-desc {
+		            font-size: 0.85rem; color: #64748b; line-height: 1.5; margin: 0;
+		            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+		        }
+
+		        @keyframes feedScroll {
+		            0% { transform: translateY(0); }
+		            100% { transform: translateY(-50%); }
+		        }		
 
         /* News Section & Filters */
         .news-filters {
@@ -298,6 +395,7 @@
                 </div>
             </div>
         </section>
+		
 
         <!-- Biography -->
         <section class="bio-section">
@@ -308,6 +406,136 @@
             
             <p>Dr. Dass earned his PhD in Computer Science and Engineering from Texas A&M University in 2021. His research was recognized with the <strong>Best PhD Dissertation Poster Award</strong> at the Annual Computing Conference, 2019 among fourteen SEC universities. He was also a <strong>College of Engineering Graduate Teaching Fellow</strong> in 2020 and received the <strong>CSE Teaching Assistant Excellence Award</strong> in 2018. He holds a B.Tech degree in Electronics and Communication engineering with a Minor in CSE from the Indian Institute of Technology (IIT) Guwahati.</p>
         </section>
+		
+		
+		<!-- Vertical Activity Feed Widget -->
+		        <div class="activity-feed-widget">
+		            <div class="feed-header">
+		                <div><i class="fab fa-linkedin"></i> Highlights: 2025 - 2026</div>
+		                <span class="feed-status">Live Updates</span>
+		            </div>
+		            <div class="feed-viewport">
+		                <div class="feed-content">
+		                    <!-- ORIGINAL SET (Last 1 Year) -->
+		                    <!-- <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
+		                        <div class="feed-info">
+		                            <a href="#" class="feed-item-title">Current Research: Scalable Privacy in GenAI</a>
+		                            <p class="feed-item-desc">Actively developing new frameworks for efficient federated learning and data privacy in large-scale language models.</p>
+		                        </div> 
+		                    </div>-->
+		                    <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
+		                        <div class="feed-info">
+		                            <a href="https://www.linkedin.com/posts/jyotikrishnadass_nsf-levelupai-cra-activity-7415803746695159808-3pDY" target="_blank" class="feed-item-title">NSF LEVEL UP AI Phase 2 (Phoenix)</a>
+		                            <p class="feed-item-desc">Representing UofA at the NSF Level Up AI workshop to shape the national AI curriculum for future engineering leaders.</p>
+		                        </div>
+		                    </div>
+		                    <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Jan</span><span class="year">2026</span></div>
+		                        <div class="feed-info">
+		                            <a href="https://www.linkedin.com/posts/uarizonaece_aispark-uarizonaece-ai-ugcPost-7397003792946388993-Ft1Y" target="_blank" class="feed-item-title">AI SPARK Workshop Kickoff</a>
+		                            <p class="feed-item-desc">Launched a massive hands-on workshop for over 100 participants focusing on applied Generative AI and automation.</p>
+		                        </div>
+		                    </div>
+		                    <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <a href="https://www.linkedin.com/posts/hariharan-ramesh-a6420a1a8_beardown-uarizonaece-studentsuccess-activity-7405797730775764992-Xn5O" target="_blank" class="feed-item-title">Outstanding GTA Award: Hariharan Ramesh</a>
+		                            <p class="feed-item-desc">A major milestone for the DASS Lab as Hariharan receives the prestigious Outstanding Graduate Teaching Assistant Award.</p>
+		                        </div>
+		                    </div>
+		                    <!-- <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <a href="#" class="feed-item-title">Fall Semester Research Launch</a>
+		                            <p class="feed-item-desc">Welcomed new PhD and Masters students to the DASS Lab for the Fall '25 cohort to work on Distributed AI Systems.</p>
+		                        </div>
+		                    </div> -->
+		                    <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Aug</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <a href="https://www.linkedin.com/posts/uarizonaece_nvidiagrant-generativeai-federatedlearning-activity-7376328799233200130-vHKo" target="_blank" class="feed-item-title">NVIDIA Academic Grant Awarded</a>
+		                            <p class="feed-item-desc">Received hardware support from NVIDIA to accelerate lab research in decentralized training of foundational models.</p>
+		                        </div>
+		                    </div>
+		                    <!-- <div class="feed-item">
+		                        <div class="feed-date"><span class="month">May</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <a href="#" class="feed-item-title">Spring Graduation Success</a>
+		                            <p class="feed-item-desc">Celebrating our graduating seniors and masters students as they transition to industry roles and further research.</p>
+		                        </div>
+		                    </div> -->
+		                    <!-- <div class="feed-item">
+		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <a href="#" class="feed-item-title">Paper Presentation: Distributed Optimization</a>
+		                            <p class="feed-item-desc">Presented recent findings on scalable optimization techniques for high-dimensional data at a top-tier venue.</p>
+		                        </div>
+		                    </div> -->
+
+		                    <!-- CLONED SET (Exact copies for seamless loop) -->
+		                    <!-- <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">Current Research: Scalable Privacy in GenAI</span>
+		                            <p class="feed-item-desc">Actively developing new frameworks for efficient federated learning and data privacy in large-scale language models.</p>
+		                        </div> 
+		                    </div> -->
+		                    <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">NSF LEVEL UP AI Phase 2 (Phoenix)</span>
+		                            <p class="feed-item-desc">Representing UofA at the NSF Level Up AI workshop to shape the national AI curriculum for future engineering leaders.</p>
+		                        </div>
+		                    </div>
+		                    <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Jan</span><span class="year">2026</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">AI SPARK Workshop Kickoff</span>
+		                            <p class="feed-item-desc">Launched a massive hands-on workshop for over 100 participants focusing on applied Generative AI and automation.</p>
+		                        </div>
+		                    </div>
+		                    <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">Outstanding GTA Award: Hariharan Ramesh</span>
+		                            <p class="feed-item-desc">A major milestone for the DASS Lab as Hariharan receives the prestigious Outstanding Graduate Teaching Assistant Award.</p>
+		                        </div>
+		                    </div>
+		                    <!-- <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">Fall Semester Research Launch</span>
+		                            <p class="feed-item-desc">Welcomed new PhD and Masters students to the DASS Lab for the Fall '25 cohort to work on Distributed AI Systems.</p>
+		                        </div> 
+		                    </div>-->
+		                    <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Aug</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">NVIDIA Academic Grant Awarded</span>
+		                            <p class="feed-item-desc">Received hardware support from NVIDIA to accelerate lab research in decentralized training of foundational models.</p>
+		                        </div>
+		                    </div>
+		                    <!-- <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">May</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">Spring Graduation Success</span>
+		                            <p class="feed-item-desc">Celebrating our graduating seniors and masters students as they transition to industry roles and further research.</p>
+		                        </div>
+		                    </div> -->
+		                    <!-- <div class="feed-item" aria-hidden="true">
+		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2025</span></div>
+		                        <div class="feed-info">
+		                            <span class="feed-item-title">Paper Presentation: Distributed Optimization</span>
+		                            <p class="feed-item-desc">Presented recent findings on scalable optimization techniques for high-dimensional data at a top-tier venue.</p>
+		                        </div>
+		                    </div> -->
+		                </div>
+		            </div>
+		        </div>
+				
+		
 
         <!-- News Section -->
         <section>

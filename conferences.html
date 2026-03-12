@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Deadlines - DASS Lab</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --ua-navy: #0c2340;
+            --ua-red: #ab0520;
+            --bg-gray: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --ai-color: #6366f1;
+            --sys-color: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-gray);
+            color: #1e293b;
+            line-height: 1.5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ua-navy);
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            background: #e2e8f0;
+            padding: 0.25rem;
+            border-radius: 8px;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: #475569;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: var(--ua-navy);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        .section-divider {
+            grid-column: 1 / -1;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #cbd5e1;
+        }
+
+        .deadline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border-top: 4px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .card.expired { opacity: 0.7; border-top-color: #cbd5e1 !important; }
+        .card:hover { transform: translateY(-4px); opacity: 1; }
+        .card.cat-ai { border-top-color: var(--ai-color); }
+        .card.cat-sys { border-top-color: var(--sys-color); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .conf-name { font-size: 1.4rem; font-weight: 800; color: var(--ua-navy); }
+        
+        .conf-link { 
+            color: #94a3b8; 
+            font-size: 0.9rem; 
+            transition: color 0.2s;
+        }
+        .conf-link:hover { color: var(--ua-red); }
+
+        .conf-full { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; min-height: 2.5em; overflow: hidden; }
+
+        .countdown-timer {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1rem;
+            border: 1px solid #f1f5f9;
+        }
+
+        .expired .countdown-timer { background: #f1f5f9; }
+
+        .time-unit { text-align: center; }
+        .time-val { display: block; font-size: 1.1rem; font-weight: 700; color: var(--ua-navy); }
+        .time-label { font-size: 0.6rem; text-transform: uppercase; color: #94a3b8; font-weight: 600; }
+
+        .deadline-details {
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 0.5rem 0;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .dl-item { display: flex; justify-content: space-between; align-items: center; }
+        .dl-label { color: #64748b; font-weight: 500; }
+        .dl-date { color: #1e293b; font-weight: 700; }
+        .passed { text-decoration: line-through; color: #cbd5e1; }
+
+        .conf-occurrence {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #fff7ed;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #c2410c;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expired .conf-occurrence { background: #f8fafc; color: #94a3b8; }
+
+        .tag-row { margin-top: auto; padding-top: 1rem; display: flex; gap: 0.4rem; }
+        .badge { font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+        .badge-ai { background: #e0e7ff; color: var(--ai-color); }
+        .badge-sys { background: #fef3c7; color: var(--sys-color); }
+
+        .loading-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+        .loading-state i { margin-bottom: 1rem; color: var(--ai-color); }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Academic Deadline Tracker</h1>
+        <p class="subtitle">DASS Lab • AI/ML & Computer Systems Research</p>
+    </header>
+
+    <div class="controls">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="filter('all', this)">All</button>
+            <button class="filter-btn" onclick="filter('ai', this)">AI/ML</button>
+            <button class="filter-btn" onclick="filter('sys', this)">Systems</button>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search conference..." onkeyup="search()">
+        </div>
+    </div>
+
+    <div class="deadline-grid" id="deadlineGrid">
+        <!-- Initially shows loading state -->
+        <div class="loading-state">
+            <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+            <h3>Fetching Live Deadlines...</h3>
+            <p>Syncing with CCF-DDL community repository.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global variable to store the fetched/merged data
+    let allConferences = [];
+    let currentCategory = 'all';
+
+    // 1. Definition of target conferences
+    const TARGET_CONFS = {
+        // AI/ML
+        "ICML": "ai", "NeurIPS": "ai", "ICLR": "ai", "CVPR": "ai", "ACL": "ai", 
+        "ECCV": "ai", "ICCV": "ai", "ECML-PKDD": "ai", "EMNLP": "ai", "NAACL": "ai", 
+        "MLSys": "ai", "KDD": "ai", "AAAI": "ai", "CPAL": "ai",
+        // Systems
+        "ISCA": "sys", "HPCA": "sys", "MICRO": "sys", "IPDPS": "sys", "DAC": "sys", 
+        "SC": "sys", "ICDCS": "sys"
+    };
+
+    // 2. Original Hardcoded Array (used as a fallback and to fill missing gaps)
+    const FALLBACK_CONFERENCES = [
+        // AI/ML
+        { name: "ICML", full: "Int'l Conference on Machine Learning", category: "ai", abstract: "2026-01-23", fullPaper: "2026-01-30", confDate: "July 12-18, 2026", url: "https://icml.cc", location: "Vienna, Austria" },
+        { name: "NeurIPS", full: "Neural Information Processing Systems", category: "ai", abstract: "2026-05-14", fullPaper: "2026-05-21", confDate: "Dec 2026", url: "https://nips.cc", location: "Vancouver, Canada" },
+        { name: "ICLR", full: "Int'l Conference on Learning Representations", category: "ai", abstract: "2025-09-25", fullPaper: "2025-10-02", confDate: "April 2026", url: "https://iclr.cc", location: "TBA" },
+        { name: "CVPR", full: "Conf. on Computer Vision and Pattern Recognition", category: "ai", abstract: "2025-11-10", fullPaper: "2025-11-17", confDate: "June 2026", url: "https://cvpr.thecvf.com", location: "Nashville, USA" },
+        { name: "ACL", full: "Association for Computational Linguistics", category: "ai", abstract: "2026-02-01", fullPaper: "2026-02-15", confDate: "Aug 2026", url: "https://www.aclweb.org", location: "TBA" },
+        { name: "ECCV", full: "European Conference on Computer Vision", category: "ai", abstract: "2026-03-01", fullPaper: "2026-03-08", confDate: "Sept 2026", url: "https://eccv.app", location: "TBA" },
+        { name: "ICCV", full: "Int'l Conference on Computer Vision", category: "ai", abstract: "2025-03-05", fullPaper: "2025-03-12", confDate: "Oct 2025", url: "https://iccv.thecvf.com", location: "Expired" },
+        { name: "ECML-PKDD", full: "European Conf. on Machine Learning", category: "ai", abstract: "2026-03-15", fullPaper: "2026-03-22", confDate: "Sept 2026", url: "https://ecmlpkdd.org", location: "TBA" },
+        { name: "EMNLP", full: "Empirical Methods in Natural Language Processing", category: "ai", abstract: "2026-05-10", fullPaper: "2026-05-17", confDate: "Nov 2026", url: "https://emnlp.org", location: "TBA" },
+        { name: "NAACL", full: "North American Chapter of the ACL", category: "ai", abstract: "2025-12-15", fullPaper: "2025-12-22", confDate: "June 2026", url: "https://2026.naacl.org", location: "TBA" },
+        { name: "MLSys", full: "Conference on Machine Learning and Systems", category: "ai", abstract: "2025-10-20", fullPaper: "2025-10-27", confDate: "March 2026", url: "https://mlsys.org", location: "TBA" },
+        { name: "KDD", full: "SIGKDD Conf. on Knowledge Discovery & Data Mining", category: "ai", abstract: "2026-02-05", fullPaper: "2026-02-12", confDate: "Aug 2026", url: "https://kdd.org", location: "TBA" },
+        { name: "AAAI", full: "AAAI Conf. on Artificial Intelligence", category: "ai", abstract: "2025-08-07", fullPaper: "2025-08-15", confDate: "Feb 2026", url: "https://aaai.org", location: "Philadelphia, USA" },
+        { name: "CPAL", full: "Conference on Parsimony and Learning", category: "ai", abstract: "TBA", fullPaper: "TBA", confDate: "TBA", url: "https://cpal.cc", location: "TBA" },
+        
+        // Systems
+        { name: "ISCA", full: "Int'l Symposium on Computer Architecture", category: "sys", abstract: "2025-11-15", fullPaper: "2025-11-22", confDate: "June 2026", url: "https://iscaconf.org", location: "Tokyo, Japan" },
+        { name: "HPCA", full: "High-Performance Computer Architecture", category: "sys", abstract: "2025-07-25", fullPaper: "2025-08-01", confDate: "Feb 2026", url: "https://hpca-conf.org", location: "Seoul, Korea" },
+        { name: "MICRO", full: "IEEE/ACM Int'l Symposium on Microarchitecture", category: "sys", abstract: "2026-04-10", fullPaper: "2026-04-17", confDate: "Oct 2026", url: "https://microarch.org", location: "TBA" },
+        { name: "IPDPS", full: "Int'l Parallel & Distributed Processing Symposium", category: "sys", abstract: "2025-10-15", fullPaper: "2025-10-22", confDate: "May 2026", url: "https://ipdps.org", location: "Milan, Italy" },
+        { name: "DAC", full: "Design Automation Conference", category: "sys", abstract: "2025-11-15", fullPaper: "2025-11-22", confDate: "June 2026", url: "https://dac.com", location: "San Francisco, USA" },
+        { name: "SC", full: "Supercomputing Conference", category: "sys", abstract: "2026-03-20", fullPaper: "2026-03-27", confDate: "Nov 2026", url: "https://sc26.supercomputing.org", location: "TBA" },
+        { name: "ICDCS", full: "Int'l Conference on Distributed Computing Systems", category: "sys", abstract: "2026-01-10", fullPaper: "2026-01-20", confDate: "July 2026", url: "https://icdcs.org", location: "TBA" }
+    ];
+
+    // Helper to extract just the YYYY-MM-DD from API date strings
+    function normalizeDate(dateStr) {
+        if (!dateStr || String(dateStr).toUpperCase() === "TBA" || String(dateStr).toUpperCase() === "TBD") {
+            return "TBA";
+        }
+        return String(dateStr).split(' ')[0].split('T')[0];
+    }
+
+    // 3. Fetching Logic
+    async function fetchConferences() {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/allconf.json');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const rawData = await response.json();
+            
+            const liveConferences = rawData
+                .filter(conf => TARGET_CONFS.hasOwnProperty(conf.title))
+                .map(conf => {
+                    const latestIteration = conf.confs && conf.confs[0] ? conf.confs[0] : {};
+                    const timelines = latestIteration.timeline || [];
+                    const firstTimeline = timelines[0] || {};
+                    
+                    return {
+                        name: conf.title,
+                        full: conf.description || conf.title,
+                        category: TARGET_CONFS[conf.title],
+                        abstract: normalizeDate(firstTimeline.abstract_deadline || firstTimeline.deadline),
+                        fullPaper: normalizeDate(firstTimeline.deadline),
+                        confDate: latestIteration.date || "TBA",
+                        url: latestIteration.link || conf.url || "",
+                        location: latestIteration.place || "TBA"
+                    };
+                });
+
+            // Merge any missing conferences from the fallback array
+            const liveNames = new Set(liveConferences.map(c => c.name));
+            const missingFromLive = FALLBACK_CONFERENCES.filter(c => !liveNames.has(c.name));
+
+            return [...liveConferences, ...missingFromLive];
+
+        } catch (error) {
+            console.warn("Failed to fetch live conference data. Using fallback hardcoded list.", error);
+            return FALLBACK_CONFERENCES;
+        }
+    }
+
+    // --- UI Logic ---
+
+    function getStatusClass(dateStr) {
+        if (dateStr === "TBA") return '';
+        return new Date(dateStr + "T23:59:59") < new Date() ? 'passed' : '';
+    }
+
+    function createCard(conf) {
+        const isTBA = conf.fullPaper === "TBA";
+        let days = 0, hours = 0, isExpired = false;
+
+        if (!isTBA) {
+            const primaryDL = new Date(conf.fullPaper + "T23:59:59");
+            const now = new Date();
+            const diff = primaryDL - now;
+            isExpired = diff < 0;
+            days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        }
+        
+        return `
+            <div class="card cat-${conf.category} ${isExpired ? 'expired' : ''}">
+                <div class="card-header">
+                    <span class="conf-name">${conf.name}</span>
+                    <a href="${conf.url}" target="_blank" class="conf-link"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+                <div class="conf-full">${conf.full}</div>
+                
+                <div class="countdown-timer">
+                    <div class="time-unit">
+                        <span class="time-val">${isTBA ? '--' : (isExpired ? '0' : days)}</span>
+                        <span class="time-label">Days Left</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-val">${isTBA ? '--' : (isExpired ? '0' : hours)}</span>
+                        <span class="time-label">Hours</span>
+                    </div>
+                </div>
+
+                <div class="deadline-details">
+                    <div class="dl-item">
+                        <span class="dl-label">Abstract</span>
+                        <span class="dl-date ${getStatusClass(conf.abstract)}">${conf.abstract}</span>
+                    </div>
+                    <div class="dl-item">
+                        <span class="dl-label">Full Paper</span>
+                        <span class="dl-date ${getStatusClass(conf.fullPaper)}">${conf.fullPaper}</span>
+                    </div>
+                </div>
+
+                <div class="conf-occurrence">
+                    <i class="far fa-calendar-alt"></i>
+                    <span>${conf.confDate} • ${conf.location}</span>
+                </div>
+
+                <div class="tag-row">
+                    <span class="badge badge-${conf.category}">${conf.category === 'ai' ? 'AI / ML' : 'Systems'}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function render(list) {
+        const now = new Date();
+        
+        // Sort: Active first (by date), then Expired (by date)
+        const active = list.filter(c => c.fullPaper === "TBA" || new Date(c.fullPaper + "T23:59:59") >= now)
+                           .sort((a, b) => {
+                               if (a.fullPaper === "TBA") return 1;
+                               if (b.fullPaper === "TBA") return -1;
+                               return new Date(a.fullPaper) - new Date(b.fullPaper);
+                           });
+        
+        const expired = list.filter(c => c.fullPaper !== "TBA" && new Date(c.fullPaper + "T23:59:59") < now)
+                            .sort((a, b) => new Date(a.fullPaper) - new Date(b.fullPaper));
+
+        let html = '';
+        if (active.length > 0) {
+            html += `<div class="section-divider">Active Submissions</div>`;
+            html += active.map(c => createCard(c)).join('');
+        }
+        if (expired.length > 0) {
+            html += `<div class="section-divider">Past Deadlines</div>`;
+            html += expired.map(c => createCard(c)).join('');
+        }
+
+        if (html === '') {
+            html = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem;">No conferences found.</div>`;
+        }
+
+        document.getElementById('deadlineGrid').innerHTML = html;
+    }
+
+    // --- Interactions ---
+
+    function filter(cat, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = cat;
+        
+        // Apply both filter and search simultaneously
+        applyFilters();
+    }
+
+    function search() {
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        
+        const results = allConferences.filter(c => {
+            const matchesCategory = currentCategory === 'all' || c.category === currentCategory;
+            const matchesSearch = c.name.toLowerCase().includes(q) || c.full.toLowerCase().includes(q);
+            return matchesCategory && matchesSearch;
+        });
+        
+        render(results);
+    }
+
+    // Initialize application
+    window.onload = async () => {
+        // Fetch data (shows loading state automatically from initial HTML)
+        allConferences = await fetchConferences();
+        
+        // Initial render
+        render(allConferences);
+    };
+</script>
+</body>
+</html>

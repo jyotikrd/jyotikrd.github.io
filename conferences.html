@@ -81,14 +81,7 @@
         .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
         .card.cat-ai  { border-top-color: var(--ai-color); }
         .card.cat-sys { border-top-color: var(--sys-color); }
-        
-        /* Consistent visibility for expired cards */
-        .card.expired { 
-            opacity: 0.85; 
-            filter: grayscale(0.2); 
-            background: #fcfcfc;
-            border-top-color: #94a3b8 !important; 
-        }
+        .card.expired { opacity: 0.55; filter: grayscale(0.5); }
 
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem; }
         .conf-name { font-size: 1.35rem; font-weight: 800; color: var(--ua-navy); }
@@ -104,12 +97,13 @@
         .val {
             display: block; font-size: 1.4rem; font-weight: 800;
             font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+            transition: color 0.4s;
         }
         .val.urgent { color: var(--ua-red); }
         .val.soon   { color: #d97706; }
         .val.ok     { color: var(--ua-navy); }
         .val.tba    { color: #94a3b8; font-size: 0.95rem; font-weight: 600; }
-        .sep { font-size: 1.3rem; font-weight: 700; color: #94a3b8; padding-bottom: 14px; }
+        .sep { font-size: 1.3rem; font-weight: 700; color: #94a3b8; padding-bottom: 14px; padding-left: 1px; padding-right: 1px; }
         .lab { font-size: 0.58rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.06em; margin-top: 2px; }
 
         .dates {
@@ -120,7 +114,7 @@
         .date-label { color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 0.35rem; }
         .date-value { font-weight: 700; color: #1e293b; }
         .date-value.tba    { color: #94a3b8; font-weight: 500; }
-        .date-value.passed { color: #94a3b8; text-decoration: line-through; font-weight: 400; }
+        .date-value.passed { color: #cbd5e1; text-decoration: line-through; font-weight: 400; }
 
         .meta {
             margin-top: auto; padding-top: 0.85rem;
@@ -135,8 +129,8 @@
         .bg-ai  { background: #e0e7ff; color: var(--ai-color); }
         .bg-sys { background: #fef3c7; color: var(--sys-color); }
 
-        .live-dot   { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: blink 2s infinite; }
-        .static-dot { width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; }
+        .live-dot   { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: #10b981; animation: blink 2s infinite; }
+        .static-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: #f59e0b; }
 
         .loading-wrap { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #64748b; }
         .spinner {
@@ -148,7 +142,7 @@
             max-width: 280px; margin: 0.75rem auto 0;
             height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden;
         }
-        .progress-bar { height: 100%; background: var(--ua-navy); transition: width 0.3s; }
+        .progress-bar { height: 100%; background: var(--ua-navy); border-radius: 2px; transition: width 0.3s; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -156,10 +150,10 @@
 <div class="container">
     <header>
         <h1>DASS Lab Deadline Tracker</h1>
-        <p class="subtitle">Comprehensive Conference List • AI/ML/NLP & Systems/Arch</p>
+        <p class="subtitle">Comprehensive Conference List • AI/ML/NLP &amp; Systems/Arch</p>
         <div class="sync-line" id="syncLine">
             <span class="pulse" id="syncDot"></span>
-            <span id="syncText">Connecting to live data...</span>
+            <span id="syncText">Connecting to ccfddl live data...</span>
         </div>
     </header>
 
@@ -178,7 +172,7 @@
     <div class="deadline-grid" id="deadlineGrid">
         <div class="loading-wrap">
             <div class="spinner"></div>
-            <div>Syncing with repository...</div>
+            <div>Fetching live deadline data from ccfddl...</div>
             <div class="progress-bar-wrap"><div class="progress-bar" id="progBar" style="width:0%"></div></div>
         </div>
     </div>
@@ -186,7 +180,10 @@
 
 <script>
 // ── MASTER CONFERENCE LIST ───────────────────────────────────────────────────
+// sub  = subdirectory under conference/ in ccfddl repo
+// file = yml filename (lowercase)
 const MASTER = [
+    // AI/ML/NLP
     { id:"ICML",      name:"ICML",      full:"International Conference on Machine Learning",           cat:"ai",  sub:"AI", file:"icml"      },
     { id:"NeurIPS",   name:"NeurIPS",   full:"Neural Information Processing Systems",                  cat:"ai",  sub:"AI", file:"neurips"   },
     { id:"ICLR",      name:"ICLR",      full:"International Conference on Learning Representations",   cat:"ai",  sub:"AI", file:"iclr"      },
@@ -195,45 +192,180 @@ const MASTER = [
     { id:"ECCV",      name:"ECCV",      full:"European Conference on Computer Vision",                 cat:"ai",  sub:"AI", file:"eccv"      },
     { id:"ICCV",      name:"ICCV",      full:"International Conference on Computer Vision",            cat:"ai",  sub:"AI", file:"iccv"      },
     { id:"ECML-PKDD", name:"ECML-PKDD", full:"Machine Learning and Knowledge Discovery in Databases",  cat:"ai",  sub:"AI", file:"ecml_pkdd" },
-    { id:"EMNLP",     name:"EMNLP",     full:"Empirical Methods in Natural Language Processing",       cat:"ai",  sub:"AI", file:"emnlp"     },
+    { id:"EMNLP",     name:"EMNLP",     full:"Empirical Methods in Natural Language Processing",      cat:"ai",  sub:"AI", file:"emnlp"     },
     { id:"NAACL",     name:"NAACL",     full:"North American Chapter of the ACL",                     cat:"ai",  sub:"AI", file:"naacl"     },
     { id:"MLSys",     name:"MLSys",     full:"Conference on Machine Learning and Systems",             cat:"ai",  sub:"AI", file:"mlsys"     },
     { id:"KDD",       name:"KDD",       full:"Knowledge Discovery and Data Mining",                    cat:"ai",  sub:"DB", file:"kdd"       },
     { id:"AAAI",      name:"AAAI",      full:"AAAI Conference on Artificial Intelligence",             cat:"ai",  sub:"AI", file:"aaai"      },
     { id:"IJCAI",     name:"IJCAI",     full:"International Joint Conference on Artificial Intelligence", cat:"ai", sub:"AI", file:"ijcai"  },
+    { id:"SIGIR",     name:"SIGIR",     full:"Research and Development in Information Retrieval",      cat:"ai",  sub:"DB", file:"sigir"     },
+    { id:"WSDM",      name:"WSDM",      full:"Web Search and Data Mining",                             cat:"ai",  sub:"DB", file:"wsdm"      },
     { id:"WWW",       name:"WWW",       full:"The Web Conference",                                     cat:"ai",  sub:"DB", file:"www"       },
+    { id:"COLING",    name:"COLING",    full:"International Conference on Computational Linguistics",  cat:"ai",  sub:"AI", file:"coling"    },
     { id:"CPAL",      name:"CPAL",      full:"Conference on Parsimony and Learning",                   cat:"ai",  sub:"AI", file:"cpal"      },
-    { id:"ISCA",      name:"ISCA",      full:"International Symposium on Computer Architecture",        cat:"sys", sub:"DS", file:"isca"     },
-    { id:"HPCA",      name:"HPCA",      full:"High-Performance Computer Architecture",                  cat:"sys", sub:"DS", file:"hpca"     },
-    { id:"MICRO",     name:"MICRO",     full:"International Symposium on Microarchitecture",            cat:"sys", sub:"DS", file:"micro"    },
-    { id:"IPDPS",     name:"IPDPS",     full:"Int'l Parallel & Distributed Processing Symposium",      cat:"sys", sub:"DS", file:"ipdps"    },
-    { id:"DAC",       name:"DAC",       full:"Design Automation Conference",                            cat:"sys", sub:"DS", file:"dac"      },
-    { id:"ASPLOS",    name:"ASPLOS",    full:"Architectural Support for Prog. Lang. and OS",            cat:"sys", sub:"DS", file:"asplos"   },
-    { id:"EuroSys",   name:"EuroSys",   full:"European Conference on Computer Systems",               cat:"sys", sub:"SE", file:"eurosys"  },
-    { id:"SC",        name:"SC",        full:"Supercomputing Conference",                            cat:"sys", sub:"DS", file:"sc"       },
-    { id:"ICDCS",     name:"ICDCS",     full:"Int'l Conference on Distributed Computing Systems",       cat:"sys", sub:"DS", file:"icdcs"    },
-    { id:"ICS",       name:"ICS",       full:"International Conference on Supercomputing",             cat:"sys", sub:"DS", file:"ics"      },
-    { id:"HPDC",      name:"HPDC",      full:"High-Performance Parallel and Distributed Computing",     cat:"sys", sub:"DS", file:"hpdc"     },
-    { id:"PPoPP",     name:"PPoPP",     full:"Principles and Practice of Parallel Programming",         cat:"sys", sub:"DS", file:"ppopp"    },
-    { id:"HiPC",      name:"HiPC",      full:"IEEE International Conference on High Performance Computing", cat:"sys", sub:"DS", file:"hipc"  },
+    // Systems / Architecture (incl. HPC/Dist)
+    { id:"ISCA",   name:"ISCA",   full:"International Symposium on Computer Architecture",        cat:"sys", sub:"DS", file:"isca"   },
+    { id:"HPCA",   name:"HPCA",   full:"High-Performance Computer Architecture",                  cat:"sys", sub:"DS", file:"hpca"   },
+    { id:"MICRO",  name:"MICRO",  full:"International Symposium on Microarchitecture",            cat:"sys", sub:"DS", file:"micro"  },
+    { id:"IPDPS",  name:"IPDPS",  full:"Int'l Parallel & Distributed Processing Symposium",      cat:"sys", sub:"DS", file:"ipdps"  },
+    { id:"DAC",    name:"DAC",    full:"Design Automation Conference",                            cat:"sys", sub:"DS", file:"dac"    },
+    { id:"ASPLOS", name:"ASPLOS", full:"Architectural Support for Prog. Lang. and OS",            cat:"sys", sub:"DS", file:"asplos" },
+    { id:"EuroSys", name:"EuroSys", full:"European Conference on Computer Systems",              cat:"sys", sub:"SE", file:"eurosys" },
+    { id:"SC",    name:"SC",    full:"Supercomputing Conference",                            cat:"sys", sub:"DS", file:"sc"    },
+    { id:"ICDCS", name:"ICDCS", full:"Int'l Conference on Distributed Computing Systems",   cat:"sys", sub:"DS", file:"icdcs" },
+    { id:"ICS",   name:"ICS",   full:"International Conference on Supercomputing",           cat:"sys", sub:"DS", file:"ics"   },
+    { id:"HPDC",  name:"HPDC",  full:"High-Performance Parallel and Distributed Computing", cat:"sys", sub:"DS", file:"hpdc"  },
+    { id:"PPoPP", name:"PPoPP", full:"Principles and Practice of Parallel Programming",     cat:"sys", sub:"DS", file:"ppopp" },
+    { id:"HiPC",  name:"HiPC",  full:"IEEE International Conference on High Performance Computing", cat:"sys", sub:"DS", file:"hipc" },
 ];
 
+const BASE = "https://raw.githubusercontent.com/ccfddl/ccf-deadlines/refs/heads/main/conference/";
+
+// ── YAML PARSER ─────────────────────────────────────────────────────────────
+function parseConf(yaml) {
+    const confsIdx = yaml.indexOf('confs:');
+    if (confsIdx === -1) return null;
+    const body = yaml.slice(confsIdx + 6);
+
+    // Split into per-year entries (lines starting with 4 spaces then "- year:")
+    const rawBlocks = body.split(/\n    - year:/);
+    const entries = [];
+
+    for (const raw of rawBlocks) {
+        if (!raw.trim()) continue;
+        const block = raw;
+
+        const yearM  = block.match(/^[\s:]*(\d{4})/);
+        const linkM  = block.match(/\n\s+link:\s*(.+)/);
+        const dateM  = block.match(/\n\s+date:\s*(.+)/);
+        const placeM = block.match(/\n\s+place:\s*(.+)/);
+
+        if (!yearM) continue;
+        const year  = parseInt(yearM[1]);
+        const link  = linkM  ? linkM[1].trim().replace(/['"]/g,'')  : '';
+        const date  = dateM  ? dateM[1].trim().replace(/['"]/g,'')  : 'TBA';
+        const place = placeM ? placeM[1].trim().replace(/['"]/g,'') : 'TBA';
+
+        // Extract FIRST timeline entry for abstract + deadline
+        const tlStart = block.indexOf('timeline:');
+        let abstract = null, deadline = null;
+
+        if (tlStart !== -1) {
+            // grab first entry block between first "- " and next "- " inside timeline
+            const tlBody = block.slice(tlStart + 9);
+            // abstract_deadline
+            const absM  = tlBody.match(/abstract_deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2}[\s\d:]*)/);
+            const deadM = tlBody.match(/deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2}[\s\d:]*)/);
+            if (absM)  abstract = absM[1].trim().slice(0,10);
+            if (deadM) deadline = deadM[1].trim().slice(0,10);
+        }
+
+        entries.push({ year, link, date, place, abstract: abstract||'TBA', deadline: deadline||'TBA' });
+    }
+
+    if (!entries.length) return null;
+
+    // Pick best: soonest upcoming deadline first, else most recent year
+    const now = Date.now();
+    const upcoming = entries
+        .filter(e => e.deadline !== 'TBA' && new Date(e.deadline + 'T23:59:59-12:00') >= now)
+        .sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+    if (upcoming.length) return upcoming[0];
+
+    return entries.sort((a,b) => b.year - a.year)[0];
+}
+
+// ── FETCH ────────────────────────────────────────────────────────────────────
+async function fetchConf(m) {
+    // Use verified authoritative data if available (skip YAML fetch)
+    if (VERIFIED[m.id]) return { ...m, ...VERIFIED[m.id], source:'live' };
+
+    const url = `${BASE}${m.sub}/${m.file}.yml`;
+    try {
+        const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
+        if (!r.ok) throw new Error(r.status);
+        const yaml = await r.text();
+        const p = parseConf(yaml);
+        if (!p) throw new Error('parse');
+        return { ...m, ...p, source:'live' };
+    } catch (e) {
+        return { ...m, abstract:'TBA', deadline:'TBA', date:'TBA', place:'TBA', link:'', source:'fail' };
+    }
+}
+
+// ── VERIFIED DATA (last auto-updated: 2026-03-15) ─
 const VERIFIED = {
-    "ICML": { date:"Jul 6-11, 2026", place:"Coex, Seoul", link:"https://icml.cc/" },
-    "NeurIPS": { date:"Dec 6-12, 2026", place:"ICC Sydney", link:"https://neurips.cc/" },
-    "ECML-PKDD": { abstract:"2026-03-05", deadline:"2026-03-12", place:"Naples, Italy", link:"https://ecmlpkdd.org/2026/" },
-    "KDD": { abstract:"2026-02-01", deadline:"2026-02-08", date:"Aug 9-13, 2026", place:"Jeju, South Korea" },
-    "ASPLOS": { deadline:"2025-03-12", date:"March 22-26, 2026", link:"https://www.asplos-conference.org/" },
-    "SC": { abstract:"2026-04-01", deadline:"2026-04-08", place:"Chicago, IL" }
+    "ICML": { abstract:"TBA", deadline:"TBA", date:"Jul 6th through Sat the 11th, 2026", place:"11th, 2026 at the Coex Convention &amp; Exhibition Center", link:"https://icml.cc/Conferences/2026/Dates" },
+    "NeurIPS": { abstract:"TBA", deadline:"TBA", date:"Dec 6th through Sat the 12th, 2026", place:"12th, 2026 at the International Convention Centre", link:"https://neurips.cc/Conferences/2026/Dates" },
+    "ICLR": { abstract:"TBA", deadline:"TBA", date:"Thursday April 23 through Saturday April 25", place:"location and dates to be announced", link:"https://iclr.cc/Conferences/2026/Dates" },
+    "CVPR": { abstract:"TBA", deadline:"TBA", date:"Jun 3rd through Sun the 7th, 2026", place:"Denver Convention Center", link:"https://cvpr.thecvf.com/Conferences/2026/Dates" },
+    "ACL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"San Diego, California, United States", link:"https://2026.aclweb.org" },
+    "ECCV": { abstract:"TBA", deadline:"TBA", date:"Sep 8th through Sun the 13th, 2026", place:"Malmö Arena and Malmömässan", link:"https://eccv.ecva.net/Conferences/2026/Dates" },
+    "ECML-PKDD": { abstract:"2026-03-05", deadline:"2026-03-12", date:"TBA", place:"Naples, Italy", link:"https://ecmlpkdd.org/2026/" },
+    "MLSys": { abstract:"TBA", deadline:"TBA", date:"May 18th through Fri the 22nd, 2026", place:"Hyatt Regency Bellevue", link:"https://mlsys.org/Conferences/2026/Dates" },
+    "KDD": { abstract:"2026-02-01", deadline:"2026-02-08", date:"August 9 to 13, 2026", place:"Jeju, South Korea", link:"https://kdd2026.kdd.org/research-track-call-for-papers/" },
+    "WWW": { abstract:"2025-09-30", deadline:"2025-10-07", date:"TBA", place:"TBD", link:"https://www2026.thewebconf.org" },
+    "ISCA": { abstract:"2025-11-10", deadline:"2025-11-17", date:"TBA", place:"Raleigh, NC", link:"https://iscaconf.org/isca2026/" },
+    "HPCA": { abstract:"2025-07-25", deadline:"2025-08-01", date:"TBA", place:"Sydney, Australia", link:"https://2026.hpca-conf.org" },
+    "MICRO": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"Athens, Greece", link:"https://www.microarch.org/micro59/submit/papers.php" },
+    "IPDPS": { abstract:"2025-10-02", deadline:"2025-10-09", date:"TBA", place:"New Orleans, LA", link:"https://www.ipdps.org/ipdps2026/" },
+    "DAC": { abstract:"TBA", deadline:"TBA", date:"July 26-29, 2026", place:"Long Beach, CA", link:"https://www.dac.com/" },
+    "ASPLOS": { abstract:"TBA", deadline:"2025-03-12", date:"March 22-26, 2026", place:"TBA", link:"https://www.asplos-conference.org/asplos2027/cfp/" },
+    "EuroSys": { abstract:"2026-05-07", deadline:"2026-05-14", date:"TBA", place:"Edinburgh, Scotland", link:"https://2027.eurosys.org/cfp.html" },
+    "ICCV": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://iccv.thecvf.com/Conferences/{year+2}/Dates" },
+    "EMNLP": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://2025.emnlp.org" },
+    "NAACL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://2025.naacl.org" },
+    "AAAI": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://aaai.org/Conferences/AAAI-2026/" },
+    "IJCAI": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://ijcai-26.org/" },
+    "CPAL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://cpal.cc/" },
+    "HiPC": { abstract:"TBA", deadline:"TBA", date:"December 16-19, 2026", place:"TBA", link:"https://hipc.org/" },
+    "SC": { abstract:"2026-04-01", deadline:"2026-04-08", date:"TBA", place:"Chicago, IL", link:"https://sc26.supercomputing.org/" },
+    "ICDCS": { abstract:"TBA", deadline:"TBA", date:"June 22–25, 2026", place:"Seoul, South Korea", link:"https://icdcs2026.icdcs.org/" },
+    "ICS": { abstract:"2026-02-02", deadline:"2026-02-09", date:"TBA", place:"Belfast, UK", link:"https://dipsa-qub.github.io/ICS2026-webpage/" },
+    "HPDC": { abstract:"2026-01-29", deadline:"2026-02-05", date:"TBA", place:"Cleveland, OH", link:"https://hpdc.sci.utah.edu/2026/" },
+    "PPoPP": { abstract:"2025-09-01", deadline:"2025-09-01", date:"TBA", place:"Sydney, Australia", link:"https://ppopp26.sigplan.org" },
 };
 
-const BASE = "https://raw.githubusercontent.com/ccfddl/ccf-deadlines/refs/heads/main/conference/";
+// ── STATE ────────────────────────────────────────────────────────────────────
 let allConfs = [], currentFilter = 'all', tickTimer = null;
 
-// ── UTILITIES ────────────────────────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
+    const prog = document.getElementById('progBar');
+    const CHUNK = 8;
+    let done = 0;
+
+    for (let i = 0; i < MASTER.length; i += CHUNK) {
+        const results = await Promise.all(MASTER.slice(i, i+CHUNK).map(fetchConf));
+        allConfs.push(...results);
+        done += results.length;
+        if (prog) prog.style.width = Math.round(done / MASTER.length * 100) + '%';
+        applyFilters();
+    }
+
+    const live = allConfs.filter(c => c.source === 'live').length;
+    const dot  = document.getElementById('syncDot');
+    const txt  = document.getElementById('syncText');
+    if (live === allConfs.length) {
+        dot.className = 'pulse green';
+        txt.textContent = `All ${live} conferences synced live from ccfddl • Tickers update every second`;
+    } else if (live > 0) {
+        dot.className = 'pulse yellow';
+        txt.textContent = `${live}/${allConfs.length} synced live • ${allConfs.length-live} files not found in repo`;
+    } else {
+        dot.className = 'pulse red';
+        txt.textContent = 'Could not reach ccfddl (CORS or network issue)';
+    }
+
+    if (tickTimer) clearInterval(tickTimer);
+    tickTimer = setInterval(tick, 1000);
+}
+
+// ── COUNTDOWN ────────────────────────────────────────────────────────────────
 function pad2(n) { return String(n).padStart(2,'0'); }
 
 function timeRemaining(isoDate) {
+    // AoE deadline = 23:59:59 UTC-12
     const target = new Date(isoDate + 'T23:59:59-12:00');
     const diff = target - Date.now();
     if (diff <= 0) return { expired:true, d:0, h:0, m:0, s:0 };
@@ -243,15 +375,41 @@ function timeRemaining(isoDate) {
 
 function colorCls(t) {
     if (t.expired) return 'tba';
-    if (t.d < 3) return 'urgent';
-    if (t.d < 14) return 'soon';
+    if (t.d < 3)   return 'urgent';
+    if (t.d < 14)  return 'soon';
     return 'ok';
 }
 
+// Live-update just the number elements without re-rendering cards
+function tick() {
+    document.querySelectorAll('.countdown[data-deadline]').forEach(el => {
+        const dl = el.getAttribute('data-deadline');
+        if (!dl || dl === 'TBA') return;
+        const t   = timeRemaining(dl);
+        const cls = colorCls(t);
+        const dEl = el.querySelector('.v-d');
+        const hEl = el.querySelector('.v-h');
+        const mEl = el.querySelector('.v-m');
+        const sEl = el.querySelector('.v-s');
+        if (!dEl) return;
+        dEl.textContent = t.expired ? '--' : t.d;
+        hEl.textContent = t.expired ? '--' : pad2(t.h);
+        mEl.textContent = t.expired ? '--' : pad2(t.m);
+        sEl.textContent = t.expired ? '--' : pad2(t.s);
+        [dEl,hEl,mEl,sEl].forEach(e => { e.className = 'val ' + cls; });
+        if (t.expired) {
+            const card = el.closest('.card');
+            if (card) card.classList.add('expired');
+        }
+    });
+}
+
+// ── DATE FORMATTING ──────────────────────────────────────────────────────────
 function fmtDate(iso) {
     if (!iso || iso === 'TBA') return 'TBA';
     const d = new Date(iso + 'T12:00:00Z');
-    return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 }
 
 function isPast(iso) {
@@ -259,148 +417,123 @@ function isPast(iso) {
     return new Date(iso + 'T23:59:59-12:00') < Date.now();
 }
 
-// ── DATA FETCHING ────────────────────────────────────────────────────────────
-function parseConf(yaml) {
-    const confsIdx = yaml.indexOf('confs:');
-    if (confsIdx === -1) return null;
-    const rawBlocks = yaml.slice(confsIdx + 6).split(/\n    - year:/);
-    const entries = [];
-
-    for (const raw of rawBlocks) {
-        if (!raw.trim()) continue;
-        const yearM = raw.match(/^[\s:]*(\d{4})/);
-        if (!yearM) continue;
-
-        const linkM = raw.match(/\n\s+link:\s*(.+)/);
-        const dateM = raw.match(/\n\s+date:\s*(.+)/);
-        const placeM = raw.match(/\n\s+place:\s*(.+)/);
-        const tlBody = raw.slice(raw.indexOf('timeline:') + 9);
-        const absM = tlBody.match(/abstract_deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2})/);
-        const deadM = tlBody.match(/deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2})/);
-
-        entries.push({
-            year: parseInt(yearM[1]),
-            link: linkM ? linkM[1].trim().replace(/['"]/g,'') : '',
-            date: dateM ? dateM[1].trim().replace(/['"]/g,'') : 'TBA',
-            place: placeM ? placeM[1].trim().replace(/['"]/g,'') : 'TBA',
-            abstract: absM ? absM[1] : 'TBA',
-            deadline: deadM ? deadM[1] : 'TBA'
-        });
-    }
-    const now = Date.now();
-    const upcoming = entries.filter(e => e.deadline !== 'TBA' && new Date(e.deadline + 'T23:59:59-12:00') >= now).sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
-    return upcoming.length ? upcoming[0] : entries.sort((a,b) => b.year - a.year)[0];
-}
-
-async function fetchConf(m) {
-    const url = `${BASE}${m.sub}/${m.file}.yml`;
-    try {
-        const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
-        if (!r.ok) throw new Error();
-        const p = parseConf(await r.text());
-        return { ...m, ...p, source:'live' };
-    } catch (e) {
-        const fallback = VERIFIED[m.id] || {};
-        return { ...m, abstract:'TBA', deadline:'TBA', date:'TBA', place:'TBA', link:'', ...fallback, source:'static' };
-    }
-}
-
-// ── RENDER ENGINE ────────────────────────────────────────────────────────────
+// ── CREATE CARD ───────────────────────────────────────────────────────────────
 function createCard(c) {
-    const hasDl = c.deadline && c.deadline !== 'TBA';
-    const t = hasDl ? timeRemaining(c.deadline) : {expired:false};
-    const cls = hasDl ? colorCls(t) : 'tba';
-    const isExp = t.expired;
+    const catLabel = { ai:'AI/ML', sys:'Systems' }[c.cat] || c.cat;
+    const hasDl    = c.deadline && c.deadline !== 'TBA';
+    const t        = hasDl ? timeRemaining(c.deadline) : null;
+    const isExp    = t ? t.expired : false;
+    const cls      = t ? colorCls(t) : 'tba';
 
-    const cdHtml = hasDl 
+    const cdHtml = hasDl
         ? `<div class="unit"><span class="val ${cls} v-d">${isExp ? '--' : t.d}</span><span class="lab">Days</span></div>
            <div class="sep">:</div>
            <div class="unit"><span class="val ${cls} v-h">${isExp ? '--' : pad2(t.h)}</span><span class="lab">Hrs</span></div>
            <div class="sep">:</div>
-           <div class="unit"><span class="val ${cls} v-m">${isExp ? '--' : pad2(t.m)}</span><span class="lab">Min</span></div>`
+           <div class="unit"><span class="val ${cls} v-m">${isExp ? '--' : pad2(t.m)}</span><span class="lab">Min</span></div>
+           <div class="sep">:</div>
+           <div class="unit"><span class="val ${cls} v-s">${isExp ? '--' : pad2(t.s)}</span><span class="lab">Sec</span></div>`
         : `<div class="unit"><span class="val tba">TBA</span><span class="lab">Deadline</span></div>`;
+
+    const absClass  = c.abstract  === 'TBA' ? 'date-value tba' : (isPast(c.abstract)  ? 'date-value passed' : 'date-value');
+    const deadClass = c.deadline  === 'TBA' ? 'date-value tba' : (isPast(c.deadline)  ? 'date-value passed' : 'date-value');
+    const dateClass = c.date      === 'TBA' ? 'date-value tba' : 'date-value';
+    const srcDot    = c.source === 'live'
+        ? `<span class="live-dot" title="Live from ccfddl"></span>`
+        : `<span class="static-dot" title="Not found in repo"></span>`;
 
     return `
       <div class="card cat-${c.cat}${isExp ? ' expired' : ''}">
         <div class="card-header">
           <span class="conf-name">${c.name}</span>
-          ${c.link ? `<a href="${c.link}" target="_blank" style="color:#94a3b8"><i class="fas fa-external-link-alt"></i></a>` : ''}
+          ${c.link ? `<a href="${c.link}" target="_blank" style="color:#94a3b8;font-size:0.8rem"><i class="fas fa-external-link-alt"></i></a>` : ''}
         </div>
         <div class="conf-full">${c.full}</div>
+
         <div class="countdown" data-deadline="${c.deadline}">${cdHtml}</div>
+
         <div class="dates">
-          <div class="date-row"><span class="date-label">Abstract</span><span class="date-value ${isPast(c.abstract)?'passed':''}">${fmtDate(c.abstract)}</span></div>
-          <div class="date-row"><span class="date-label">Full Paper</span><span class="date-value ${isPast(c.deadline)?'passed':''}">${fmtDate(c.deadline)}</span></div>
-          <div class="date-row"><span class="date-label">Conference</span><span class="date-value">${c.date}</span></div>
+          <div class="date-row">
+            <span class="date-label"><i class="fas fa-pencil-alt" style="width:12px;opacity:0.4"></i> Abstract</span>
+            <span class="${absClass}">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label"><i class="fas fa-paper-plane" style="width:12px;opacity:0.4"></i> Full Paper</span>
+            <span class="${deadClass}">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label"><i class="fas fa-calendar-alt" style="width:12px;opacity:0.4"></i> Conference</span>
+            <span class="${dateClass}">${c.date}</span>
+          </div>
+          ${c.note ? `<div class="date-row" style="margin-top:0.3rem;padding-top:0.3rem;border-top:1px dashed #e2e8f0">
+            <span class="date-label" style="font-style:italic"><i class="fas fa-info-circle" style="width:12px;opacity:0.4"></i> Note</span>
+            <span style="font-size:0.7rem;color:#64748b;text-align:right;max-width:65%">${c.note}</span>
+          </div>` : ''}
         </div>
+
         <div class="meta">
-          <i class="fas fa-map-marker-alt"></i><span class="meta-place">${c.place}</span>
-          <span class="${c.source}-dot"></span>
-          <span class="badge bg-${c.cat}">${c.cat.toUpperCase()}</span>
+          <i class="fas fa-map-marker-alt" style="flex-shrink:0"></i>
+          <span class="meta-place">${c.place}</span>
+          ${srcDot}
+          <span class="badge bg-${c.cat}">${catLabel}</span>
         </div>
       </div>`;
 }
 
+// ── RENDER ───────────────────────────────────────────────────────────────────
 function render(list) {
-    const now = new Date();
-    const currentYear = now.getFullYear();
+    const now = Date.now();
     const isUpcoming = c => {
-        if (c.deadline !== 'TBA' && new Date(c.deadline + 'T23:59:59-12:00') >= now) return true;
-        if (c.date && c.date.includes(currentYear.toString())) return true;
-        return c.deadline === 'TBA';
+        if (c.deadline === 'TBA') return true;
+        const d = new Date(c.deadline + 'T23:59:59-12:00');
+        return isNaN(d) || d >= now;
     };
-
-    const up = list.filter(isUpcoming).sort((a,b) => (a.deadline==='TBA'?1:b.deadline==='TBA'?-1:new Date(a.deadline)-new Date(b.deadline)));
-    const past = list.filter(c => !isUpcoming(c)).sort((a,b) => new Date(b.deadline)-new Date(a.deadline));
+    const upcoming = list.filter(isUpcoming)
+        .sort((a,b) => {
+            if (a.deadline==='TBA') return 1;
+            if (b.deadline==='TBA') return -1;
+            return new Date(a.deadline) - new Date(b.deadline);
+        });
+    const past = list.filter(c => !isUpcoming(c))
+        .sort((a,b) => new Date(b.deadline) - new Date(a.deadline));
 
     let html = '';
-    if (up.length) { html += `<div class="section-header">Upcoming & Current</div>`; up.forEach(c => html += createCard(c)); }
-    if (past.length) { html += `<div class="section-header">Past Conferences</div>`; past.forEach(c => html += createCard(c)); }
-    document.getElementById('deadlineGrid').innerHTML = html || '<div class="loading-wrap">No matches found.</div>';
+    if (upcoming.length) {
+        html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming Deadlines (${upcoming.length})</div>`;
+        upcoming.forEach(c => { html += createCard(c); });
+    }
+    if (past.length) {
+        html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Past / Finished (${past.length})</div>`;
+        past.forEach(c => { html += createCard(c); });
+    }
+    if (!upcoming.length && !past.length) {
+        html = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#64748b">No conferences match.</div>';
+    }
+    document.getElementById('deadlineGrid').innerHTML = html;
 }
 
+// ── FILTER / SEARCH ───────────────────────────────────────────────────────────
 function setFilter(cat, btn) {
     currentFilter = cat;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyFilters();
 }
-
 function applyFilters() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    render(allConfs.filter(c => (currentFilter === 'all' || c.cat === currentFilter) && (c.name.toLowerCase().includes(q) || c.full.toLowerCase().includes(q))));
-}
-
-function tick() {
-    document.querySelectorAll('.countdown[data-deadline]').forEach(el => {
-        const dl = el.getAttribute('data-deadline');
-        if (!dl || dl === 'TBA') return;
-        const t = timeRemaining(dl);
-        const cls = colorCls(t);
-        const vD = el.querySelector('.v-d'), vH = el.querySelector('.v-h'), vM = el.querySelector('.v-m');
-        if (vD) {
-            vD.textContent = t.expired ? '--' : t.d; vD.className = 'val ' + cls;
-            vH.textContent = t.expired ? '--' : pad2(t.h); vH.className = 'val ' + cls;
-            vM.textContent = t.expired ? '--' : pad2(t.m); vM.className = 'val ' + cls;
-        }
-    });
-}
-
-async function init() {
-    const CHUNK = 8;
-    for (let i = 0; i < MASTER.length; i += CHUNK) {
-        const res = await Promise.all(MASTER.slice(i, i+CHUNK).map(fetchConf));
-        allConfs.push(...res);
-        document.getElementById('progBar').style.width = Math.round((allConfs.length/MASTER.length)*100) + '%';
-        applyFilters();
-    }
-    const liveCount = allConfs.filter(c => c.source === 'live').length;
-    document.getElementById('syncDot').className = 'pulse ' + (liveCount === MASTER.length ? 'green' : 'yellow');
-    document.getElementById('syncText').textContent = `${liveCount}/${MASTER.length} synced live.`;
-    setInterval(tick, 1000);
+    const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+    render(allConfs.filter(c =>
+        (currentFilter === 'all' || c.cat === currentFilter) &&
+        (!q || c.name.toLowerCase().includes(q) || c.full.toLowerCase().includes(q))
+    ));
 }
 
 init();
 </script>
+
+    <hr>
+    <footer style="text-align: center; padding: 20px; font-family: sans-serif; color: #555;">
+        <p>Data sourced and adapted from <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" style="color: #007bff; text-decoration: none;">ccfddl GitHub</a>.</p>
+    </footer>
+    
 </body>
 </html>

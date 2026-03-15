@@ -537,143 +537,101 @@ function createCard(c) {
 //     }
 //     document.getElementById('deadlineGrid').innerHTML = html;
 // }
-
-// ── MODIFIED RENDER LOGIC ────────────────────────────────────────────────────
+// ── COMPLETE RENDER ENGINE ──────────────────────────────────────────────────
 function render(list) {
     const now = new Date();
     const currentYear = now.getFullYear();
+    const grid = document.getElementById('deadlineGrid');
 
-    // Logic: Is the conference event still "live" or coming up?
+    // 1. Identify if the conference event is still "relevant" for the Upcoming section
     const isUpcomingEvent = c => {
-        // 1. If deadline is in the future, it's definitely upcoming
+        // If deadline is in the future, it's definitely upcoming
         if (c.deadline && c.deadline !== 'TBA') {
             if (new Date(c.deadline + 'T23:59:59-12:00') >= now) return true;
         }
 
-        // 2. If deadline passed, check the Conference Event Date
+        // If deadline passed, check the Conference Event Date (to keep current year events visible)
         if (c.date && c.date !== 'TBA') {
             const yearMatch = c.date.match(/\d{4}/);
             const confYear = yearMatch ? parseInt(yearMatch[0]) : null;
-            
-            // Stay in Upcoming if the conference year is this year or future
             if (confYear && confYear >= currentYear) return true;
         }
 
-        // 3. Fallback for TBA entries
-        if (c.deadline === 'TBA') return true;
+        // Fallback: If everything is TBA, keep it in upcoming so we don't lose it
+        if (c.deadline === 'TBA' && c.date === 'TBA') return true;
 
         return false;
     };
 
-    // Filter into two main buckets
+    // 2. Separate into two pools
     const upcomingPool = list.filter(isUpcomingEvent);
     const pastPool = list.filter(c => !isUpcomingEvent(c));
 
-    // Sort Upcoming: 
-    // - Group 1: Future Deadlines (sorted by date)
-    // - Group 2: Passed Deadlines (sorted by date, at bottom)
+    // 3. Sort Upcoming: Future deadlines first, then TBAs, then recently passed deadlines
     const sortedUpcoming = upcomingPool.sort((a, b) => {
         const aPassed = a.deadline !== 'TBA' && new Date(a.deadline + 'T23:59:59-12:00') < now;
         const bPassed = b.deadline !== 'TBA' && new Date(b.deadline + 'T23:59:59-12:00') < now;
 
-        // If one is passed and other isn't, the passed one sinks to bottom
         if (aPassed && !bPassed) return 1;
         if (!aPassed && bPassed) return -1;
 
-        // Otherwise, sort by date normally
         if (a.deadline === 'TBA') return 1;
         if (b.deadline === 'TBA') return -1;
         return new Date(a.deadline) - new Date(b.deadline);
     });
 
-    // Sort Past: Most recent first
+    // 4. Sort Past: Most recent first
     const sortedPast = pastPool.sort((a, b) => {
         const dateA = a.deadline === 'TBA' ? 0 : new Date(a.deadline);
         const dateB = b.deadline === 'TBA' ? 0 : new Date(b.deadline);
         return dateB - dateA;
     });
 
+    // 5. Generate HTML
     let html = '';
-    if (sortedUpcoming.length) {
-        html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming & Active (${sortedUpcoming.length})</div>`;
+
+    if (sortedUpcoming.length > 0) {
+        html += `<div class="section-header"><i class="fas fa-hourglass-half"></i> Upcoming & Current Year (${sortedUpcoming.length})</div>`;
         sortedUpcoming.forEach(c => { html += createCard(c); });
     }
-    if (sortedPast.length) {
-        html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Archive / Finished (${sortedPast.length})</div>`;
+
+    if (sortedPast.length > 0) {
+        html += `<div class="section-header" style="margin-top:3rem"><i class="fas fa-history"></i> Past Conferences (${sortedPast.length})</div>`;
         sortedPast.forEach(c => { html += createCard(c); });
     }
-    
-    if (!sortedUpcoming.length && !sortedPast.length) {
-        html = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#64748b">No conferences match.</div>';
+
+    if (list.length === 0) {
+        html = `<div style="grid-column:1/-1; text-align:center; padding:100px; color:#94a3b8;">
+                    <i class="fas fa-search" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+                    No conferences found matching your criteria.
+                </div>`;
     }
-    document.getElementById('deadlineGrid').innerHTML = html;
-}
-    // Filter into two main buckets
-    const upcomingPool = list.filter(isUpcomingEvent);
-    const pastPool = list.filter(c => !isUpcomingEvent(c));
 
-    // Sort Upcoming: 
-    // - Group 1: Future Deadlines (sorted by date)
-    // - Group 2: Passed Deadlines (sorted by date, at bottom)
-    const sortedUpcoming = upcomingPool.sort((a, b) => {
-        const aPassed = a.deadline !== 'TBA' && new Date(a.deadline + 'T23:59:59-12:00') < now;
-        const bPassed = b.deadline !== 'TBA' && new Date(b.deadline + 'T23:59:59-12:00') < now;
-
-        // If one is passed and other isn't, the passed one sinks to bottom
-        if (aPassed && !bPassed) return 1;
-        if (!aPassed && bPassed) return -1;
-
-        // Otherwise, sort by date normally
-        if (a.deadline === 'TBA') return 1;
-        if (b.deadline === 'TBA') return -1;
-        return new Date(a.deadline) - new Date(b.deadline);
-    });
-
-    // Sort Past: Most recent first
-    const sortedPast = pastPool.sort((a, b) => {
-        const dateA = a.deadline === 'TBA' ? 0 : new Date(a.deadline);
-        const dateB = b.deadline === 'TBA' ? 0 : new Date(b.deadline);
-        return dateB - dateA;
-    });
-
-    let html = '';
-    if (sortedUpcoming.length) {
-        html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming & Active (${sortedUpcoming.length})</div>`;
-        sortedUpcoming.forEach(c => { html += createCard(c); });
-    }
-    if (sortedPast.length) {
-        html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Archive / Finished (${sortedPast.length})</div>`;
-        sortedPast.forEach(c => { html += createCard(c); });
-    }
-    
-    if (!sortedUpcoming.length && !sortedPast.length) {
-        html = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#64748b">No conferences match.</div>';
-    }
-    document.getElementById('deadlineGrid').innerHTML = html;
+    grid.innerHTML = html;
 }
 
-// ── FILTER / SEARCH ───────────────────────────────────────────────────────────
+// ── FILTER CONTROLS ─────────────────────────────────────────────────────────
 function setFilter(cat, btn) {
     currentFilter = cat;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyFilters();
 }
+
 function applyFilters() {
-    const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
-    render(allConfs.filter(c =>
-        (currentFilter === 'all' || c.cat === currentFilter) &&
-        (!q || c.name.toLowerCase().includes(q) || c.full.toLowerCase().includes(q))
-    ));
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    
+    const filtered = allConfs.filter(c => {
+        const matchesTab = (currentFilter === 'all' || c.cat === currentFilter);
+        const matchesSearch = (c.name.toLowerCase().includes(search) || c.full.toLowerCase().includes(search));
+        return matchesTab && matchesSearch;
+    });
+
+    render(filtered);
 }
 
+// Start the application
 init();
 </script>
-
-    <hr>
-    <footer style="text-align: center; padding: 20px; font-family: sans-serif; color: #555;">
-        <p>Data sourced and adapted from <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" style="color: #007bff; text-decoration: none;">ccfddl GitHub</a>.</p>
-    </footer>
-    
 </body>
 </html>

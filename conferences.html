@@ -142,6 +142,20 @@
             max-width: 280px; margin: 0.75rem auto 0;
             height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden;
         }
+        /* Improved visibility for expired cards in Upcoming section */
+        .card.expired { 
+        opacity: 0.85; 
+        filter: grayscale(0.2); 
+        background: #fcfcfc;
+        border-top-color: #94a3b8 !important; 
+        }
+
+        /* Clearer strikethrough for passed dates */
+        .date-value.passed { 
+        color: #94a3b8; 
+        text-decoration: line-through; 
+        font-weight: 400; 
+        }
         .progress-bar { height: 100%; background: var(--ua-navy); border-radius: 2px; transition: width 0.3s; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -377,30 +391,41 @@ function colorCls(t) {
     return 'ok';
 }
 
-// Live-update just the number elements without re-rendering cards
+// ── UPDATED TICKER (TO AVOID JUMPING) ────────────────────────────────────────
 function tick() {
+    const now = new Date();
     document.querySelectorAll('.countdown[data-deadline]').forEach(el => {
         const dl = el.getAttribute('data-deadline');
         if (!dl || dl === 'TBA') return;
-        const t   = timeRemaining(dl);
+        
+        const t = timeRemaining(dl);
         const cls = colorCls(t);
         const dEl = el.querySelector('.v-d');
         const hEl = el.querySelector('.v-h');
         const mEl = el.querySelector('.v-m');
         const sEl = el.querySelector('.v-s');
+        
         if (!dEl) return;
+        
         dEl.textContent = t.expired ? '--' : t.d;
         hEl.textContent = t.expired ? '--' : pad2(t.h);
         mEl.textContent = t.expired ? '--' : pad2(t.m);
         sEl.textContent = t.expired ? '--' : pad2(t.s);
+        
         [dEl,hEl,mEl,sEl].forEach(e => { e.className = 'val ' + cls; });
+        
+        // Add expired class to the card and strike-through text if time is up
         if (t.expired) {
             const card = el.closest('.card');
-            if (card) card.classList.add('expired');
+            if (card) {
+                card.classList.add('expired');
+                // Target the deadline text inside the card specifically
+                const deadValue = card.querySelector('.date-row:nth-child(2) .date-value');
+                if (deadValue) deadValue.classList.add('passed');
+            }
         }
     });
 }
-
 // ── DATE FORMATTING ──────────────────────────────────────────────────────────
 function fmtDate(iso) {
     if (!iso || iso === 'TBA') return 'TBA';
@@ -477,33 +502,147 @@ function createCard(c) {
       </div>`;
 }
 
-// ── RENDER ───────────────────────────────────────────────────────────────────
+// // ── RENDER ───────────────────────────────────────────────────────────────────
+// function render(list) {
+//     const now = Date.now();
+//     const isUpcoming = c => {
+//         if (c.deadline === 'TBA') return true;
+//         const d = new Date(c.deadline + 'T23:59:59-12:00');
+//         return isNaN(d) || d >= now;
+//     };
+//     const upcoming = list.filter(isUpcoming)
+//         .sort((a,b) => {
+//             if (a.deadline==='TBA') return 1;
+//             if (b.deadline==='TBA') return -1;
+//             return new Date(a.deadline) - new Date(b.deadline);
+//         });
+//     const past = list.filter(c => !isUpcoming(c))
+//         .sort((a,b) => new Date(b.deadline) - new Date(a.deadline));
+
+//     let html = '';
+//     if (upcoming.length) {
+//         html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming Deadlines (${upcoming.length})</div>`;
+//         upcoming.forEach(c => { html += createCard(c); });
+//     }
+//     if (past.length) {
+//         html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Past / Finished (${past.length})</div>`;
+//         past.forEach(c => { html += createCard(c); });
+//     }
+//     if (!upcoming.length && !past.length) {
+//         html = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#64748b">No conferences match.</div>';
+//     }
+//     document.getElementById('deadlineGrid').innerHTML = html;
+// }
+
+// ── MODIFIED RENDER LOGIC ────────────────────────────────────────────────────
 function render(list) {
-    const now = Date.now();
-    const isUpcoming = c => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    // Logic: Is the conference event still "live" or coming up?
+    const isUpcomingEvent = c => {
+        // 1. If deadline is in the future, it's definitely upcoming
+        if (c.deadline && c.deadline !== 'TBA') {
+            if (new Date(c.deadline + 'T23:59:59-12:00') >= now) return true;
+        }
+
+        // 2. If deadline passed, check the Conference Event Date
+        if (c.date && c.date !== 'TBA') {
+            const yearMatch = c.date.match(/\d{4}/);
+            const confYear = yearMatch ? parseInt(yearMatch[0]) : null;
+            
+            // Stay in Upcoming if the conference year is this year or future
+            if (confYear && confYear >= currentYear) return true;
+        }
+
+        // 3. Fallback for TBA entries
         if (c.deadline === 'TBA') return true;
-        const d = new Date(c.deadline + 'T23:59:59-12:00');
-        return isNaN(d) || d >= now;
+
+        return false;
     };
-    const upcoming = list.filter(isUpcoming)
-        .sort((a,b) => {
-            if (a.deadline==='TBA') return 1;
-            if (b.deadline==='TBA') return -1;
-            return new Date(a.deadline) - new Date(b.deadline);
-        });
-    const past = list.filter(c => !isUpcoming(c))
-        .sort((a,b) => new Date(b.deadline) - new Date(a.deadline));
+
+    // Filter into two main buckets
+    const upcomingPool = list.filter(isUpcomingEvent);
+    const pastPool = list.filter(c => !isUpcomingEvent(c));
+
+    // Sort Upcoming: 
+    // - Group 1: Future Deadlines (sorted by date)
+    // - Group 2: Passed Deadlines (sorted by date, at bottom)
+    const sortedUpcoming = upcomingPool.sort((a, b) => {
+        const aPassed = a.deadline !== 'TBA' && new Date(a.deadline + 'T23:59:59-12:00') < now;
+        const bPassed = b.deadline !== 'TBA' && new Date(b.deadline + 'T23:59:59-12:00') < now;
+
+        // If one is passed and other isn't, the passed one sinks to bottom
+        if (aPassed && !bPassed) return 1;
+        if (!aPassed && bPassed) return -1;
+
+        // Otherwise, sort by date normally
+        if (a.deadline === 'TBA') return 1;
+        if (b.deadline === 'TBA') return -1;
+        return new Date(a.deadline) - new Date(b.deadline);
+    });
+
+    // Sort Past: Most recent first
+    const sortedPast = pastPool.sort((a, b) => {
+        const dateA = a.deadline === 'TBA' ? 0 : new Date(a.deadline);
+        const dateB = b.deadline === 'TBA' ? 0 : new Date(b.deadline);
+        return dateB - dateA;
+    });
 
     let html = '';
-    if (upcoming.length) {
-        html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming Deadlines (${upcoming.length})</div>`;
-        upcoming.forEach(c => { html += createCard(c); });
+    if (sortedUpcoming.length) {
+        html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming & Active (${sortedUpcoming.length})</div>`;
+        sortedUpcoming.forEach(c => { html += createCard(c); });
     }
-    if (past.length) {
-        html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Past / Finished (${past.length})</div>`;
-        past.forEach(c => { html += createCard(c); });
+    if (sortedPast.length) {
+        html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Archive / Finished (${sortedPast.length})</div>`;
+        sortedPast.forEach(c => { html += createCard(c); });
     }
-    if (!upcoming.length && !past.length) {
+    
+    if (!sortedUpcoming.length && !sortedPast.length) {
+        html = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#64748b">No conferences match.</div>';
+    }
+    document.getElementById('deadlineGrid').innerHTML = html;
+}
+    // Filter into two main buckets
+    const upcomingPool = list.filter(isUpcomingEvent);
+    const pastPool = list.filter(c => !isUpcomingEvent(c));
+
+    // Sort Upcoming: 
+    // - Group 1: Future Deadlines (sorted by date)
+    // - Group 2: Passed Deadlines (sorted by date, at bottom)
+    const sortedUpcoming = upcomingPool.sort((a, b) => {
+        const aPassed = a.deadline !== 'TBA' && new Date(a.deadline + 'T23:59:59-12:00') < now;
+        const bPassed = b.deadline !== 'TBA' && new Date(b.deadline + 'T23:59:59-12:00') < now;
+
+        // If one is passed and other isn't, the passed one sinks to bottom
+        if (aPassed && !bPassed) return 1;
+        if (!aPassed && bPassed) return -1;
+
+        // Otherwise, sort by date normally
+        if (a.deadline === 'TBA') return 1;
+        if (b.deadline === 'TBA') return -1;
+        return new Date(a.deadline) - new Date(b.deadline);
+    });
+
+    // Sort Past: Most recent first
+    const sortedPast = pastPool.sort((a, b) => {
+        const dateA = a.deadline === 'TBA' ? 0 : new Date(a.deadline);
+        const dateB = b.deadline === 'TBA' ? 0 : new Date(b.deadline);
+        return dateB - dateA;
+    });
+
+    let html = '';
+    if (sortedUpcoming.length) {
+        html += `<div class="section-header"><i class="fas fa-hourglass-half" style="margin-right:.4rem;opacity:.5"></i>Upcoming & Active (${sortedUpcoming.length})</div>`;
+        sortedUpcoming.forEach(c => { html += createCard(c); });
+    }
+    if (sortedPast.length) {
+        html += `<div class="section-header" style="margin-top:2rem"><i class="fas fa-check-circle" style="margin-right:.4rem;opacity:.5"></i>Archive / Finished (${sortedPast.length})</div>`;
+        sortedPast.forEach(c => { html += createCard(c); });
+    }
+    
+    if (!sortedUpcoming.length && !sortedPast.length) {
         html = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#64748b">No conferences match.</div>';
     }
     document.getElementById('deadlineGrid').innerHTML = html;

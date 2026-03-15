@@ -1,13 +1,14 @@
-Home                    [index.html]
-#   Home                [index.html]
-#   Research			[research.html]
-	Publications        [publications.html]
-	DASS Lab			[dasslab.html]
-	Teaching			[teaching.html]
-#	Services			[services.html]
-	Awards			    [awards.html]
-	CV					[documents/CV_JyotikrishnaDass.pdf]
-	
-	
 # usefull links
 #   Jemdoc   		[http://jemdoc.jaboc.net/]
+
+Home              [index.html]
+#   Home          [index.html]
+    Research      [research.html]
+    Publications  [publications.html]
+    Conference Deadlines     [conferences.html]
+    DASS Lab      [dasslab.html] 
+    Teaching      [teaching.html]
+#   Services      [services.html]
+    Awards        [awards.html]
+	Open Positions        [openpositions.html]
+    CV            [documents/CV_JyotikrishnaDass.pdf]

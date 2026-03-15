@@ -198,6 +198,10 @@ const MASTER = [
     { id:"KDD",       name:"KDD",       full:"Knowledge Discovery and Data Mining",                    cat:"ai",  sub:"DB", file:"kdd"       },
     { id:"AAAI",      name:"AAAI",      full:"AAAI Conference on Artificial Intelligence",             cat:"ai",  sub:"AI", file:"aaai"      },
     { id:"IJCAI",     name:"IJCAI",     full:"International Joint Conference on Artificial Intelligence", cat:"ai", sub:"AI", file:"ijcai"  },
+    { id:"SIGIR",     name:"SIGIR",     full:"Research and Development in Information Retrieval",      cat:"ai",  sub:"DB", file:"sigir"     },
+    { id:"WSDM",      name:"WSDM",      full:"Web Search and Data Mining",                             cat:"ai",  sub:"DB", file:"wsdm"      },
+    { id:"WWW",       name:"WWW",       full:"The Web Conference",                                     cat:"ai",  sub:"DB", file:"www"       },
+    { id:"COLING",    name:"COLING",    full:"International Conference on Computational Linguistics",  cat:"ai",  sub:"AI", file:"coling"    },
     { id:"CPAL",      name:"CPAL",      full:"Conference on Parsimony and Learning",                   cat:"ai",  sub:"AI", file:"cpal"      },
     // Systems / Architecture (incl. HPC/Dist)
     { id:"ISCA",   name:"ISCA",   full:"International Symposium on Computer Architecture",        cat:"sys", sub:"DS", file:"isca"   },
@@ -291,8 +295,8 @@ async function fetchConf(m) {
 
 // ── VERIFIED DATA (last auto-updated: 2026-03-15) ─
 const VERIFIED = {
-    "ICML": { abstract:"TBA", deadline:"TBA", date:"Jul 6th through Sat the 11th, 2026", place:"11th, 2026 at the Coex Convention &amp; Exhibition Center", link:"https://icml.cc/Conferences/2026/Dates" },
-    "NeurIPS": { abstract:"TBA", deadline:"TBA", date:"Dec 6th through Sat the 12th, 2026", place:"12th, 2026 at the International Convention Centre", link:"https://neurips.cc/Conferences/2026/Dates" },
+    "ICML": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"11th, 2026 at the Coex Convention &amp; Exhibition Center", link:"https://icml.cc/Conferences/2026/Dates" },
+    "NeurIPS": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"12th, 2026 at the International Convention Centre", link:"https://neurips.cc/Conferences/2026/Dates" },
     "ICLR": { abstract:"TBA", deadline:"TBA", date:"Thursday April 23 through Saturday April 25", place:"location and dates to be announced", link:"https://iclr.cc/Conferences/2026/Dates" },
     "CVPR": { abstract:"TBA", deadline:"TBA", date:"Jun 3rd through Sun the 7th, 2026", place:"Denver Convention Center", link:"https://cvpr.thecvf.com/Conferences/2026/Dates" },
     "ACL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"San Diego, California, United States", link:"https://2026.aclweb.org" },
@@ -319,6 +323,7 @@ const VERIFIED = {
     "ICS": { abstract:"2026-02-02", deadline:"2026-02-09", date:"TBA", place:"Belfast, UK", link:"https://dipsa-qub.github.io/ICS2026-webpage/" },
     "HPDC": { abstract:"2026-01-29", deadline:"2026-02-05", date:"TBA", place:"Cleveland, OH", link:"https://hpdc.sci.utah.edu/2026/" },
     "PPoPP": { abstract:"2025-09-01", deadline:"2025-09-01", date:"TBA", place:"Sydney, Australia", link:"https://ppopp26.sigplan.org" },
+    // (kept from previous run) "WWW": {"abstract": "2025-09-30", "deadline": "2025-10-07", "date": "TBA", "place": "TBD", "link": "https://www2026.thewebconf.org"},
 };
 
 // ── STATE ────────────────────────────────────────────────────────────────────

@@ -286,13 +286,10 @@ function parseConf(yaml) {
     return entries.sort((a,b) => b.year - a.year)[0];
 }
 
-// ── FETCH ────────────────────────────────────────────────────────────────────
 async function fetchConf(m) {
-    // Use verified authoritative data if available (skip YAML fetch)
-    if (VERIFIED[m.id]) return { ...m, ...VERIFIED[m.id], source:'live' };
-
     const url = `${BASE}${m.sub}/${m.file}.yml`;
     try {
+        // Try to get live data from GitHub
         const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
         if (!r.ok) throw new Error(r.status);
         const yaml = await r.text();
@@ -300,6 +297,11 @@ async function fetchConf(m) {
         if (!p) throw new Error('parse');
         return { ...m, ...p, source:'live' };
     } catch (e) {
+        // FALLBACK: If GitHub fails/CORS blocks, use your VERIFIED list
+        if (VERIFIED[m.id]) {
+            return { ...m, ...VERIFIED[m.id], source:'static' };
+        }
+        // Last resort: empty data
         return { ...m, abstract:'TBA', deadline:'TBA', date:'TBA', place:'TBA', link:'', source:'fail' };
     }
 }
@@ -346,26 +348,28 @@ async function init() {
     const CHUNK = 8;
     let done = 0;
 
+    // Clear existing list before starting
+    allConfs = [];
+
     for (let i = 0; i < MASTER.length; i += CHUNK) {
         const results = await Promise.all(MASTER.slice(i, i+CHUNK).map(fetchConf));
         allConfs.push(...results);
         done += results.length;
         if (prog) prog.style.width = Math.round(done / MASTER.length * 100) + '%';
-        applyFilters();
+        applyFilters(); // Render as we go
     }
 
+    // Update the UI status line
     const live = allConfs.filter(c => c.source === 'live').length;
     const dot  = document.getElementById('syncDot');
     const txt  = document.getElementById('syncText');
+    
     if (live === allConfs.length) {
         dot.className = 'pulse green';
-        txt.textContent = `All ${live} conferences synced live from ccfddl • Tickers update every second`;
-    } else if (live > 0) {
-        dot.className = 'pulse yellow';
-        txt.textContent = `${live}/${allConfs.length} synced live • ${allConfs.length-live} files not found in repo`;
+        txt.textContent = `All ${live} conferences synced live from ccfddl.`;
     } else {
-        dot.className = 'pulse red';
-        txt.textContent = 'Could not reach ccfddl (CORS or network issue)';
+        dot.className = 'pulse yellow';
+        txt.textContent = `${live}/${allConfs.length} live • ${allConfs.length - live} using local backup.`;
     }
 
     if (tickTimer) clearInterval(tickTimer);

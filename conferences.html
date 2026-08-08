@@ -194,6 +194,7 @@ const MASTER = [
     { id:"ECML-PKDD", name:"ECML-PKDD", full:"Machine Learning and Knowledge Discovery in Databases",  cat:"ai",  sub:"AI", file:"ecml_pkdd" },
     { id:"EMNLP",     name:"EMNLP",     full:"Empirical Methods in Natural Language Processing",      cat:"ai",  sub:"AI", file:"emnlp"     },
     { id:"NAACL",     name:"NAACL",     full:"North American Chapter of the ACL",                     cat:"ai",  sub:"AI", file:"naacl"     },
+	{ id:"EACL",     name:"EACL",       full:"European Chapter of ACL",                               cat:"ai",  sub:"AI", file:"eacl"     },
     { id:"MLSys",     name:"MLSys",     full:"Conference on Machine Learning and Systems",             cat:"ai",  sub:"AI", file:"mlsys"     },
     { id:"KDD",       name:"KDD",       full:"Knowledge Discovery and Data Mining",                    cat:"ai",  sub:"DB", file:"kdd"       },
     { id:"AAAI",      name:"AAAI",      full:"AAAI Conference on Artificial Intelligence",             cat:"ai",  sub:"AI", file:"aaai"      },
@@ -204,7 +205,7 @@ const MASTER = [
     { id:"WEB",       name:"WEB",       full:"The ACM Web Conference",                                 cat:"ai",  sub:"DB", file:"web"       },
     { id:"COLING",    name:"COLING",    full:"International Conference on Computational Linguistics",  cat:"ai",  sub:"AI", file:"coling"    },
     { id:"CPAL",      name:"CPAL",      full:"Conference on Parsimony and Learning",                   cat:"ai",  sub:"AI", file:"cpal"      },
-	{ id:"BigData",   name:"BigData",   full:"International Conference on Big Data",                   cat:"ai",  sub:"AI", file:"bigdata"      },
+	{ id:"BigData",   name:"BigData",   full:"International Conference on Big Data",                   cat:"ai",  sub:"AI", file:"bigdata"   },
     // Systems / Architecture (incl. HPC/Dist)
     { id:"ISCA",   name:"ISCA",   full:"International Symposium on Computer Architecture",        cat:"sys", sub:"DS", file:"isca"   },
     { id:"HPCA",   name:"HPCA",   full:"High-Performance Computer Architecture",                  cat:"sys", sub:"DS", file:"hpca"   },
@@ -298,40 +299,66 @@ async function fetchConf(m) {
 
 // ── VERIFIED DATA (last auto-updated: 2026-08-03) ─
 const VERIFIED = {
-    "NeurIPS": { abstract:"2026-05-05", deadline:"2026-05-05", date:"December 6, 2026", place:"Sydney, Australia", link:"https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/nips.yml" },
-    "ICML": { abstract:"2026-01-24", deadline:"2026-01-24", date:"July 6-12, 2026", place:"Seoul, Korea", link:"https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml" },
-    "ICLR": { abstract:"2026-09-18", deadline:"2026-09-25", date:"April 26-28, 2027", place:"location and dates to be announced", link:"https://iclr.cc/Conferences/2027/Dates" },
-    "CVPR": { abstract:"2025-11-07", deadline:"2025-11-13", date:"June 20-24, 2027", place:"Seattle, WA, USA", link:"https://cvpr.thecvf.com/Conferences/2026/Dates" },
-    "ACL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"San Diego, California, United States", link:"https://2026.aclweb.org" },
-    "ECCV": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://eccv.ecva.net/Conferences/2026/Dates" },
-    "ECML-PKDD": { abstract:"2026-03-05", deadline:"2026-03-12", date:"Sep 7-11, 2026", place:"Naples, Italy", link:"https://ecmlpkdd.org/2026/" },
-    "MLSys": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://mlsys.org/Conferences/2026/Dates" },
-    "KDD": { abstract:"2026-07-19", deadline:"2026-07-26", date:"August 9-13, 2026", place:"Jeju, South Korea", link:"https://kdd2027.kdd.org/research-track-call-for-papers/" },
-    "ISCA": { abstract:"2025-11-10", deadline:"2025-11-17", date:"TBA", place:"Raleigh, NC", link:"https://iscaconf.org/isca2026/" },
-    "HPCA": { abstract:"2026-07-24", deadline:"2026-07-31", date:"March 20-24, 2027", place:"Sydney, Australia", link:"https://2027.hpca-conf.org" },
-    "MICRO": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"Athens, Greece", link:"https://www.microarch.org/micro59/submit/papers.php" },
-    "IPDPS": { abstract:"2025-10-02", deadline:"2025-10-09", date:"TBA", place:"New Orleans, LA", link:"https://www.ipdps.org/ipdps2026/" },
-    "DAC": { abstract:"TBA", deadline:"TBA", date:"July 11-14, 2027", place:"San Jose, CA", link:"https://www.dac.com/" },
-    "ASPLOS": { abstract:"TBA", deadline:"2026-04-15", date:"April 11-15, 2027", place:"TBA", link:"https://www.asplos-conference.org/asplos2027/cfp/" },
-    "EuroSys": { abstract:"2026-09-17", deadline:"2026-09-24", date:"TBA", place:"Edinburgh, Scotland", link:"https://2027.eurosys.org/cfp.html" },
-    "ICCV": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://iccv.thecvf.com/Conferences/{year+2}/Dates" },
-    "EMNLP": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://2025.emnlp.org" },
-    "NAACL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://2025.naacl.org" },
-    "AAAI": { abstract:"2026-07-21", deadline:"2026-07-28", date:"February 16-23, 2027", place:"TBA", link:"https://aaai.org/conference/aaai/aaai-27/" },
-    "IJCAI": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://ijcai-26.org/" },
-    "CPAL": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://cpal.cc/" },
-    "HiPC": { abstract:"TBA", deadline:"TBA", date:"December 16-19, 2026", place:"TBA", link:"https://hipc.org/" },
-    "SC": { abstract:"2026-04-01", deadline:"2026-04-08", date:"TBA", place:"Chicago, IL", link:"https://sc26.supercomputing.org/" },
-	"SEC": { abstract:"2026-05-08", deadline:"2026-05-08", date:"October 13-16, 2026", place:"Santa Clara, CA", link:"https://acm-ieee-sec.org/2026/" },
-    "ICDCS": { abstract:"TBA", deadline:"TBA", date:"June 22–25, 2026", place:"Seoul, South Korea", link:"https://icdcs2026.icdcs.org/" },
-    "ICS": { abstract:"2026-02-02", deadline:"2026-02-09", date:"TBA", place:"Belfast, UK", link:"https://dipsa-qub.github.io/ICS2026-webpage/" },
-    "HPDC": { abstract:"2026-01-29", deadline:"2026-02-05", date:"TBA", place:"Cleveland, OH", link:"https://hpdc.sci.utah.edu/2026/" },
-    "PPoPP": { abstract:"2025-09-01", deadline:"2025-09-01", date:"TBA", place:"Sydney, Australia", link:"https://ppopp26.sigplan.org" },
-	"WACV": { abstract:"2026-08-21", deadline:"2026-08-28", date:"January 4-8, 2027", place:"Orlando, Florida", link:"https://wacv.thecvf.com/Conferences/2027/Dates" },
-	"BigData": { abstract:"2026-08-21", deadline:"2026-08-21", date:"December 14-17, 2026", place:"Phoenix, Arizona", link:"https://bigdataieee.org/BigData2026/important-dates/" },
-	"WEB": { abstract:"2026-10-11", deadline:"2026-10-18", date:"May 10-14, 2027", place:"Dublin, Ireland", link:"https://acmweb2027.org/important-dates/" },
+    
+	// Spring Submissions
+	// January
+	"ACL": { abstract:"2026-01-05", deadline:"2026-01-05", date:"July 2-7, 2026", place:"San Diego, CA, USA", link:"https://2026.aclweb.org" },
+	"IJCAI": { abstract:"2026-01-12", deadline:"2026-01-19", date:"August 15-21, 2026", place:"Bremen, Germany", link:"https://2026.ijcai.org/important-dates/" },
+	"ICML": { abstract:"2026-01-24", deadline:"2026-01-24", date:"July 6-12, 2026", place:"Seoul, Korea", link:"https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml" },
+    "ICDCS": { abstract:"2026-01-21", deadline:"2026-01-21", date:"June 22–25, 2026", place:"Seoul, South Korea", link:"https://icdcs2026.icdcs.org/" },
+	"HPDC": { abstract:"2026-01-29", deadline:"2026-02-05", date:"TBA", place:"Cleveland, OH, USA", link:"https://hpdc.sci.utah.edu/2026/" },
 	
-    // (kept from previous run) "WWW": {"abstract": "2025-09-30", "deadline": "2025-10-07", "date": "TBA", "place": "TBD", "link": "https://www2026.thewebconf.org"},
+	// February
+	"ICS": { abstract:"2026-02-02", deadline:"2026-02-09", date:"July 6-9, 2026", place:"Belfast, Northern Ireland, UK", link:"https://dipsa-qub.github.io/ICS2026-webpage/" },
+	"ECCV": { abstract:"2026-02-26", deadline:"2026-03-05", date:"September 8-12, 2026", place:"Malmö, Sweden", link:"https://eccv.ecva.net/Conferences/2026/Dates" },
+	
+	// March
+	"ICCV": { abstract:"2027-03-02", deadline:"2027-03-06", date:"October 2-8, 2027", place:"Hong Kong", link:"https://iccv.thecvf.com/Conferences/{year+2}/Dates" },
+	"ECML-PKDD": { abstract:"2026-03-05", deadline:"2026-03-12", date:"September 7-11, 2026", place:"Naples, Italy", link:"https://ecmlpkdd.org/2026/" },
+	"MICRO": { abstract:"2026-03-31", deadline:"2026-04-07", date:"October 31- November 4, 2026", place:"Athens, Greece", link:"https://www.microarch.org/micro59/" },
+    
+	// April
+	 "SC": { abstract:"2026-04-01", deadline:"2026-04-08", date:"TBA", place:"Chicago, IL", link:"https://sc26.supercomputing.org/" },
+	 
+	 
+	// Summer Submissions
+	// May
+	 "NeurIPS": { abstract:"2026-05-05", deadline:"2026-05-05", date:"December 6, 2026", place:"Sydney, Australia", link:"https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/nips.yml" },
+	 "SEC": { abstract:"2026-05-08", deadline:"2026-05-08", date:"October 13-16, 2026", place:"Santa Clara, CA", link:"https://acm-ieee-sec.org/2026/" },
+     "EMNLP": { abstract:"2026-05-25", deadline:"2026-05-25", date:"October 24-29, 2026", place:"Budapest, Hungary", link:"https://2026.emnlp.org" },
+	
+	//July
+	"HiPC": { abstract:"2026-07-01", deadline:"2026-07-08", date:"December 16-19, 2026", place:"TBA", link:"https://hipc.org/" }, 
+	"KDD": { abstract:"2026-07-19", deadline:"2026-07-26", date:"August 9-13, 2026", place:"Jeju, South Korea", link:"https://kdd2027.kdd.org/research-track-call-for-papers/" },
+	"AAAI": { abstract:"2026-07-21", deadline:"2026-07-28", date:"February 16-23, 2027", place:"TBA", link:"https://aaai.org/conference/aaai/aaai-27/" },
+	"HPCA": { abstract:"2026-07-24", deadline:"2026-07-31", date:"March 20-24, 2027", place:"Sydney, Australia", link:"https://2027.hpca-conf.org" },
+	 
+	//August
+	"EACL": { abstract:"2026-08-03", deadline:"2026-08-03", date:"March 9-14, 2026", place:"Athens, Greece", link:"https://2027.eacl.org" },
+	"PPoPP": { abstract:"2026-08-03", deadline:"2026-08-03", date:"March 20-24, 2027", place:"Salt Lake City, Utah, USA", link:"https://ppopp27.sigplan.org/dates" },
+	"BigData": { abstract:"2026-08-21", deadline:"2026-08-21", date:"December 14-17, 2026", place:"Phoenix, Arizona", link:"https://bigdataieee.org/BigData2026/important-dates/" },
+	"WACV": { abstract:"2026-08-21", deadline:"2026-08-28", date:"January 4-8, 2027", place:"Orlando, Florida", link:"https://wacv.thecvf.com/Conferences/2027/Dates" },
+	 
+	
+	// Fall Submissions
+	// September
+    "ASPLOS": { abstract:"2026-09-09", deadline:"2026-09-09", date:"April 11-15, 2027", place:"Heraklion, Crete, Greece", link:"https://www.asplos-conference.org/asplos2027/cfp/" },
+    "EuroSys": { abstract:"2026-09-17", deadline:"2026-09-24", date:"TBA", place:"Edinburgh, Scotland", link:"https://2027.eurosys.org/cfp.html" },
+	"ICLR": { abstract:"2026-09-18", deadline:"2026-09-25", date:"April 26-28, 2027", place:"TBA", link:"https://iclr.cc/Conferences/2027/Dates" },
+    
+	//October
+    "IPDPS": { abstract:"2026-10-01", deadline:"2026-10-08", date:"June 1-5, 2027", place:"Seattle, WA, USA", link:"https://www.ipdps.org/ipdps2026/" },
+	"WEB": { abstract:"2026-10-11", deadline:"2026-10-18", date:"May 10-14, 2027", place:"Dublin, Ireland", link:"https://acmweb2027.org/important-dates/" },
+	"NAACL": { abstract:"2026-10-12", deadline:"2026-10-12", date:"June -5, 2027", place:"San Francisco, CA, USA", link:"https://2027.naacl.org" },
+	"MLSys": { abstract:"TBA", deadline:"TBA", date:"TBA", place:"TBA", link:"https://mlsys.org/Conferences/2026/Dates" },
+	
+	//Novemmber
+	"CVPR": { abstract:"2025-11-07", deadline:"2025-11-13", date:"June 20-24, 2027", place:"Seattle, WA, USA", link:"https://cvpr.thecvf.com/Conferences/2026/Dates" },
+	"ISCA": { abstract:"2026-11-10", deadline:"2026-11-17", date:"June 5-9, 2027", place:"Atlanta, GA, USA", link:"https://iscaconf.org/isca2026/" },
+	"DAC": { abstract:"2026-11-19", deadline:"2026-11-19", date:"July 11-14, 2027", place:"San Jose, CA", link:"https://www.dac.com/" },
+	
+	//December
+	"CPAL": { abstract:"2025-12-12", deadline:"2025-12-12", date:"March 23-26, 2026", place:"Tübingen, Germany", link:"https://cpal.cc/" },
 };
 
 // ── STATE ────────────────────────────────────────────────────────────────────

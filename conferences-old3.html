@@ -355,6 +355,7 @@
         // ── STATE ────────────────────────────────────────────────────────────────────
         let allConfs = [], currentCatFilter = 'all', currentSeasonFilter = 'all', tickTimer = null;
         let monthOffset = 0, activeMonthFilter = null, currentView = 'grid';
+        let tableSeasonFilter = 'all', tableCatFilter = 'all';
         let leafletMap = null, mapMarkers = [];
 
         // ── INIT ─────────────────────────────────────────────────────────────────────
@@ -376,7 +377,8 @@
                 done += results.length;
                 if (prog) prog.style.width = Math.round(done / MASTER.length * 100) + '%';
                 
-                applyFilters();
+                if (currentView === 'grid') applyFilters();
+                else renderTable();
             }
 
             const live = allConfs.filter(c => c.source === 'live').length;
@@ -400,8 +402,9 @@
             if (tickTimer) clearInterval(tickTimer);
             tickTimer = setInterval(tick, 1000);
             
-            // Final render
+            // Final render for both views
             applyFilters();
+            renderTable();
         }
 
         // ── COUNTDOWN ────────────────────────────────────────────────────────────────
@@ -464,7 +467,7 @@
 
         // ── CREATE CARD ───────────────────────────────────────────────────────────────
         function createCard(c) {
-            const catLabel = { ai:'AI', sys:'Systems' }[c.cat] || c.cat;
+            const catLabel = { ai:'AI/ML/NLP/CV', sys:'Systems' }[c.cat] || c.cat;
             const hasDl    = c.deadline && c.deadline !== 'TBA';
             const t        = hasDl ? timeRemaining(c.deadline) : null;
             const isExp    = t ? t.expired : false;
@@ -684,6 +687,8 @@
             const gridCont = document.getElementById('deadlineGrid');
             const tableCont = document.getElementById('tableContainer');
             const mapCont = document.getElementById('mapWrapper');
+            const gridControls = document.getElementById('gridControls');
+            const searchWrapper = document.getElementById('searchWrapper');
             
             // Reset all buttons
             [btnGrid, btnTable, btnMap].forEach(btn => {
@@ -699,21 +704,27 @@
             if (view === 'grid') {
                 btnGrid.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
                 gridCont.classList.remove('hidden');
+                gridControls.classList.remove('hidden', 'opacity-0');
+                searchWrapper.classList.remove('hidden', 'opacity-0');
                 applyFilters();
             } else if (view === 'table') {
                 btnTable.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
                 tableCont.classList.remove('hidden');
-                applyFilters(); // Renders table with current filters
+                gridControls.classList.add('hidden', 'opacity-0');
+                searchWrapper.classList.add('hidden', 'opacity-0');
+                renderTable();
             } else if (view === 'map') {
                 btnMap.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
                 mapCont.classList.remove('hidden');
+                gridControls.classList.remove('hidden', 'opacity-0');
+                searchWrapper.classList.remove('hidden', 'opacity-0');
                 applyFilters(); // Renders map with current filters
                 if (leafletMap) leafletMap.invalidateSize();
             }
         }
 
         // ── MAP RENDER ───────────────────────────────────────────────────────────────
-        function renderMap(filteredConfs = []) {
+        function renderMap(filteredConfs) {
             if (!leafletMap) {
                 leafletMap = L.map('mapContainer').setView([20, 0], 2);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -736,7 +747,7 @@
                         <div class="p-2 min-w-[220px]">
                             <div class="flex items-start justify-between gap-3 mb-1">
                                 <div class="font-bold text-gray-800 text-lg leading-tight flex items-center">${c.name} ${linkHtml}</div>
-                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI' : 'Systems'}</span>
+                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI/ML/NLP/CV' : 'Systems'}</span>
                             </div>
                             <div class="text-xs text-gray-500 mb-3 border-b border-gray-200 pb-2 leading-snug">${c.full}</div>
                             
@@ -797,7 +808,13 @@
             });
         }
 
-        function renderTable(filteredConfs = []) {
+        function updateTableFilter(type, val) {
+            if (type === 'season') tableSeasonFilter = val;
+            if (type === 'cat') tableCatFilter = val;
+            renderTable();
+        }
+
+        function renderTable() {
             const catLabels = { ai: 'AI/ML/NLP/CV', sys: 'Systems/Arch' };
             const seasonLabels = { spring: 'Spring', summer: 'Summer', fall: 'Fall', unknown: 'TBA' };
             const seasonColors = { 
@@ -807,8 +824,14 @@
                 unknown: 'text-slate-500 bg-slate-50 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700' 
             };
             
+            // Apply Table-specific Filters
+            let tableConfs = allConfs.filter(c => {
+                const sMatch = tableSeasonFilter === 'all' || getSeason(c.abstract) === tableSeasonFilter;
+                const cMatch = tableCatFilter === 'all' || c.cat === tableCatFilter;
+                return sMatch && cMatch;
+            });
+            
             // Sort Chronologically from January to December based on Abstract (ignoring year)
-            let tableConfs = [...filteredConfs];
             tableConfs.sort((a, b) => {
                 const getMD = d => (d && d !== 'TBA') ? d.substring(5, 10) : '99-99'; // Extract "MM-DD"
                 return getMD(a.abstract).localeCompare(getMD(b.abstract));
@@ -817,13 +840,34 @@
             let html = `
                 <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors">
                     <h2 class="text-xl font-bold">Annual Conference Schedule</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Tracked conferences ordered chronologically by abstract deadline (January to December).</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">All 36 tracked conferences ordered chronologically by abstract deadline (January to December).</p>
                 </div>
                 <div class="overflow-x-auto bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-colors">
-                    <table class="w-full text-left border-collapse min-w-[750px]">
+                    <table class="w-full text-left border-collapse min-w-[950px]">
                         <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">
                             <tr>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold w-[120px] align-bottom">
+                                    <div class="flex flex-col gap-1.5">
+                                        <span>Season</span>
+                                        <select onchange="updateTableFilter('season', this.value)" class="text-[0.7rem] border border-slate-300 dark:border-slate-600 rounded p-1 font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 shadow-sm focus:outline-none focus:border-uaNavy dark:focus:border-blue-500 focus:ring-1 focus:ring-uaNavy/30 dark:focus:ring-blue-500/30 w-full cursor-pointer transition-all">
+                                            <option value="all" ${tableSeasonFilter === 'all' ? 'selected' : ''}>All</option>
+                                            <option value="spring" ${tableSeasonFilter === 'spring' ? 'selected' : ''}>Spring</option>
+                                            <option value="summer" ${tableSeasonFilter === 'summer' ? 'selected' : ''}>Summer</option>
+                                            <option value="fall" ${tableSeasonFilter === 'fall' ? 'selected' : ''}>Fall</option>
+                                        </select>
+                                    </div>
+                                </th>
                                 <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold min-w-[200px] align-bottom pb-4">Conference</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold w-[140px] align-bottom">
+                                    <div class="flex flex-col gap-1.5">
+                                        <span>Theme</span>
+                                        <select onchange="updateTableFilter('cat', this.value)" class="text-[0.7rem] border border-slate-300 dark:border-slate-600 rounded p-1 font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 shadow-sm focus:outline-none focus:border-uaNavy dark:focus:border-blue-500 focus:ring-1 focus:ring-uaNavy/30 dark:focus:ring-blue-500/30 w-full cursor-pointer transition-all">
+                                            <option value="all" ${tableCatFilter === 'all' ? 'selected' : ''}>All</option>
+                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP/CV</option>
+                                            <option value="sys" ${tableCatFilter === 'sys' ? 'selected' : ''}>Systems/Arch</option>
+                                        </select>
+                                    </div>
+                                </th>
                                 <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Abstract</th>
                                 <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Full Paper</th>
                                 <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Event Date</th>
@@ -833,20 +877,28 @@
                         <tbody>`;
                      
             if (tableConfs.length === 0) {
-                html += `<tr><td colspan="5" class="p-8 text-center text-slate-500 dark:text-slate-400 font-medium">No conferences match these filters.</td></tr>`;
+                html += `<tr><td colspan="7" class="p-8 text-center text-slate-500 dark:text-slate-400 font-medium">No conferences match these filters.</td></tr>`;
             } else {
                 tableConfs.forEach(c => {
+                    const season = getSeason(c.abstract);
+                    const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-aiColor dark:text-indigo-400 border-indigo-100 dark:border-indigo-800/50' : 'bg-amber-50 dark:bg-amber-900/30 text-sysColor dark:text-amber-400 border-amber-100 dark:border-amber-800/50';
                     const absClass  = c.abstract  === 'TBA' ? 'text-slate-400 dark:text-slate-500' : (isPast(c.abstract)  ? 'text-slate-400 dark:text-slate-500 line-through' : 'font-semibold text-slate-800 dark:text-slate-200');
                     const deadClass = c.deadline  === 'TBA' ? 'text-slate-400 dark:text-slate-500' : (isPast(c.deadline)  ? 'text-slate-400 dark:text-slate-500 line-through' : 'font-semibold text-slate-800 dark:text-slate-200');
                     
                     html += `
                         <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
                             <td class="p-3">
+                                <span class="px-2 py-1 rounded border text-[0.65rem] font-bold uppercase tracking-wider whitespace-nowrap ${seasonColors[season]}">${seasonLabels[season]}</span>
+                            </td>
+                            <td class="p-3">
                                 <div class="font-bold text-uaNavy dark:text-blue-300 flex items-center gap-2">
                                     ${c.name}
                                     ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-300 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><i class="fas fa-external-link-alt text-[0.7rem]"></i></a>` : ''}
                                 </div>
                                 <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 group-hover:line-clamp-none transition-all">${c.full}</div>
+                            </td>
+                            <td class="p-3">
+                                <span class="px-2 py-1 rounded border text-[0.7rem] font-semibold whitespace-nowrap ${badgeClass}">${catLabels[c.cat]}</span>
                             </td>
                             <td class="p-3 text-sm ${absClass} whitespace-nowrap">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</td>
                             <td class="p-3 text-sm ${deadClass} whitespace-nowrap">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</td>
@@ -888,8 +940,6 @@
                 render(filtered);
             } else if (currentView === 'map') {
                 renderMap(filtered);
-            } else if (currentView === 'table') {
-                renderTable(filtered);
             }
         }
 

@@ -73,14 +73,14 @@
                 </button>
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold text-uaNavy dark:text-blue-400 mb-1 transition-colors">DASS Lab Conference Tracker</h1>
-            <p class="text-slate-500 dark:text-slate-400 text-base">AI/ML/NLP &amp; Systems/Arch</p>
+            <p class="text-slate-500 dark:text-slate-400 text-base">AI/ML/NLP/CV &amp; Systems/Arch</p>
         <!-- Controls -->
         <div class="flex flex-wrap justify-between items-center mb-8 gap-4 sticky top-0 z-50 bg-bgGray/95 dark:bg-slate-900/95 backdrop-blur py-3 border-b border-slate-200 dark:border-slate-800 transition-colors">
             <div id="gridControls" class="flex flex-col gap-2 flex-1 transition-opacity duration-300">
                 <div class="flex flex-wrap gap-2">
                     <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg flex-wrap transition-colors">
                         <button class="filter-btn active bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'cat')">All</button>
-                        <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP</button>
+                        <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP/CV</button>
                         <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('sys', this, 'cat')">Systems/Arch</button>
                     </div>
                     <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg flex-wrap transition-colors">
@@ -152,7 +152,7 @@
     <script>
         // ── MASTER CONFERENCE LIST ───────────────────────────────────────────────────
         const MASTER = [
-            // AI/ML/NLP
+            // AI/ML/NLP/CV
             { id:"ICML",      name:"ICML",      full:"International Conference on Machine Learning",          cat:"ai",  sub:"AI", file:"icml"      },
             { id:"NeurIPS",   name:"NeurIPS",   full:"Neural Information Processing Systems",                  cat:"ai",  sub:"AI", file:"neurips"   },
             { id:"ICLR",      name:"ICLR",      full:"International Conference on Learning Representations",   cat:"ai",  sub:"AI", file:"iclr"      },
@@ -467,7 +467,7 @@
 
         // ── CREATE CARD ───────────────────────────────────────────────────────────────
         function createCard(c) {
-            const catLabel = { ai:'AI/ML', sys:'Systems' }[c.cat] || c.cat;
+            const catLabel = { ai:'AI/ML/NLP/CV', sys:'Systems' }[c.cat] || c.cat;
             const hasDl    = c.deadline && c.deadline !== 'TBA';
             const t        = hasDl ? timeRemaining(c.deadline) : null;
             const isExp    = t ? t.expired : false;
@@ -747,7 +747,7 @@
                         <div class="p-2 min-w-[220px]">
                             <div class="flex items-start justify-between gap-3 mb-1">
                                 <div class="font-bold text-gray-800 text-lg leading-tight flex items-center">${c.name} ${linkHtml}</div>
-                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI/ML' : 'Systems'}</span>
+                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI/ML/NLP/CV' : 'Systems'}</span>
                             </div>
                             <div class="text-xs text-gray-500 mb-3 border-b border-gray-200 pb-2 leading-snug">${c.full}</div>
                             
@@ -815,7 +815,7 @@
         }
 
         function renderTable() {
-            const catLabels = { ai: 'AI/ML/NLP', sys: 'Systems/Arch' };
+            const catLabels = { ai: 'AI/ML/NLP/CV', sys: 'Systems/Arch' };
             const seasonLabels = { spring: 'Spring', summer: 'Summer', fall: 'Fall', unknown: 'TBA' };
             const seasonColors = { 
                 spring: 'text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50', 
@@ -863,7 +863,7 @@
                                         <span>Theme</span>
                                         <select onchange="updateTableFilter('cat', this.value)" class="text-[0.7rem] border border-slate-300 dark:border-slate-600 rounded p-1 font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 shadow-sm focus:outline-none focus:border-uaNavy dark:focus:border-blue-500 focus:ring-1 focus:ring-uaNavy/30 dark:focus:ring-blue-500/30 w-full cursor-pointer transition-all">
                                             <option value="all" ${tableCatFilter === 'all' ? 'selected' : ''}>All</option>
-                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP</option>
+                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP/CV</option>
                                             <option value="sys" ${tableCatFilter === 'sys' ? 'selected' : ''}>Systems/Arch</option>
                                         </select>
                                     </div>

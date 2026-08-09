@@ -55,7 +55,7 @@
         <!-- Header -->
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-extrabold text-uaNavy mb-1">DASS Lab Conference Tracker</h1>
-            <p class="text-slate-500 text-base">AI/ML/NLP &amp; Systems/Arch</p>
+            <p class="text-slate-500 text-base">AI/ML/NLP/CV &amp; Systems/Arch</p>
             
             <div id="syncLine" class="text-xs text-slate-400 mt-2 flex items-center justify-center gap-2">
                 <span id="syncDot" class="w-2 h-2 rounded-full bg-slate-400 inline-block"></span>
@@ -69,7 +69,7 @@
                 <div class="flex flex-wrap gap-2">
                     <div class="flex gap-1 bg-slate-200 p-1 rounded-lg flex-wrap">
                         <button class="filter-btn active bg-white text-uaNavy shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'cat')">All</button>
-                        <button class="filter-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP</button>
+                        <button class="filter-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP/CV</button>
                         <button class="filter-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('sys', this, 'cat')">Systems/Arch</button>
                     </div>
                     <div class="flex gap-1 bg-slate-200 p-1 rounded-lg flex-wrap">
@@ -125,7 +125,7 @@
     <script>
         // ── MASTER CONFERENCE LIST ───────────────────────────────────────────────────
         const MASTER = [
-            // AI/ML/NLP
+            // AI/ML/NLP/CV
             { id:"ICML",      name:"ICML",      full:"International Conference on Machine Learning",          cat:"ai",  sub:"AI", file:"icml"      },
             { id:"NeurIPS",   name:"NeurIPS",   full:"Neural Information Processing Systems",                  cat:"ai",  sub:"AI", file:"neurips"   },
             { id:"ICLR",      name:"ICLR",      full:"International Conference on Learning Representations",   cat:"ai",  sub:"AI", file:"iclr"      },
@@ -650,7 +650,7 @@
         }
 
         function renderTable() {
-            const catLabels = { ai: 'AI/ML/NLP', sys: 'Systems/Arch' };
+            const catLabels = { ai: 'AI/ML/NLP/CV', sys: 'Systems/Arch' };
             const seasonLabels = { spring: 'Spring', summer: 'Summer', fall: 'Fall', unknown: 'TBA' };
             const seasonColors = { 
                 spring: 'text-emerald-700 bg-emerald-50 border-emerald-200', 
@@ -698,7 +698,7 @@
                                         <span>Theme</span>
                                         <select onchange="updateTableFilter('cat', this.value)" class="text-[0.7rem] border border-slate-300 rounded p-1 font-medium text-slate-700 bg-white shadow-sm focus:outline-none focus:border-uaNavy focus:ring-1 focus:ring-uaNavy/30 w-full cursor-pointer transition-all">
                                             <option value="all" ${tableCatFilter === 'all' ? 'selected' : ''}>All</option>
-                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP</option>
+                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP/CV</option>
                                             <option value="sys" ${tableCatFilter === 'sys' ? 'selected' : ''}>Systems/Arch</option>
                                         </select>
                                     </div>

@@ -12,8 +12,13 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Leaflet Map CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -46,55 +51,64 @@
         .card-expired { opacity: 0.55; filter: grayscale(0.5); }
         .val-transition { transition: color 0.4s; }
         .progress-bar { transition: width 0.3s; }
+
+        /* Leaflet Map Dark Mode Adjustments */
+        .dark .leaflet-layer { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
+        .dark .leaflet-control-zoom-in, .dark .leaflet-control-zoom-out, .dark .leaflet-control-attribution { 
+            background-color: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; 
+        }
+        #mapContainer { z-index: 10; }
     </style>
 </head>
 
-<body class="bg-bgGray text-slate-800 font-sans p-6 min-h-screen">
+<body class="bg-bgGray dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans p-6 min-h-screen transition-colors duration-300">
     <div class="max-w-[1400px] mx-auto">
         
         <!-- Header -->
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-uaNavy mb-1">DASS Lab Conference Tracker</h1>
-            <p class="text-slate-500 text-base">AI/ML/NLP/CV &amp; Systems/Arch</p>
-            
-            <div id="syncLine" class="text-xs text-slate-400 mt-2 flex items-center justify-center gap-2">
-                <span id="syncDot" class="w-2 h-2 rounded-full bg-slate-400 inline-block"></span>
-                <span id="syncText">Connecting to ccfddl live data...</span>
+        <header class="text-center mb-8 relative">
+            <div class="absolute right-0 top-0">
+                <button id="themeToggle" onclick="toggleTheme()" class="p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-yellow-400 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors" title="Toggle Dark Mode">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:inline"></i>
+                </button>
             </div>
-        </header>
-
+            <h1 class="text-3xl md:text-4xl font-extrabold text-uaNavy dark:text-blue-400 mb-1 transition-colors">DASS Lab Conference Tracker</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-base">AI/ML/NLP &amp; Systems/Arch</p>
         <!-- Controls -->
-        <div class="flex flex-wrap justify-between items-center mb-8 gap-4 sticky top-0 z-50 bg-bgGray/95 backdrop-blur py-3 border-b border-slate-200">
+        <div class="flex flex-wrap justify-between items-center mb-8 gap-4 sticky top-0 z-50 bg-bgGray/95 dark:bg-slate-900/95 backdrop-blur py-3 border-b border-slate-200 dark:border-slate-800 transition-colors">
             <div id="gridControls" class="flex flex-col gap-2 flex-1 transition-opacity duration-300">
                 <div class="flex flex-wrap gap-2">
-                    <div class="flex gap-1 bg-slate-200 p-1 rounded-lg flex-wrap">
-                        <button class="filter-btn active bg-white text-uaNavy shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'cat')">All</button>
-                        <button class="filter-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP/CV</button>
-                        <button class="filter-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('sys', this, 'cat')">Systems/Arch</button>
+                    <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg flex-wrap transition-colors">
+                        <button class="filter-btn active bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'cat')">All</button>
+                        <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP</button>
+                        <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('sys', this, 'cat')">Systems/Arch</button>
                     </div>
-                    <div class="flex gap-1 bg-slate-200 p-1 rounded-lg flex-wrap">
-                        <button class="season-btn active bg-white text-uaNavy shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'season')">All Seasons</button>
-                        <button class="season-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('spring', this, 'season')">Spring</button>
-                        <button class="season-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('summer', this, 'season')">Summer</button>
-                        <button class="season-btn text-slate-600 hover:bg-slate-300/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('fall', this, 'season')">Fall</button>
+                    <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg flex-wrap transition-colors">
+                        <button class="season-btn active bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'season')">All Seasons</button>
+                        <button class="season-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('spring', this, 'season')">Spring</button>
+                        <button class="season-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('summer', this, 'season')">Summer</button>
+                        <button class="season-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('fall', this, 'season')">Fall</button>
                     </div>
                 </div>
             </div>
             
             <div class="flex flex-wrap md:flex-nowrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
                 <div id="searchWrapper" class="relative flex-1 max-w-[300px] min-w-[200px] transition-opacity duration-300">
-                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"></i>
                     <input type="text" id="searchInput" placeholder="Search conference..." oninput="applyFilters()" 
-                           class="w-full py-2.5 pr-4 pl-10 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-uaNavy/30 text-sm bg-white shadow-sm transition-all">
+                           class="w-full py-2.5 pr-4 pl-10 rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-uaNavy/30 dark:focus:ring-blue-500/50 text-sm bg-white dark:bg-slate-800 dark:text-slate-200 shadow-sm transition-all">
                 </div>
                 
                 <!-- View Toggle -->
-                <div class="flex gap-1 bg-slate-200 p-1 rounded-lg shrink-0 ml-auto md:ml-0">
-                    <button id="viewBtnGrid" class="bg-white text-uaNavy shadow-sm px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('grid')" title="Grid View">
+                <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg shrink-0 ml-auto md:ml-0 transition-colors">
+                    <button id="viewBtnGrid" class="bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('grid')" title="Grid View">
                         <i class="fas fa-th-large"></i><span class="hidden sm:inline">Grid</span>
                     </button>
-                    <button id="viewBtnTable" class="text-slate-600 hover:bg-slate-300/50 px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('table')" title="Annual Table View">
+                    <button id="viewBtnTable" class="text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('table')" title="Annual Table View">
                         <i class="fas fa-list"></i><span class="hidden sm:inline">Table</span>
+                    </button>
+                    <button id="viewBtnMap" class="text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('map')" title="Map View">
+                        <i class="fas fa-globe-americas"></i><span class="hidden sm:inline">Map</span>
                     </button>
                 </div>
             </div>
@@ -116,8 +130,21 @@
             <!-- Rendered via JS -->
         </div>
         
-        <hr class="my-10 border-slate-200">
+        <!-- Interactive Map View (Hidden by default) -->
+        <div id="mapWrapper" class="hidden transition-all duration-500">
+            <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors">
+                <h2 class="text-xl font-bold">Global Conference Map</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Showing locations for currently filtered conferences.</p>
+            </div>
+            <div id="mapContainer" class="w-full h-[600px] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"></div>
+        </div>
+        
+        <hr class="my-10 border-slate-200 dark:border-slate-800 transition-colors">
         <footer class="text-center pb-6 text-sm text-slate-500">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <span id="syncDot" class="w-2 h-2 rounded-full inline-block bg-slate-300"></span>
+                <span id="syncText" class="dark:text-slate-400">Initializing sync...</span>
+            </div>
             <p>Data sourced and adapted from <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" class="text-blue-500 hover:underline">ccfddl GitHub</a>.</p>
         </footer>
     </div>
@@ -125,7 +152,7 @@
     <script>
         // ── MASTER CONFERENCE LIST ───────────────────────────────────────────────────
         const MASTER = [
-            // AI/ML/NLP/CV
+            // AI/ML/NLP
             { id:"ICML",      name:"ICML",      full:"International Conference on Machine Learning",          cat:"ai",  sub:"AI", file:"icml"      },
             { id:"NeurIPS",   name:"NeurIPS",   full:"Neural Information Processing Systems",                  cat:"ai",  sub:"AI", file:"neurips"   },
             { id:"ICLR",      name:"ICLR",      full:"International Conference on Learning Representations",   cat:"ai",  sub:"AI", file:"iclr"      },
@@ -295,13 +322,51 @@
             "CPAL": { abstract:"2025-12-12", deadline:"2025-12-12", date:"March 23-26, 2026", place:"Tübingen, Germany", link:"https://cpal.cc/" },
         };
 
+        // ── GEO CACHE FOR MAP VIEW ───────────────────────────────────────────────────
+        const GEO_CACHE = {
+            "San Diego, CA, USA": [32.7157, -117.1611],
+            "Bremen, Germany": [53.0793, 8.8017],
+            "Seoul, Korea": [37.5665, 126.9780],
+            "Seoul, South Korea": [37.5665, 126.9780],
+            "Cleveland, OH, USA": [41.4993, -81.6944],
+            "Belfast, Northern Ireland, UK": [54.5973, -5.9301],
+            "Malmö, Sweden": [55.6050, 13.0038],
+            "Hong Kong": [22.3193, 114.1694],
+            "Naples, Italy": [40.8518, 14.2681],
+            "Athens, Greece": [37.9838, 23.7275],
+            "Chicago, IL": [41.8781, -87.6298],
+            "Sydney, Australia": [-33.8688, 151.2093],
+            "Santa Clara, CA, USA": [37.3541, -121.9552],
+            "Budapest, Hungary": [47.4979, 19.0402],
+            "Jeju, South Korea": [33.4996, 126.5312],
+            "Salt Lake City, Utah, USA": [40.7608, -111.8910],
+            "Phoenix, AZ, USA": [33.4484, -112.0740],
+            "Orlando, FL, USA": [28.5383, -81.3792],
+            "Heraklion, Crete, Greece": [35.3387, 25.1442],
+            "Edinburgh, Scotland": [55.9533, -3.1883],
+            "Seattle, WA, USA": [47.6062, -122.3321],
+            "Dublin, Ireland": [53.3498, -6.2603],
+            "San Francisco, CA, USA": [37.7749, -122.4194],
+            "Atlanta, GA, USA": [33.7490, -84.3880],
+            "San Jose, CA": [37.3382, -121.8863],
+            "Tübingen, Germany": [48.5216, 9.0576]
+        };
+
         // ── STATE ────────────────────────────────────────────────────────────────────
         let allConfs = [], currentCatFilter = 'all', currentSeasonFilter = 'all', tickTimer = null;
         let monthOffset = 0, activeMonthFilter = null, currentView = 'grid';
         let tableSeasonFilter = 'all', tableCatFilter = 'all';
+        let leafletMap = null, mapMarkers = [];
 
         // ── INIT ─────────────────────────────────────────────────────────────────────
         async function init() {
+            // Theme initialization
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
             const prog = document.getElementById('progBar');
             const CHUNK = 8;
             let done = 0;
@@ -320,16 +385,18 @@
             const dot  = document.getElementById('syncDot');
             const txt  = document.getElementById('syncText');
             
-            // Update dot colors using Tailwind classes
-            if (live === allConfs.length) {
-                dot.className = 'w-2 h-2 rounded-full inline-block bg-emerald-500 animate-blink';
-                txt.textContent = `All ${live} conferences synced live from ccfddl • Tickers update every second`;
-            } else if (live > 0) {
-                dot.className = 'w-2 h-2 rounded-full inline-block bg-amber-500';
-                txt.textContent = `${live}/${allConfs.length} synced live • ${allConfs.length-live} files not found in repo`;
-            } else {
-                dot.className = 'w-2 h-2 rounded-full inline-block bg-red-500';
-                txt.textContent = 'Could not reach ccfddl (CORS or network issue)';
+            if (dot && txt) {
+                // Update dot colors using Tailwind classes
+                if (live === allConfs.length) {
+                    dot.className = 'w-2 h-2 rounded-full inline-block bg-emerald-500 animate-blink';
+                    txt.textContent = `All ${live} conferences synced live from ccfddl • Tickers update every second`;
+                } else if (live > 0) {
+                    dot.className = 'w-2 h-2 rounded-full inline-block bg-amber-500';
+                    txt.textContent = `${live}/${allConfs.length} synced live • ${allConfs.length-live} files not found in repo`;
+                } else {
+                    dot.className = 'w-2 h-2 rounded-full inline-block bg-red-500';
+                    txt.textContent = 'Could not reach ccfddl (CORS or network issue)';
+                }
             }
 
             if (tickTimer) clearInterval(tickTimer);
@@ -404,59 +471,59 @@
             const hasDl    = c.deadline && c.deadline !== 'TBA';
             const t        = hasDl ? timeRemaining(c.deadline) : null;
             const isExp    = t ? t.expired : false;
-            const cls      = t ? colorCls(t) : 'text-slate-400 text-base font-semibold';
+            const cls      = t ? colorCls(t) : 'text-slate-400 dark:text-slate-500 text-base font-semibold';
             const valClass = 'block text-2xl font-extrabold tabular-nums tracking-tight val-transition ' + cls;
 
             const cdHtml = hasDl
-                ? `<div class="text-center min-w-[48px]"><span class="${valClass} v-d">${isExp ? '--' : t.d}</span><span class="text-[0.6rem] uppercase text-slate-400 tracking-wider mt-[2px] block">Days</span></div>
-                   <div class="text-xl font-bold text-slate-300 pb-3 px-[1px]">:</div>
-                   <div class="text-center min-w-[48px]"><span class="${valClass} v-h">${isExp ? '--' : pad2(t.h)}</span><span class="text-[0.6rem] uppercase text-slate-400 tracking-wider mt-[2px] block">Hrs</span></div>
-                   <div class="text-xl font-bold text-slate-300 pb-3 px-[1px]">:</div>
-                   <div class="text-center min-w-[48px]"><span class="${valClass} v-m">${isExp ? '--' : pad2(t.m)}</span><span class="text-[0.6rem] uppercase text-slate-400 tracking-wider mt-[2px] block">Min</span></div>
-                   <div class="text-xl font-bold text-slate-300 pb-3 px-[1px]">:</div>
-                   <div class="text-center min-w-[48px]"><span class="${valClass} v-s">${isExp ? '--' : pad2(t.s)}</span><span class="text-[0.6rem] uppercase text-slate-400 tracking-wider mt-[2px] block">Sec</span></div>`
-                : `<div class="text-center min-w-[48px]"><span class="${valClass}">TBA</span><span class="text-[0.6rem] uppercase text-slate-400 tracking-wider mt-[2px] block">Deadline</span></div>`;
+                ? `<div class="text-center min-w-[48px]"><span class="${valClass} v-d">${isExp ? '--' : t.d}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Days</span></div>
+                   <div class="text-xl font-bold text-slate-300 dark:text-slate-600 pb-3 px-[1px]">:</div>
+                   <div class="text-center min-w-[48px]"><span class="${valClass} v-h">${isExp ? '--' : pad2(t.h)}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Hrs</span></div>
+                   <div class="text-xl font-bold text-slate-300 dark:text-slate-600 pb-3 px-[1px]">:</div>
+                   <div class="text-center min-w-[48px]"><span class="${valClass} v-m">${isExp ? '--' : pad2(t.m)}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Min</span></div>
+                   <div class="text-xl font-bold text-slate-300 dark:text-slate-600 pb-3 px-[1px]">:</div>
+                   <div class="text-center min-w-[48px]"><span class="${valClass} v-s">${isExp ? '--' : pad2(t.s)}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Sec</span></div>`
+                : `<div class="text-center min-w-[48px]"><span class="${valClass}">TBA</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Deadline</span></div>`;
 
-            const absClass  = c.abstract  === 'TBA' ? 'font-medium text-slate-400' : (isPast(c.abstract)  ? 'text-slate-300 line-through font-normal' : 'font-bold text-slate-800');
-            const deadClass = c.deadline  === 'TBA' ? 'font-medium text-slate-400' : (isPast(c.deadline)  ? 'text-slate-300 line-through font-normal' : 'font-bold text-slate-800');
-            const dateClass = c.date      === 'TBA' ? 'font-medium text-slate-400' : 'font-bold text-slate-800';
+            const absClass  = c.abstract  === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : (isPast(c.abstract)  ? 'text-slate-300 dark:text-slate-600 line-through font-normal' : 'font-bold text-slate-800 dark:text-slate-200');
+            const deadClass = c.deadline  === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : (isPast(c.deadline)  ? 'text-slate-300 dark:text-slate-600 line-through font-normal' : 'font-bold text-slate-800 dark:text-slate-200');
+            const dateClass = c.date      === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : 'font-bold text-slate-800 dark:text-slate-200';
             const srcDot    = c.source === 'live'
                 ? `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emerald-500 animate-blink" title="Live from ccfddl"></span>`
                 : `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-amber-500" title="Not found in repo"></span>`;
             
             const borderTopColor = c.cat === 'ai' ? 'border-t-aiColor' : 'border-t-sysColor';
-            const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 text-aiColor' : 'bg-amber-50 text-sysColor';
+            const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-aiColor dark:text-indigo-400' : 'bg-amber-50 dark:bg-amber-900/30 text-sysColor dark:text-amber-400';
 
             return `
-              <div class="card ${isExp ? 'card-expired ' : ''}bg-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border-t-4 ${borderTopColor} flex flex-col">
+              <div class="card ${isExp ? 'card-expired ' : ''}bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border-t-4 ${borderTopColor} flex flex-col">
                 <div class="flex justify-between items-start mb-1">
-                  <span class="text-[1.35rem] font-extrabold text-uaNavy">${c.name}</span>
-                  ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-400 hover:text-blue-500 transition-colors text-sm"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                  <span class="text-[1.35rem] font-extrabold text-uaNavy dark:text-blue-400">${c.name}</span>
+                  ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-400 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors text-sm"><i class="fas fa-external-link-alt"></i></a>` : ''}
                 </div>
-                <div class="text-xs text-slate-500 mb-4 leading-snug min-h-[1.9em]">${c.full}</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-snug min-h-[1.9em]">${c.full}</div>
 
-                <div class="countdown bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-3 flex justify-center items-center gap-1 mb-4 border border-slate-100" data-deadline="${c.deadline}">${cdHtml}</div>
+                <div class="countdown bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700/50 dark:to-slate-700 rounded-lg p-3 flex justify-center items-center gap-1 mb-4 border border-slate-100 dark:border-slate-700/50" data-deadline="${c.deadline}">${cdHtml}</div>
 
-                <div class="text-[0.78rem] border-t border-slate-100 pt-3 flex flex-col gap-2">
+                <div class="text-[0.78rem] border-t border-slate-100 dark:border-slate-700 pt-3 flex flex-col gap-2">
                   <div class="flex justify-between items-center">
-                    <span class="text-slate-500 font-medium flex items-center gap-1.5"><i class="fas fa-pencil-alt w-3 opacity-40"></i> Abstract</span>
+                    <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-pencil-alt w-3 opacity-40"></i> Abstract</span>
                     <span class="${absClass} text-right">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</span>
                   </div>
                   <div class="flex justify-between items-center">
-                    <span class="text-slate-500 font-medium flex items-center gap-1.5"><i class="fas fa-paper-plane w-3 opacity-40"></i> Full Paper</span>
+                    <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-paper-plane w-3 opacity-40"></i> Full Paper</span>
                     <span class="${deadClass} text-right">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</span>
                   </div>
                   <div class="flex justify-between items-center">
-                    <span class="text-slate-500 font-medium flex items-center gap-1.5"><i class="fas fa-calendar-alt w-3 opacity-40"></i> Conference</span>
+                    <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-calendar-alt w-3 opacity-40"></i> Conference</span>
                     <span class="${dateClass} text-right">${c.date}</span>
                   </div>
-                  ${c.note ? `<div class="flex justify-between items-start mt-1 pt-1.5 border-t border-dashed border-slate-200">
-                    <span class="italic text-slate-500 font-medium flex items-center gap-1.5"><i class="fas fa-info-circle w-3 opacity-40"></i> Note</span>
-                    <span class="text-[0.7rem] text-slate-500 text-right max-w-[65%]">${c.note}</span>
+                  ${c.note ? `<div class="flex justify-between items-start mt-1 pt-1.5 border-t border-dashed border-slate-200 dark:border-slate-700">
+                    <span class="italic text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-info-circle w-3 opacity-40"></i> Note</span>
+                    <span class="text-[0.7rem] text-slate-500 dark:text-slate-400 text-right max-w-[65%]">${c.note}</span>
                   </div>` : ''}
                 </div>
 
-                <div class="mt-auto pt-4 text-[0.7rem] text-slate-400 flex items-center gap-2">
+                <div class="mt-auto pt-4 text-[0.7rem] text-slate-400 dark:text-slate-500 flex items-center gap-2">
                   <i class="fas fa-map-marker-alt shrink-0"></i>
                   <span class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">${c.place}</span>
                   ${srcDot}
@@ -492,39 +559,39 @@
                 const currentRealMonth = new Date().getMonth();
                 
                 let monthHtml = `<div class="flex items-center gap-1.5 text-[0.75rem] normal-case tracking-normal font-medium ml-auto mt-2 sm:mt-0">`;
-                monthHtml += `<button onclick="changeMonthOffset(-1)" class="px-2 py-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"><i class="fas fa-chevron-left"></i></button>`;
+                monthHtml += `<button onclick="changeMonthOffset(-1)" class="px-2 py-1.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><i class="fas fa-chevron-left"></i></button>`;
                 
                 for(let i=0; i<3; i++) {
                     let mIdx = (currentRealMonth + monthOffset + i) % 12;
                     if (mIdx < 0) mIdx += 12;
                     let isActive = activeMonthFilter === mIdx;
-                    let activeCls = isActive ? 'bg-uaNavy text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+                    let activeCls = isActive ? 'bg-uaNavy dark:bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700';
                     monthHtml += `<button onclick="toggleMonthFilter(${mIdx})" class="px-3 py-1.5 rounded transition-colors ${activeCls}">${monthNamesFull[mIdx]}</button>`;
                 }
                 
-                monthHtml += `<button onclick="changeMonthOffset(1)" class="px-2 py-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"><i class="fas fa-chevron-right"></i></button>`;
+                monthHtml += `<button onclick="changeMonthOffset(1)" class="px-2 py-1.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><i class="fas fa-chevron-right"></i></button>`;
                 if (activeMonthFilter !== null) {
-                     monthHtml += `<button onclick="toggleMonthFilter(${activeMonthFilter})" class="px-2 py-1.5 rounded bg-red-50 text-red-500 hover:bg-red-100 transition-colors ml-1" title="Clear Month Filter"><i class="fas fa-times"></i></button>`;
+                     monthHtml += `<button onclick="toggleMonthFilter(${activeMonthFilter})" class="px-2 py-1.5 rounded bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors ml-1" title="Clear Month Filter"><i class="fas fa-times"></i></button>`;
                 }
                 monthHtml += `</div>`;
 
-                html += `<div class="col-span-full mt-6 mb-2 pb-2 border-b-2 border-slate-200 text-uaNavy font-extrabold uppercase text-[0.85rem] tracking-wider flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                html += `<div class="col-span-full mt-6 mb-2 pb-2 border-b-2 border-slate-200 dark:border-slate-700 text-uaNavy dark:text-blue-400 font-extrabold uppercase text-[0.85rem] tracking-wider flex flex-col sm:flex-row justify-between items-start sm:items-center">
                             <div class="flex items-center"><i class="fas fa-hourglass-half mr-1.5 opacity-50"></i>Upcoming Deadlines (${filteredUpcoming.length})</div>
                             ${monthHtml}
                          </div>`;
                          
                 if (filteredUpcoming.length === 0) {
-                    html += `<div class="col-span-full text-center py-8 text-slate-500 bg-white rounded-xl border border-dashed border-slate-200 shadow-sm">No upcoming conferences have abstract deadlines in ${monthNamesFull[activeMonthFilter]}.</div>`;
+                    html += `<div class="col-span-full text-center py-8 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 shadow-sm">No upcoming conferences have abstract deadlines in ${monthNamesFull[activeMonthFilter]}.</div>`;
                 } else {
                     filteredUpcoming.forEach(c => { html += createCard(c); });
                 }
             }
             if (past.length) {
-                html += `<div class="col-span-full mt-10 mb-2 pb-2 border-b-2 border-slate-200 text-uaNavy font-extrabold uppercase text-[0.85rem] tracking-wider"><i class="fas fa-check-circle mr-1.5 opacity-50"></i>Past / Finished (${past.length})</div>`;
+                html += `<div class="col-span-full mt-10 mb-2 pb-2 border-b-2 border-slate-200 dark:border-slate-700 text-uaNavy dark:text-blue-400 font-extrabold uppercase text-[0.85rem] tracking-wider"><i class="fas fa-check-circle mr-1.5 opacity-50"></i>Past / Finished (${past.length})</div>`;
                 past.forEach(c => { html += createCard(c); });
             }
             if (!upcoming.length && !past.length) {
-                html = '<div class="col-span-full text-center py-16 text-slate-500">No conferences match your filter/search.</div>';
+                html = '<div class="col-span-full text-center py-16 text-slate-500 dark:text-slate-400">No conferences match your filter/search.</div>';
             }
             document.getElementById('deadlineGrid').innerHTML = html;
         }
@@ -534,36 +601,47 @@
             if (type === 'cat') {
                 currentCatFilter = val;
                 document.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('active', 'bg-white', 'text-uaNavy', 'shadow-sm');
-                    b.classList.add('text-slate-600');
+                    b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                    b.classList.add('text-slate-600', 'dark:text-slate-400');
                 });
             } else if (type === 'season') {
                 currentSeasonFilter = val;
                 document.querySelectorAll('.season-btn').forEach(b => {
-                    b.classList.remove('active', 'bg-white', 'text-uaNavy', 'shadow-sm');
-                    b.classList.add('text-slate-600');
+                    b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                    b.classList.add('text-slate-600', 'dark:text-slate-400');
                 });
                 
                 if (val !== 'all') {
                     const now = Date.now();
-                    // Find upcoming abstracts for the specific season
-                    const upcomingAbstracts = allConfs.filter(c => {
-                        if (getSeason(c.abstract) !== val) return false;
-                        if (c.abstract === 'TBA') return true;
-                        const d = new Date(c.abstract + 'T23:59:59-12:00');
-                        return isNaN(d) || d >= now;
-                    }).sort((a,b) => {
-                        if (a.abstract === 'TBA') return 1;
-                        if (b.abstract === 'TBA') return -1;
-                        return new Date(a.abstract) - new Date(b.abstract);
-                    });
                     
-                    let targetMonth;
-                    // Auto-detect the month of the first upcoming abstract
-                    if (upcomingAbstracts.length > 0 && upcomingAbstracts[0].abstract !== 'TBA') {
-                        targetMonth = getMonthIndex(upcomingAbstracts[0].abstract);
-                    } else {
-                        // Fallbacks to first month of season if no data/TBA
+                    // Helper to check if a conference is entirely in the past or still upcoming
+                    const isUpcoming = c => {
+                        if (c.deadline === 'TBA') return true;
+                        const d = new Date(c.deadline + 'T23:59:59-12:00');
+                        return isNaN(d) || d >= now;
+                    };
+                    
+                    // Find upcoming deadlines specifically tied to this season's abstract
+                    const upcomingForSeason = allConfs.filter(c => getSeason(c.abstract) === val && isUpcoming(c))
+                        .sort((a,b) => {
+                            if (a.abstract === 'TBA') return 1;
+                            if (b.abstract === 'TBA') return -1;
+                            return new Date(a.abstract) - new Date(b.abstract);
+                        });
+                    
+                    let targetMonth = -1;
+                    
+                    // Auto-detect the month of the first strictly upcoming abstract in that season
+                    for (let c of upcomingForSeason) {
+                        let m = getMonthIndex(c.abstract);
+                        if (m !== -1) {
+                            targetMonth = m;
+                            break;
+                        }
+                    }
+                    
+                    // Fallbacks to first month of season if no data/TBA
+                    if (targetMonth === -1) {
                         targetMonth = { 'spring': 0, 'summer': 4, 'fall': 8 }[val];
                     }
                     
@@ -576,8 +654,8 @@
                 }
             }
             
-            btn.classList.add('active', 'bg-white', 'text-uaNavy', 'shadow-sm');
-            btn.classList.remove('text-slate-600');
+            btn.classList.add('active', 'bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+            btn.classList.remove('text-slate-600', 'dark:text-slate-400');
             
             applyFilters();
         }
@@ -605,42 +683,129 @@
             
             const btnGrid = document.getElementById('viewBtnGrid');
             const btnTable = document.getElementById('viewBtnTable');
+            const btnMap = document.getElementById('viewBtnMap');
             const gridCont = document.getElementById('deadlineGrid');
             const tableCont = document.getElementById('tableContainer');
+            const mapCont = document.getElementById('mapWrapper');
             const gridControls = document.getElementById('gridControls');
             const searchWrapper = document.getElementById('searchWrapper');
             
+            // Reset all buttons
+            [btnGrid, btnTable, btnMap].forEach(btn => {
+                btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-300/50', 'dark:hover:bg-slate-700/50');
+            });
+            
+            // Hide all containers
+            gridCont.classList.add('hidden');
+            tableCont.classList.add('hidden');
+            mapCont.classList.add('hidden');
+            
             if (view === 'grid') {
-                btnGrid.classList.add('bg-white', 'text-uaNavy', 'shadow-sm');
-                btnGrid.classList.remove('text-slate-600', 'hover:bg-slate-300/50');
-                
-                btnTable.classList.remove('bg-white', 'text-uaNavy', 'shadow-sm');
-                btnTable.classList.add('text-slate-600', 'hover:bg-slate-300/50');
-                
+                btnGrid.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
                 gridCont.classList.remove('hidden');
-                tableCont.classList.add('hidden');
-                
-                // Show grid-specific controls
                 gridControls.classList.remove('hidden', 'opacity-0');
                 searchWrapper.classList.remove('hidden', 'opacity-0');
-                
-                applyFilters(); // Ensure grid is up-to-date
-            } else {
-                btnTable.classList.add('bg-white', 'text-uaNavy', 'shadow-sm');
-                btnTable.classList.remove('text-slate-600', 'hover:bg-slate-300/50');
-                
-                btnGrid.classList.remove('bg-white', 'text-uaNavy', 'shadow-sm');
-                btnGrid.classList.add('text-slate-600', 'hover:bg-slate-300/50');
-                
-                gridCont.classList.add('hidden');
+                applyFilters();
+            } else if (view === 'table') {
+                btnTable.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
                 tableCont.classList.remove('hidden');
-                
-                // Hide grid-specific controls for the full annual view
                 gridControls.classList.add('hidden', 'opacity-0');
                 searchWrapper.classList.add('hidden', 'opacity-0');
-                
-                renderTable(); // Ensure table is up-to-date
+                renderTable();
+            } else if (view === 'map') {
+                btnMap.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                mapCont.classList.remove('hidden');
+                gridControls.classList.remove('hidden', 'opacity-0');
+                searchWrapper.classList.remove('hidden', 'opacity-0');
+                applyFilters(); // Renders map with current filters
+                if (leafletMap) leafletMap.invalidateSize();
             }
+        }
+
+        // ── MAP RENDER ───────────────────────────────────────────────────────────────
+        function renderMap(filteredConfs) {
+            if (!leafletMap) {
+                leafletMap = L.map('mapContainer').setView([20, 0], 2);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors',
+                    maxZoom: 18,
+                }).addTo(leafletMap);
+            }
+
+            // Clear old markers
+            mapMarkers.forEach(m => leafletMap.removeLayer(m));
+            mapMarkers = [];
+
+            // Add new markers
+            filteredConfs.forEach(c => {
+                if (c.place && c.place !== 'TBA') {
+                    const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'bg-amber-50 text-amber-600 border-amber-200';
+                    const linkHtml = c.link ? `<a href="${c.link}" target="_blank" class="text-blue-500 hover:text-blue-700 transition-colors" title="Visit Conference Website"><i class="fas fa-external-link-alt text-sm ml-1"></i></a>` : '';
+                    
+                    const popupContent = `
+                        <div class="p-2 min-w-[220px]">
+                            <div class="flex items-start justify-between gap-3 mb-1">
+                                <div class="font-bold text-gray-800 text-lg leading-tight flex items-center">${c.name} ${linkHtml}</div>
+                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI/ML' : 'Systems'}</span>
+                            </div>
+                            <div class="text-xs text-gray-500 mb-3 border-b border-gray-200 pb-2 leading-snug">${c.full}</div>
+                            
+                            <div class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1.5 text-sm text-gray-700">
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-pencil-alt text-gray-400 w-3"></i> Abstract:</span> 
+                                <span class="${c.abstract === 'TBA' ? 'text-gray-400' : (isPast(c.abstract) ? 'line-through text-gray-400' : 'font-semibold')} text-right">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</span>
+                                
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-paper-plane text-gray-400 w-3"></i> Full Paper:</span> 
+                                <span class="${c.deadline === 'TBA' ? 'text-gray-400' : (isPast(c.deadline) ? 'line-through text-gray-400' : 'font-semibold')} text-right">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</span>
+                                
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 w-3"></i> Event:</span> 
+                                <span class="text-right">${c.date}</span>
+                                
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-gray-400 w-3"></i> Location:</span> 
+                                <span class="break-words text-right">${c.place}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    // Create custom themed map pin using inline SVG
+                    const pinColor = c.cat === 'ai' ? '#6366f1' : '#f59e0b'; // AI: Indigo, Sys: Amber
+                    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="width: 28px; height: 42px; fill: ${pinColor}; filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.3));"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>`;
+                    
+                    const customIcon = L.divIcon({
+                        html: svgIcon,
+                        className: 'bg-transparent border-none', // overrides default Leaflet white square styles
+                        iconSize: [28, 42],
+                        iconAnchor: [14, 42], // bottom-center is the anchor point
+                        popupAnchor: [0, -42] // popup spawns right above the pin
+                    });
+
+                    let coords = GEO_CACHE[c.place];
+                    
+                    if (coords) {
+                        const marker = L.marker(coords, { icon: customIcon }).addTo(leafletMap);
+                        marker.bindPopup(popupContent);
+                        mapMarkers.push(marker);
+                    } else {
+                        // Fetch asynchronously to not block rendering and ensure all places are mapped
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(c.place)}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data && data.length > 0) {
+                                    const newCoords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                                    GEO_CACHE[c.place] = newCoords; // Add it to the cache so we don't query it again
+                                    
+                                    // Only add to map if the map view is active to prevent background DOM issues
+                                    if (currentView === 'map' && document.getElementById('mapContainer')) {
+                                        const marker = L.marker(newCoords, { icon: customIcon }).addTo(leafletMap);
+                                        marker.bindPopup(popupContent);
+                                        mapMarkers.push(marker);
+                                    }
+                                }
+                            })
+                            .catch(e => console.warn("Geocoding failed for", c.place, e));
+                    }
+                }
+            });
         }
 
         function updateTableFilter(type, val) {
@@ -650,13 +815,13 @@
         }
 
         function renderTable() {
-            const catLabels = { ai: 'AI/ML/NLP/CV', sys: 'Systems/Arch' };
+            const catLabels = { ai: 'AI/ML/NLP', sys: 'Systems/Arch' };
             const seasonLabels = { spring: 'Spring', summer: 'Summer', fall: 'Fall', unknown: 'TBA' };
             const seasonColors = { 
-                spring: 'text-emerald-700 bg-emerald-50 border-emerald-200', 
-                summer: 'text-amber-700 bg-amber-50 border-amber-200', 
-                fall: 'text-orange-700 bg-orange-50 border-orange-200', 
-                unknown: 'text-slate-500 bg-slate-50 border-slate-200' 
+                spring: 'text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50', 
+                summer: 'text-amber-700 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800/50', 
+                fall: 'text-orange-700 bg-orange-50 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800/50', 
+                unknown: 'text-slate-500 bg-slate-50 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700' 
             };
             
             // Apply Table-specific Filters
@@ -673,18 +838,18 @@
             });
             
             let html = `
-                <div class="mb-4 text-uaNavy">
+                <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors">
                     <h2 class="text-xl font-bold">Annual Conference Schedule</h2>
-                    <p class="text-sm text-slate-500">All 36 tracked conferences ordered chronologically by abstract deadline (January to December).</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">All 36 tracked conferences ordered chronologically by abstract deadline (January to December).</p>
                 </div>
-                <div class="overflow-x-auto bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="overflow-x-auto bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-colors">
                     <table class="w-full text-left border-collapse min-w-[950px]">
-                        <thead class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
+                        <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">
                             <tr>
-                                <th class="p-3 border-b border-slate-200 font-bold w-[120px] align-bottom">
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold w-[120px] align-bottom">
                                     <div class="flex flex-col gap-1.5">
                                         <span>Season</span>
-                                        <select onchange="updateTableFilter('season', this.value)" class="text-[0.7rem] border border-slate-300 rounded p-1 font-medium text-slate-700 bg-white shadow-sm focus:outline-none focus:border-uaNavy focus:ring-1 focus:ring-uaNavy/30 w-full cursor-pointer transition-all">
+                                        <select onchange="updateTableFilter('season', this.value)" class="text-[0.7rem] border border-slate-300 dark:border-slate-600 rounded p-1 font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 shadow-sm focus:outline-none focus:border-uaNavy dark:focus:border-blue-500 focus:ring-1 focus:ring-uaNavy/30 dark:focus:ring-blue-500/30 w-full cursor-pointer transition-all">
                                             <option value="all" ${tableSeasonFilter === 'all' ? 'selected' : ''}>All</option>
                                             <option value="spring" ${tableSeasonFilter === 'spring' ? 'selected' : ''}>Spring</option>
                                             <option value="summer" ${tableSeasonFilter === 'summer' ? 'selected' : ''}>Summer</option>
@@ -692,55 +857,55 @@
                                         </select>
                                     </div>
                                 </th>
-                                <th class="p-3 border-b border-slate-200 font-bold min-w-[200px] align-bottom pb-4">Conference</th>
-                                <th class="p-3 border-b border-slate-200 font-bold w-[140px] align-bottom">
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold min-w-[200px] align-bottom pb-4">Conference</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold w-[140px] align-bottom">
                                     <div class="flex flex-col gap-1.5">
                                         <span>Theme</span>
-                                        <select onchange="updateTableFilter('cat', this.value)" class="text-[0.7rem] border border-slate-300 rounded p-1 font-medium text-slate-700 bg-white shadow-sm focus:outline-none focus:border-uaNavy focus:ring-1 focus:ring-uaNavy/30 w-full cursor-pointer transition-all">
+                                        <select onchange="updateTableFilter('cat', this.value)" class="text-[0.7rem] border border-slate-300 dark:border-slate-600 rounded p-1 font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-700 shadow-sm focus:outline-none focus:border-uaNavy dark:focus:border-blue-500 focus:ring-1 focus:ring-uaNavy/30 dark:focus:ring-blue-500/30 w-full cursor-pointer transition-all">
                                             <option value="all" ${tableCatFilter === 'all' ? 'selected' : ''}>All</option>
-                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP/CV</option>
+                                            <option value="ai" ${tableCatFilter === 'ai' ? 'selected' : ''}>AI/ML/NLP</option>
                                             <option value="sys" ${tableCatFilter === 'sys' ? 'selected' : ''}>Systems/Arch</option>
                                         </select>
                                     </div>
                                 </th>
-                                <th class="p-3 border-b border-slate-200 font-bold align-bottom pb-4">Abstract</th>
-                                <th class="p-3 border-b border-slate-200 font-bold align-bottom pb-4">Full Paper</th>
-                                <th class="p-3 border-b border-slate-200 font-bold align-bottom pb-4">Event Date</th>
-                                <th class="p-3 border-b border-slate-200 font-bold align-bottom pb-4">Location</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Abstract</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Full Paper</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Event Date</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Location</th>
                             </tr>
                         </thead>
                         <tbody>`;
                      
             if (tableConfs.length === 0) {
-                html += `<tr><td colspan="7" class="p-8 text-center text-slate-500 font-medium">No conferences match these filters.</td></tr>`;
+                html += `<tr><td colspan="7" class="p-8 text-center text-slate-500 dark:text-slate-400 font-medium">No conferences match these filters.</td></tr>`;
             } else {
                 tableConfs.forEach(c => {
                     const season = getSeason(c.abstract);
-                    const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 text-aiColor border-indigo-100' : 'bg-amber-50 text-sysColor border-amber-100';
-                    const absClass  = c.abstract  === 'TBA' ? 'text-slate-400' : (isPast(c.abstract)  ? 'text-slate-400 line-through' : 'font-semibold text-slate-800');
-                    const deadClass = c.deadline  === 'TBA' ? 'text-slate-400' : (isPast(c.deadline)  ? 'text-slate-400 line-through' : 'font-semibold text-slate-800');
+                    const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-aiColor dark:text-indigo-400 border-indigo-100 dark:border-indigo-800/50' : 'bg-amber-50 dark:bg-amber-900/30 text-sysColor dark:text-amber-400 border-amber-100 dark:border-amber-800/50';
+                    const absClass  = c.abstract  === 'TBA' ? 'text-slate-400 dark:text-slate-500' : (isPast(c.abstract)  ? 'text-slate-400 dark:text-slate-500 line-through' : 'font-semibold text-slate-800 dark:text-slate-200');
+                    const deadClass = c.deadline  === 'TBA' ? 'text-slate-400 dark:text-slate-500' : (isPast(c.deadline)  ? 'text-slate-400 dark:text-slate-500 line-through' : 'font-semibold text-slate-800 dark:text-slate-200');
                     
                     html += `
-                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors group">
+                        <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
                             <td class="p-3">
                                 <span class="px-2 py-1 rounded border text-[0.65rem] font-bold uppercase tracking-wider whitespace-nowrap ${seasonColors[season]}">${seasonLabels[season]}</span>
                             </td>
                             <td class="p-3">
-                                <div class="font-bold text-uaNavy flex items-center gap-2">
+                                <div class="font-bold text-uaNavy dark:text-blue-300 flex items-center gap-2">
                                     ${c.name}
-                                    ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-300 hover:text-blue-500 transition-colors"><i class="fas fa-external-link-alt text-[0.7rem]"></i></a>` : ''}
+                                    ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-300 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><i class="fas fa-external-link-alt text-[0.7rem]"></i></a>` : ''}
                                 </div>
-                                <div class="text-xs text-slate-500 mt-0.5 line-clamp-1 group-hover:line-clamp-none transition-all">${c.full}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 group-hover:line-clamp-none transition-all">${c.full}</div>
                             </td>
                             <td class="p-3">
                                 <span class="px-2 py-1 rounded border text-[0.7rem] font-semibold whitespace-nowrap ${badgeClass}">${catLabels[c.cat]}</span>
                             </td>
                             <td class="p-3 text-sm ${absClass} whitespace-nowrap">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</td>
                             <td class="p-3 text-sm ${deadClass} whitespace-nowrap">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</td>
-                            <td class="p-3 text-sm text-slate-600 whitespace-nowrap">${c.date}</td>
-                            <td class="p-3 text-sm text-slate-600">
+                            <td class="p-3 text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap">${c.date}</td>
+                            <td class="p-3 text-sm text-slate-600 dark:text-slate-300">
                                 <div class="flex items-center gap-1.5">
-                                    <i class="fas fa-map-marker-alt text-slate-300 text-xs shrink-0"></i>
+                                    <i class="fas fa-map-marker-alt text-slate-300 dark:text-slate-500 text-xs shrink-0"></i>
                                     <span class="truncate max-w-[200px]" title="${c.place}">${c.place}</span>
                                 </div>
                             </td>
@@ -764,12 +929,29 @@
         
         function applyFilters() {
             const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
-            render(allConfs.filter(c => {
+            const filtered = allConfs.filter(c => {
                 const catMatch = currentCatFilter === 'all' || c.cat === currentCatFilter;
                 const seasonMatch = currentSeasonFilter === 'all' || getSeason(c.abstract) === currentSeasonFilter;
                 const searchMatch = !q || c.name.toLowerCase().includes(q) || c.full.toLowerCase().includes(q);
                 return catMatch && seasonMatch && searchMatch;
-            }));
+            });
+            
+            if (currentView === 'grid') {
+                render(filtered);
+            } else if (currentView === 'map') {
+                renderMap(filtered);
+            }
+        }
+
+        // ── THEME TOGGLE ─────────────────────────────────────────────────────────────
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
         }
 
         // Boot

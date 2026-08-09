@@ -132,19 +132,9 @@
         
         <!-- Interactive Map View (Hidden by default) -->
         <div id="mapWrapper" class="hidden transition-all duration-500">
-            <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold">Global Conference Map</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Showing locations for currently filtered conferences.</p>
-                </div>
-                <!-- Highlight Upcoming Abstracts Toggle -->
-                <label class="flex items-center cursor-pointer shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                    <div class="relative">
-                        <input type="checkbox" id="mapUpcomingToggle" class="sr-only peer" onchange="toggleMapHighlight(this.checked)">
-                        <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-500"></div>
-                    </div>
-                    <span class="ml-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Highlight Upcoming Abstracts</span>
-                </label>
+            <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors">
+                <h2 class="text-xl font-bold">Global Conference Map</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Showing locations for currently filtered conferences.</p>
             </div>
             <div id="mapContainer" class="w-full h-[600px] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"></div>
         </div>
@@ -366,7 +356,6 @@
         let allConfs = [], currentCatFilter = 'all', currentSeasonFilter = 'all', tickTimer = null;
         let monthOffset = 0, activeMonthFilter = null, currentView = 'grid';
         let leafletMap = null, mapMarkers = [];
-        let mapHighlightUpcoming = false;
 
         // ── INIT ─────────────────────────────────────────────────────────────────────
         async function init() {
@@ -767,16 +756,9 @@
                         </div>
                     `;
 
-                    // Check if abstract is upcoming
-                    const isUpcomingAbstract = c.abstract === 'TBA' || !isPast(c.abstract);
-                    const isBlackedOut = mapHighlightUpcoming && !isUpcomingAbstract;
-
                     // Create custom themed map pin using inline SVG
-                    let pinColor = c.cat === 'ai' ? '#6366f1' : '#f59e0b'; // AI: Indigo, Sys: Amber
-                    if (isBlackedOut) pinColor = '#475569'; // Slate-600 for past/blacked out
-
-                    const opacity = isBlackedOut ? '0.5' : '1';
-                    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="width: 28px; height: 42px; fill: ${pinColor}; opacity: ${opacity}; filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.3));"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>`;
+                    const pinColor = c.cat === 'ai' ? '#6366f1' : '#f59e0b'; // AI: Indigo, Sys: Amber
+                    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="width: 28px; height: 42px; fill: ${pinColor}; filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.3));"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>`;
                     
                     const customIcon = L.divIcon({
                         html: svgIcon,
@@ -787,10 +769,9 @@
                     });
 
                     let coords = GEO_CACHE[c.place];
-                    const zOffset = isBlackedOut ? 0 : 1000; // Keep colored pins on top
                     
                     if (coords) {
-                        const marker = L.marker(coords, { icon: customIcon, zIndexOffset: zOffset }).addTo(leafletMap);
+                        const marker = L.marker(coords, { icon: customIcon }).addTo(leafletMap);
                         marker.bindPopup(popupContent);
                         mapMarkers.push(marker);
                     } else {
@@ -804,7 +785,7 @@
                                     
                                     // Only add to map if the map view is active to prevent background DOM issues
                                     if (currentView === 'map' && document.getElementById('mapContainer')) {
-                                        const marker = L.marker(newCoords, { icon: customIcon, zIndexOffset: zOffset }).addTo(leafletMap);
+                                        const marker = L.marker(newCoords, { icon: customIcon }).addTo(leafletMap);
                                         marker.bindPopup(popupContent);
                                         mapMarkers.push(marker);
                                     }
@@ -888,11 +869,6 @@
             applyFilters();
         }
         
-        function toggleMapHighlight(val) {
-            mapHighlightUpcoming = val;
-            if (currentView === 'map') applyFilters();
-        }
-
         function applyFilters() {
             const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
             const filtered = allConfs.filter(c => {

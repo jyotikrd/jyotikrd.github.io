@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASS Lab Conference Tracker</title>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet Map CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        uaNavy: '#0c2340',
+                        uaRed: '#ab0520',
+                        bgGray: '#f8fafc',
+                        aiColor: '#6366f1',
+                        sysColor: '#f59e0b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        blink: 'blink 1.6s ease-in-out infinite',
+                        spin: 'spin 0.7s linear infinite',
+                    },
+                    keyframes: {
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.3' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom styles for elements that are easier handled outside utility classes */
+        .card-expired { opacity: 0.55; filter: grayscale(0.5); }
+        .val-transition { transition: color 0.4s; }
+        .progress-bar { transition: width 0.3s; }
+
+        /* Leaflet Map Dark Mode Adjustments */
+        .dark .leaflet-layer { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
+        .dark .leaflet-control-zoom-in, .dark .leaflet-control-zoom-out, .dark .leaflet-control-attribution { 
+            background-color: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; 
+        }
+        #mapContainer { z-index: 10; }
+    </style>
+</head>
+
+<body class="bg-bgGray dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans p-6 min-h-screen transition-colors duration-300">
+    <div class="max-w-[1400px] mx-auto">
+        
+        <!-- Header -->
+        <header class="text-center mb-8 relative">
+            <div class="absolute right-0 top-0">
+                <button id="themeToggle" onclick="toggleTheme()" class="p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-yellow-400 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors" title="Toggle Dark Mode">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:inline"></i>
+                </button>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-uaNavy dark:text-blue-400 mb-1 transition-colors">DASS Lab Conference Tracker</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-base">AI/ML/NLP/CV &amp; Systems/Arch</p>
+        <!-- Controls -->
+        <div class="flex flex-wrap justify-between items-center mb-8 gap-4 sticky top-0 z-50 bg-bgGray/95 dark:bg-slate-900/95 backdrop-blur py-3 border-b border-slate-200 dark:border-slate-800 transition-colors">
+            <div id="gridControls" class="flex flex-col gap-2 flex-1 transition-opacity duration-300">
+                <div class="flex flex-wrap gap-2">
+                    <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg flex-wrap transition-colors">
+                        <button class="filter-btn active bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'cat')">All</button>
+                        <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('ai', this, 'cat')">AI/ML/NLP/CV</button>
+                        <button class="filter-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('sys', this, 'cat')">Systems/Arch</button>
+                    </div>
+                    <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg flex-wrap transition-colors">
+                        <button class="season-btn active bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('all', this, 'season')">All Seasons</button>
+                        <button class="season-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('spring', this, 'season')">Spring</button>
+                        <button class="season-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('summer', this, 'season')">Summer</button>
+                        <button class="season-btn text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-4 py-2 rounded-md text-xs font-semibold transition-all" onclick="setFilter('fall', this, 'season')">Fall</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap md:flex-nowrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                <div id="searchWrapper" class="relative flex-1 max-w-[300px] min-w-[200px] transition-opacity duration-300">
+                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"></i>
+                    <input type="text" id="searchInput" placeholder="Search conference..." oninput="applyFilters()" 
+                           class="w-full py-2.5 pr-4 pl-10 rounded-lg border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-uaNavy/30 dark:focus:ring-blue-500/50 text-sm bg-white dark:bg-slate-800 dark:text-slate-200 shadow-sm transition-all">
+                </div>
+                
+                <!-- View Toggle -->
+                <div class="flex gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-lg shrink-0 ml-auto md:ml-0 transition-colors">
+                    <button id="viewBtnGrid" class="bg-white dark:bg-slate-700 text-uaNavy dark:text-blue-300 shadow-sm px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('grid')" title="Grid View">
+                        <i class="fas fa-th-large"></i><span class="hidden sm:inline">Grid</span>
+                    </button>
+                    <button id="viewBtnTable" class="text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('table')" title="Annual Table View">
+                        <i class="fas fa-list"></i><span class="hidden sm:inline">Table</span>
+                    </button>
+                    <button id="viewBtnMap" class="text-slate-600 dark:text-slate-400 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 px-3 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2" onclick="switchView('map')" title="Map View">
+                        <i class="fas fa-globe-americas"></i><span class="hidden sm:inline">Map</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-500" id="deadlineGrid">
+            <div class="col-span-full text-center py-16 text-slate-500">
+                <div class="w-9 h-9 border-4 border-slate-200 border-t-uaNavy rounded-full animate-spin mx-auto mb-4"></div>
+                <div>Fetching live deadline data from ccfddl...</div>
+                <div class="max-w-[280px] mx-auto mt-4 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="progress-bar h-full bg-uaNavy rounded-full w-0" id="progBar"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interactive Table View (Hidden by default) -->
+        <div id="tableContainer" class="hidden transition-all duration-500 min-h-[500px]">
+            <!-- Rendered via JS -->
+        </div>
+        
+        <!-- Interactive Map View (Hidden by default) -->
+        <div id="mapWrapper" class="hidden transition-all duration-500">
+            <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold">Global Conference Map</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Showing locations for currently filtered conferences.</p>
+                </div>
+                <!-- Highlight Upcoming Abstracts Toggle -->
+                <label class="flex items-center cursor-pointer shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <div class="relative">
+                        <input type="checkbox" id="mapUpcomingToggle" class="sr-only peer" onchange="toggleMapHighlight(this.checked)">
+                        <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-500"></div>
+                    </div>
+                    <span class="ml-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Highlight Upcoming Abstracts</span>
+                </label>
+            </div>
+            <div id="mapContainer" class="w-full h-[600px] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"></div>
+        </div>
+        
+        <hr class="my-10 border-slate-200 dark:border-slate-800 transition-colors">
+        <footer class="text-center pb-6 text-sm text-slate-500">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <span id="syncDot" class="w-2 h-2 rounded-full inline-block bg-slate-300"></span>
+                <span id="syncText" class="dark:text-slate-400">Initializing sync...</span>
+            </div>
+            <p>Data sourced and adapted from <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" class="text-blue-500 hover:underline">ccfddl GitHub</a>.</p>
+        </footer>
+    </div>
+
+    <script>
+        // ── MASTER CONFERENCE LIST ───────────────────────────────────────────────────
+        const MASTER = [
+            // AI/ML/NLP/CV
+            { id:"ICML",      name:"ICML",      full:"International Conference on Machine Learning",          cat:"ai",  sub:"AI", file:"icml"      },
+            { id:"NeurIPS",   name:"NeurIPS",   full:"Neural Information Processing Systems",                  cat:"ai",  sub:"AI", file:"neurips"   },
+            { id:"ICLR",      name:"ICLR",      full:"International Conference on Learning Representations",   cat:"ai",  sub:"AI", file:"iclr"      },
+            { id:"CVPR",      name:"CVPR",      full:"Computer Vision and Pattern Recognition",                cat:"ai",  sub:"AI", file:"cvpr"      },
+            { id:"ACL",       name:"ACL",       full:"Association for Computational Linguistics",              cat:"ai",  sub:"AI", file:"acl"       },
+            { id:"ECCV",      name:"ECCV",      full:"European Conference on Computer Vision",                 cat:"ai",  sub:"AI", file:"eccv"      },
+            { id:"ICCV",      name:"ICCV",      full:"International Conference on Computer Vision",            cat:"ai",  sub:"AI", file:"iccv"      },
+            { id:"ECML-PKDD", name:"ECML-PKDD", full:"Machine Learning and Knowledge Discovery in Databases",  cat:"ai",  sub:"AI", file:"ecml_pkdd" },
+            { id:"EMNLP",     name:"EMNLP",     full:"Empirical Methods in Natural Language Processing",       cat:"ai",  sub:"AI", file:"emnlp"     },
+            { id:"NAACL",     name:"NAACL",     full:"North American Chapter of the ACL",                      cat:"ai",  sub:"AI", file:"naacl"     },
+            { id:"EACL",     name:"EACL",       full:"European Chapter of ACL",                               cat:"ai",  sub:"AI", file:"eacl"     },
+            { id:"MLSys",     name:"MLSys",     full:"Conference on Machine Learning and Systems",             cat:"ai",  sub:"AI", file:"mlsys"     },
+            { id:"KDD",       name:"KDD",       full:"Knowledge Discovery and Data Mining",                    cat:"ai",  sub:"DB", file:"kdd"       },
+            { id:"AAAI",      name:"AAAI",      full:"AAAI Conference on Artificial Intelligence",             cat:"ai",  sub:"AI", file:"aaai"      },
+            { id:"IJCAI",     name:"IJCAI",     full:"International Joint Conference on Artificial Intelligence", cat:"ai", sub:"AI", file:"ijcai"  },
+            { id:"SIGIR",     name:"SIGIR",     full:"Research and Development in Information Retrieval",      cat:"ai",  sub:"DB", file:"sigir"     },
+            { id:"WSDM",      name:"WSDM",      full:"Web Search and Data Mining",                             cat:"ai",  sub:"DB", file:"wsdm"      },
+            { id:"WACV",      name:"WACV",      full:"Winter Conference on Applications of Computer Vision",   cat:"ai",  sub:"DB", file:"wacv"      },
+            { id:"WEB",       name:"WEB",       full:"The ACM Web Conference",                                 cat:"ai",  sub:"DB", file:"web"       },
+            { id:"COLING",    name:"COLING",    full:"International Conference on Computational Linguistics",  cat:"ai",  sub:"AI", file:"coling"    },
+            { id:"CPAL",      name:"CPAL",      full:"Conference on Parsimony and Learning",                   cat:"ai",  sub:"AI", file:"cpal"      },
+            { id:"BigData",   name:"BigData",   full:"International Conference on Big Data",                   cat:"ai",  sub:"AI", file:"bigdata"   },
+            
+            // Systems / Architecture (incl. HPC/Dist)
+            { id:"ISCA",   name:"ISCA",   full:"International Symposium on Computer Architecture",        cat:"sys", sub:"DS", file:"isca"   },
+            { id:"HPCA",   name:"HPCA",   full:"High-Performance Computer Architecture",                  cat:"sys", sub:"DS", file:"hpca"   },
+            { id:"MICRO",  name:"MICRO",  full:"International Symposium on Microarchitecture",            cat:"sys", sub:"DS", file:"micro"  },
+            { id:"IPDPS",  name:"IPDPS",  full:"Int'l Parallel & Distributed Processing Symposium",       cat:"sys", sub:"DS", file:"ipdps"  },
+            { id:"DAC",    name:"DAC",    full:"Design Automation Conference",                            cat:"sys", sub:"DS", file:"dac"    },
+            { id:"ASPLOS", name:"ASPLOS", full:"Architectural Support for Prog. Lang. and OS",            cat:"sys", sub:"DS", file:"asplos" },
+            { id:"EuroSys", name:"EuroSys", full:"European Conference on Computer Systems",              cat:"sys", sub:"SE", file:"eurosys" },
+            { id:"SC",     name:"SC",     full:"Supercomputing Conference",                            cat:"sys", sub:"DS", file:"sc"    },
+            { id:"SEC",   name:"SEC",    full:"Symposium on Edge Computing",                            cat:"sys", sub:"DS", file:"sec"    },
+            { id:"ICDCS", name:"ICDCS", full:"Int'l Conference on Distributed Computing Systems",   cat:"sys", sub:"DS", file:"icdcs" },
+            { id:"ICS",   name:"ICS",   full:"International Conference on Supercomputing",          cat:"sys", sub:"DS", file:"ics"   },
+            { id:"HPDC",  name:"HPDC",  full:"High-Performance Parallel and Distributed Computing", cat:"sys", sub:"DS", file:"hpdc"  },
+            { id:"PPoPP", name:"PPoPP", full:"Principles and Practice of Parallel Programming",     cat:"sys", sub:"DS", file:"ppopp" },
+            { id:"HiPC",  name:"HiPC",  full:"IEEE International Conference on High Performance Computing", cat:"sys", sub:"DS", file:"hipc" },
+        ];
+
+        const BASE = "https://raw.githubusercontent.com/ccfddl/ccf-deadlines/refs/heads/main/conference/";
+
+        // ── YAML PARSER ─────────────────────────────────────────────────────────────
+        function parseConf(yaml) {
+            const confsIdx = yaml.indexOf('confs:');
+            if (confsIdx === -1) return null;
+            const body = yaml.slice(confsIdx + 6);
+
+            const rawBlocks = body.split(/\n    - year:/);
+            const entries = [];
+
+            for (const raw of rawBlocks) {
+                if (!raw.trim()) continue;
+                const block = raw;
+
+                const yearM  = block.match(/^[\s:]*(\d{4})/);
+                const linkM  = block.match(/\n\s+link:\s*(.+)/);
+                const dateM  = block.match(/\n\s+date:\s*(.+)/);
+                const placeM = block.match(/\n\s+place:\s*(.+)/);
+
+                if (!yearM) continue;
+                const year  = parseInt(yearM[1]);
+                const link  = linkM  ? linkM[1].trim().replace(/['"]/g,'')  : '';
+                const date  = dateM  ? dateM[1].trim().replace(/['"]/g,'')  : 'TBA';
+                const place = placeM ? placeM[1].trim().replace(/['"]/g,'') : 'TBA';
+
+                const tlStart = block.indexOf('timeline:');
+                let abstract = null, deadline = null;
+
+                if (tlStart !== -1) {
+                    const tlBody = block.slice(tlStart + 9);
+                    const absM  = tlBody.match(/abstract_deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2}[\s\d:]*)/);
+                    const deadM = tlBody.match(/deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2}[\s\d:]*)/);
+                    if (absM)  abstract = absM[1].trim().slice(0,10);
+                    if (deadM) deadline = deadM[1].trim().slice(0,10);
+                }
+
+                entries.push({ year, link, date, place, abstract: abstract||'TBA', deadline: deadline||'TBA' });
+            }
+
+            if (!entries.length) return null;
+
+            const now = Date.now();
+            const upcoming = entries
+                .filter(e => e.deadline !== 'TBA' && new Date(e.deadline + 'T23:59:59-12:00') >= now)
+                .sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+            
+            if (upcoming.length) return upcoming[0];
+            return entries.sort((a,b) => b.year - a.year)[0];
+        }
+
+        // ── FETCH ────────────────────────────────────────────────────────────────────
+        async function fetchConf(m) {
+            if (VERIFIED[m.id]) return { ...m, ...VERIFIED[m.id], source:'live' };
+
+            const url = `${BASE}${m.sub}/${m.file}.yml`;
+            try {
+                const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
+                if (!r.ok) throw new Error(r.status);
+                const yaml = await r.text();
+                const p = parseConf(yaml);
+                if (!p) throw new Error('parse');
+                return { ...m, ...p, source:'live' };
+            } catch (e) {
+                return { ...m, abstract:'TBA', deadline:'TBA', date:'TBA', place:'TBA', link:'', source:'fail' };
+            }
+        }
+
+        // ── VERIFIED DATA (last auto-updated: 2026-08-03) ─
+        const VERIFIED = {
+            // Spring Submissions
+            // January
+            "ACL": { abstract:"2026-01-05", deadline:"2026-01-05", date:"July 2-7, 2026", place:"San Diego, CA, USA", link:"https://2026.aclweb.org" },
+            "IJCAI": { abstract:"2026-01-12", deadline:"2026-01-19", date:"August 15-21, 2026", place:"Bremen, Germany", link:"https://2026.ijcai.org/important-dates/" },
+            "ICML": { abstract:"2026-01-24", deadline:"2026-01-24", date:"July 6-12, 2026", place:"Seoul, Korea", link:"https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml" },
+            "ICDCS": { abstract:"2026-01-21", deadline:"2026-01-21", date:"June 22–25, 2026", place:"Seoul, South Korea", link:"https://icdcs2026.icdcs.org/" },
+            "HPDC": { abstract:"2026-01-29", deadline:"2026-02-05", date:"TBA", place:"Cleveland, OH, USA", link:"https://hpdc.sci.utah.edu/2026/" },
+            
+            // February
+            "ICS": { abstract:"2026-02-02", deadline:"2026-02-09", date:"July 6-9, 2026", place:"Belfast, Northern Ireland, UK", link:"https://dipsa-qub.github.io/ICS2026-webpage/" },
+            "ECCV": { abstract:"2026-02-26", deadline:"2026-03-05", date:"September 8-12, 2026", place:"Malmö, Sweden", link:"https://eccv.ecva.net/Conferences/2026/Dates" },
+            
+            // March
+            "ICCV": { abstract:"2027-03-02", deadline:"2027-03-06", date:"October 2-8, 2027", place:"Hong Kong", link:"https://iccv.thecvf.com/Conferences/{year+2}/Dates" },
+            "ECML-PKDD": { abstract:"2026-03-05", deadline:"2026-03-12", date:"September 7-11, 2026", place:"Naples, Italy", link:"https://ecmlpkdd.org/2026/" },
+            "MICRO": { abstract:"2026-03-31", deadline:"2026-04-07", date:"October 31- November 4, 2026", place:"Athens, Greece", link:"https://www.microarch.org/micro59/" },
+            
+            // April
+             "SC": { abstract:"2026-04-01", deadline:"2026-04-08", date:"TBA", place:"Chicago, IL", link:"https://sc26.supercomputing.org/" },
+            
+            // Summer Submissions
+            // May
+             "NeurIPS": { abstract:"2026-05-05", deadline:"2026-05-05", date:"December 6, 2026", place:"Sydney, Australia", link:"https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/nips.yml" },
+             "SEC": { abstract:"2026-05-08", deadline:"2026-05-08", date:"October 13-16, 2026", place:"Santa Clara, CA, USA", link:"https://acm-ieee-sec.org/2026/" },
+             "EMNLP": { abstract:"2026-05-25", deadline:"2026-05-25", date:"October 24-29, 2026", place:"Budapest, Hungary", link:"https://2026.emnlp.org" },
+            
+            //July
+            "HiPC": { abstract:"2026-07-01", deadline:"2026-07-08", date:"December 16-19, 2026", place:"TBA", link:"https://hipc.org/" }, 
+            "KDD": { abstract:"2026-07-19", deadline:"2026-07-26", date:"August 9-13, 2026", place:"Jeju, South Korea", link:"https://kdd2027.kdd.org/research-track-call-for-papers/" },
+            "AAAI": { abstract:"2026-07-21", deadline:"2026-07-28", date:"February 16-23, 2027", place:"TBA", link:"https://aaai.org/conference/aaai/aaai-27/" },
+            "HPCA": { abstract:"2026-07-24", deadline:"2026-07-31", date:"March 20-24, 2027", place:"Sydney, Australia", link:"https://2027.hpca-conf.org" },
+            
+            //August
+            "EACL": { abstract:"2026-08-03", deadline:"2026-08-03", date:"March 9-14, 2026", place:"Athens, Greece", link:"https://2027.eacl.org" },
+            "PPoPP": { abstract:"2026-08-03", deadline:"2026-08-03", date:"March 20-24, 2027", place:"Salt Lake City, Utah, USA", link:"https://ppopp27.sigplan.org/dates" },
+            "BigData": { abstract:"2026-08-21", deadline:"2026-08-21", date:"December 14-17, 2026", place:"Phoenix, AZ, USA", link:"https://bigdataieee.org/BigData2026/important-dates/" },
+            "WACV": { abstract:"2026-08-21", deadline:"2026-08-28", date:"January 4-8, 2027", place:"Orlando, FL, USA", link:"https://wacv.thecvf.com/Conferences/2027/Dates" },
+            
+            // Fall Submissions
+            // September
+            "ASPLOS": { abstract:"2026-09-09", deadline:"2026-09-09", date:"April 11-15, 2027", place:"Heraklion, Crete, Greece", link:"https://www.asplos-conference.org/asplos2027/cfp/" },
+            "EuroSys": { abstract:"2026-09-17", deadline:"2026-09-24", date:"TBA", place:"Edinburgh, Scotland", link:"https://2027.eurosys.org/cfp.html" },
+            "ICLR": { abstract:"2026-09-18", deadline:"2026-09-25", date:"April 26-28, 2027", place:"TBA", link:"https://iclr.cc/Conferences/2027/Dates" },
+            
+            //October
+            "IPDPS": { abstract:"2026-10-01", deadline:"2026-10-08", date:"June 1-5, 2027", place:"Seattle, WA, USA", link:"https://www.ipdps.org/ipdps2026/" },
+            "WEB": { abstract:"2026-10-11", deadline:"2026-10-18", date:"May 10-14, 2027", place:"Dublin, Ireland", link:"https://acmweb2027.org/important-dates/" },
+            "NAACL": { abstract:"2026-10-12", deadline:"2026-10-12", date:"June 1-5, 2027", place:"San Francisco, CA, USA", link:"https://2027.naacl.org" },
+            "MLSys": { abstract:"2026-10-30", deadline:"2026-10-30", date:"May 17-22, 2027", place:"TBA", link:"https://mlsys.org/Conferences/2026/Dates" },
+            
+            //November
+            "CVPR": { abstract:"2026-11-07", deadline:"2026-11-13", date:"June 20-24, 2027", place:"Seattle, WA, USA", link:"https://cvpr.thecvf.com/Conferences/2026/Dates" },
+            "ISCA": { abstract:"2026-11-10", deadline:"2026-11-17", date:"June 5-9, 2027", place:"Atlanta, GA, USA", link:"https://iscaconf.org/isca2026/" },
+            "DAC": { abstract:"2026-11-19", deadline:"2026-11-19", date:"July 11-14, 2027", place:"San Jose, CA", link:"https://www.dac.com/" },
+            
+            //December
+            "CPAL": { abstract:"2025-12-12", deadline:"2025-12-12", date:"March 23-26, 2026", place:"Tübingen, Germany", link:"https://cpal.cc/" },
+        };
+
+        // ── GEO CACHE FOR MAP VIEW ───────────────────────────────────────────────────
+        const GEO_CACHE = {
+            "San Diego, CA, USA": [32.7157, -117.1611],
+            "Bremen, Germany": [53.0793, 8.8017],
+            "Seoul, Korea": [37.5665, 126.9780],
+            "Seoul, South Korea": [37.5665, 126.9780],
+            "Cleveland, OH, USA": [41.4993, -81.6944],
+            "Belfast, Northern Ireland, UK": [54.5973, -5.9301],
+            "Malmö, Sweden": [55.6050, 13.0038],
+            "Hong Kong": [22.3193, 114.1694],
+            "Naples, Italy": [40.8518, 14.2681],
+            "Athens, Greece": [37.9838, 23.7275],
+            "Chicago, IL": [41.8781, -87.6298],
+            "Sydney, Australia": [-33.8688, 151.2093],
+            "Santa Clara, CA, USA": [37.3541, -121.9552],
+            "Budapest, Hungary": [47.4979, 19.0402],
+            "Jeju, South Korea": [33.4996, 126.5312],
+            "Salt Lake City, Utah, USA": [40.7608, -111.8910],
+            "Phoenix, AZ, USA": [33.4484, -112.0740],
+            "Orlando, FL, USA": [28.5383, -81.3792],
+            "Heraklion, Crete, Greece": [35.3387, 25.1442],
+            "Edinburgh, Scotland": [55.9533, -3.1883],
+            "Seattle, WA, USA": [47.6062, -122.3321],
+            "Dublin, Ireland": [53.3498, -6.2603],
+            "San Francisco, CA, USA": [37.7749, -122.4194],
+            "Atlanta, GA, USA": [33.7490, -84.3880],
+            "San Jose, CA": [37.3382, -121.8863],
+            "Tübingen, Germany": [48.5216, 9.0576]
+        };
+
+        // ── STATE ────────────────────────────────────────────────────────────────────
+        let allConfs = [], currentCatFilter = 'all', currentSeasonFilter = 'all', tickTimer = null;
+        let monthOffset = 0, activeMonthFilter = null, currentView = 'grid';
+        let leafletMap = null, mapMarkers = [];
+        let mapHighlightUpcoming = false;
+
+        // ── INIT ─────────────────────────────────────────────────────────────────────
+        async function init() {
+            // Theme initialization
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            const prog = document.getElementById('progBar');
+            const CHUNK = 8;
+            let done = 0;
+
+            for (let i = 0; i < MASTER.length; i += CHUNK) {
+                const results = await Promise.all(MASTER.slice(i, i+CHUNK).map(fetchConf));
+                allConfs.push(...results);
+                done += results.length;
+                if (prog) prog.style.width = Math.round(done / MASTER.length * 100) + '%';
+                
+                applyFilters();
+            }
+
+            const live = allConfs.filter(c => c.source === 'live').length;
+            const dot  = document.getElementById('syncDot');
+            const txt  = document.getElementById('syncText');
+            
+            if (dot && txt) {
+                // Update dot colors using Tailwind classes
+                if (live === allConfs.length) {
+                    dot.className = 'w-2 h-2 rounded-full inline-block bg-emerald-500 animate-blink';
+                    txt.textContent = `All ${live} conferences synced live from ccfddl • Tickers update every second`;
+                } else if (live > 0) {
+                    dot.className = 'w-2 h-2 rounded-full inline-block bg-amber-500';
+                    txt.textContent = `${live}/${allConfs.length} synced live • ${allConfs.length-live} files not found in repo`;
+                } else {
+                    dot.className = 'w-2 h-2 rounded-full inline-block bg-red-500';
+                    txt.textContent = 'Could not reach ccfddl (CORS or network issue)';
+                }
+            }
+
+            if (tickTimer) clearInterval(tickTimer);
+            tickTimer = setInterval(tick, 1000);
+            
+            // Final render
+            applyFilters();
+        }
+
+        // ── COUNTDOWN ────────────────────────────────────────────────────────────────
+        function pad2(n) { return String(n).padStart(2,'0'); }
+
+        function timeRemaining(isoDate) {
+            const target = new Date(isoDate + 'T23:59:59-12:00');
+            const diff = target - Date.now();
+            if (diff <= 0) return { expired:true, d:0, h:0, m:0, s:0 };
+            const s = Math.floor(diff / 1000);
+            return { expired:false, d:Math.floor(s/86400), h:Math.floor((s%86400)/3600), m:Math.floor((s%3600)/60), s:s%60 };
+        }
+
+        function colorCls(t) {
+            if (t.expired) return 'text-slate-400 text-base font-semibold';
+            if (t.d < 3)   return 'text-uaRed';
+            if (t.d < 14)  return 'text-amber-600';
+            return 'text-uaNavy';
+        }
+
+        function tick() {
+            document.querySelectorAll('.countdown[data-deadline]').forEach(el => {
+                const dl = el.getAttribute('data-deadline');
+                if (!dl || dl === 'TBA') return;
+                const t   = timeRemaining(dl);
+                const cls = colorCls(t);
+                const dEl = el.querySelector('.v-d');
+                const hEl = el.querySelector('.v-h');
+                const mEl = el.querySelector('.v-m');
+                const sEl = el.querySelector('.v-s');
+                if (!dEl) return;
+                
+                dEl.textContent = t.expired ? '--' : t.d;
+                hEl.textContent = t.expired ? '--' : pad2(t.h);
+                mEl.textContent = t.expired ? '--' : pad2(t.m);
+                sEl.textContent = t.expired ? '--' : pad2(t.s);
+                
+                const baseClass = 'block text-2xl font-extrabold tabular-nums tracking-tight val-transition ';
+                [dEl, hEl, mEl, sEl].forEach(e => { e.className = baseClass + cls; });
+                
+                if (t.expired) {
+                    const card = el.closest('.card');
+                    if (card) card.classList.add('card-expired');
+                }
+            });
+        }
+
+        // ── DATE FORMATTING ──────────────────────────────────────────────────────────
+        function fmtDate(iso) {
+            if (!iso || iso === 'TBA') return 'TBA';
+            const d = new Date(iso + 'T12:00:00Z');
+            if (isNaN(d)) return iso;
+            return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        }
+
+        function isPast(iso) {
+            if (!iso || iso === 'TBA') return false;
+            return new Date(iso + 'T23:59:59-12:00') < Date.now();
+        }
+
+        // ── CREATE CARD ───────────────────────────────────────────────────────────────
+        function createCard(c) {
+            const catLabel = { ai:'AI', sys:'Systems' }[c.cat] || c.cat;
+            const hasDl    = c.deadline && c.deadline !== 'TBA';
+            const t        = hasDl ? timeRemaining(c.deadline) : null;
+            const isExp    = t ? t.expired : false;
+            const cls      = t ? colorCls(t) : 'text-slate-400 dark:text-slate-500 text-base font-semibold';
+            const valClass = 'block text-2xl font-extrabold tabular-nums tracking-tight val-transition ' + cls;
+
+            const cdHtml = hasDl
+                ? `<div class="text-center min-w-[48px]"><span class="${valClass} v-d">${isExp ? '--' : t.d}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Days</span></div>
+                   <div class="text-xl font-bold text-slate-300 dark:text-slate-600 pb-3 px-[1px]">:</div>
+                   <div class="text-center min-w-[48px]"><span class="${valClass} v-h">${isExp ? '--' : pad2(t.h)}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Hrs</span></div>
+                   <div class="text-xl font-bold text-slate-300 dark:text-slate-600 pb-3 px-[1px]">:</div>
+                   <div class="text-center min-w-[48px]"><span class="${valClass} v-m">${isExp ? '--' : pad2(t.m)}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Min</span></div>
+                   <div class="text-xl font-bold text-slate-300 dark:text-slate-600 pb-3 px-[1px]">:</div>
+                   <div class="text-center min-w-[48px]"><span class="${valClass} v-s">${isExp ? '--' : pad2(t.s)}</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Sec</span></div>`
+                : `<div class="text-center min-w-[48px]"><span class="${valClass}">TBA</span><span class="text-[0.6rem] uppercase text-slate-400 dark:text-slate-500 tracking-wider mt-[2px] block">Deadline</span></div>`;
+
+            const absClass  = c.abstract  === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : (isPast(c.abstract)  ? 'text-slate-300 dark:text-slate-600 line-through font-normal' : 'font-bold text-slate-800 dark:text-slate-200');
+            const deadClass = c.deadline  === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : (isPast(c.deadline)  ? 'text-slate-300 dark:text-slate-600 line-through font-normal' : 'font-bold text-slate-800 dark:text-slate-200');
+            const dateClass = c.date      === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : 'font-bold text-slate-800 dark:text-slate-200';
+            const srcDot    = c.source === 'live'
+                ? `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emerald-500 animate-blink" title="Live from ccfddl"></span>`
+                : `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-amber-500" title="Not found in repo"></span>`;
+            
+            const borderTopColor = c.cat === 'ai' ? 'border-t-aiColor' : 'border-t-sysColor';
+            const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-aiColor dark:text-indigo-400' : 'bg-amber-50 dark:bg-amber-900/30 text-sysColor dark:text-amber-400';
+
+            return `
+              <div class="card ${isExp ? 'card-expired ' : ''}bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border-t-4 ${borderTopColor} flex flex-col">
+                <div class="flex justify-between items-start mb-1">
+                  <span class="text-[1.35rem] font-extrabold text-uaNavy dark:text-blue-400">${c.name}</span>
+                  ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-400 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors text-sm"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-snug min-h-[1.9em]">${c.full}</div>
+
+                <div class="countdown bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700/50 dark:to-slate-700 rounded-lg p-3 flex justify-center items-center gap-1 mb-4 border border-slate-100 dark:border-slate-700/50" data-deadline="${c.deadline}">${cdHtml}</div>
+
+                <div class="text-[0.78rem] border-t border-slate-100 dark:border-slate-700 pt-3 flex flex-col gap-2">
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-pencil-alt w-3 opacity-40"></i> Abstract</span>
+                    <span class="${absClass} text-right">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-paper-plane w-3 opacity-40"></i> Full Paper</span>
+                    <span class="${deadClass} text-right">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-calendar-alt w-3 opacity-40"></i> Conference</span>
+                    <span class="${dateClass} text-right">${c.date}</span>
+                  </div>
+                  ${c.note ? `<div class="flex justify-between items-start mt-1 pt-1.5 border-t border-dashed border-slate-200 dark:border-slate-700">
+                    <span class="italic text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5"><i class="fas fa-info-circle w-3 opacity-40"></i> Note</span>
+                    <span class="text-[0.7rem] text-slate-500 dark:text-slate-400 text-right max-w-[65%]">${c.note}</span>
+                  </div>` : ''}
+                </div>
+
+                <div class="mt-auto pt-4 text-[0.7rem] text-slate-400 dark:text-slate-500 flex items-center gap-2">
+                  <i class="fas fa-map-marker-alt shrink-0"></i>
+                  <span class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">${c.place}</span>
+                  ${srcDot}
+                  <span class="font-bold px-2 py-0.5 rounded text-[0.6rem] uppercase whitespace-nowrap ${badgeClass}">${catLabel}</span>
+                </div>
+              </div>`;
+        }
+
+        // ── RENDER ───────────────────────────────────────────────────────────────────
+        function render(list) {
+            const now = Date.now();
+            const isUpcoming = c => {
+                if (c.deadline === 'TBA') return true;
+                const d = new Date(c.deadline + 'T23:59:59-12:00');
+                return isNaN(d) || d >= now;
+            };
+            const upcoming = list.filter(isUpcoming)
+                .sort((a,b) => {
+                    if (a.deadline==='TBA') return 1;
+                    if (b.deadline==='TBA') return -1;
+                    return new Date(a.deadline) - new Date(b.deadline);
+                });
+            const past = list.filter(c => !isUpcoming(c))
+                .sort((a,b) => new Date(b.deadline) - new Date(a.deadline));
+
+            const filteredUpcoming = activeMonthFilter !== null
+                ? upcoming.filter(c => getMonthIndex(c.abstract) === activeMonthFilter)
+                : upcoming;
+
+            let html = '';
+            if (upcoming.length) {
+                const monthNamesFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                const currentRealMonth = new Date().getMonth();
+                
+                let monthHtml = `<div class="flex items-center gap-1.5 text-[0.75rem] normal-case tracking-normal font-medium ml-auto mt-2 sm:mt-0">`;
+                monthHtml += `<button onclick="changeMonthOffset(-1)" class="px-2 py-1.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><i class="fas fa-chevron-left"></i></button>`;
+                
+                for(let i=0; i<3; i++) {
+                    let mIdx = (currentRealMonth + monthOffset + i) % 12;
+                    if (mIdx < 0) mIdx += 12;
+                    let isActive = activeMonthFilter === mIdx;
+                    let activeCls = isActive ? 'bg-uaNavy dark:bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700';
+                    monthHtml += `<button onclick="toggleMonthFilter(${mIdx})" class="px-3 py-1.5 rounded transition-colors ${activeCls}">${monthNamesFull[mIdx]}</button>`;
+                }
+                
+                monthHtml += `<button onclick="changeMonthOffset(1)" class="px-2 py-1.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><i class="fas fa-chevron-right"></i></button>`;
+                if (activeMonthFilter !== null) {
+                     monthHtml += `<button onclick="toggleMonthFilter(${activeMonthFilter})" class="px-2 py-1.5 rounded bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors ml-1" title="Clear Month Filter"><i class="fas fa-times"></i></button>`;
+                }
+                monthHtml += `</div>`;
+
+                html += `<div class="col-span-full mt-6 mb-2 pb-2 border-b-2 border-slate-200 dark:border-slate-700 text-uaNavy dark:text-blue-400 font-extrabold uppercase text-[0.85rem] tracking-wider flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <div class="flex items-center"><i class="fas fa-hourglass-half mr-1.5 opacity-50"></i>Upcoming Deadlines (${filteredUpcoming.length})</div>
+                            ${monthHtml}
+                         </div>`;
+                         
+                if (filteredUpcoming.length === 0) {
+                    html += `<div class="col-span-full text-center py-8 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 shadow-sm">No upcoming conferences have abstract deadlines in ${monthNamesFull[activeMonthFilter]}.</div>`;
+                } else {
+                    filteredUpcoming.forEach(c => { html += createCard(c); });
+                }
+            }
+            if (past.length) {
+                html += `<div class="col-span-full mt-10 mb-2 pb-2 border-b-2 border-slate-200 dark:border-slate-700 text-uaNavy dark:text-blue-400 font-extrabold uppercase text-[0.85rem] tracking-wider"><i class="fas fa-check-circle mr-1.5 opacity-50"></i>Past / Finished (${past.length})</div>`;
+                past.forEach(c => { html += createCard(c); });
+            }
+            if (!upcoming.length && !past.length) {
+                html = '<div class="col-span-full text-center py-16 text-slate-500 dark:text-slate-400">No conferences match your filter/search.</div>';
+            }
+            document.getElementById('deadlineGrid').innerHTML = html;
+        }
+
+        // ── FILTER / SEARCH ───────────────────────────────────────────────────────────
+        function setFilter(val, btn, type) {
+            if (type === 'cat') {
+                currentCatFilter = val;
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                    b.classList.add('text-slate-600', 'dark:text-slate-400');
+                });
+            } else if (type === 'season') {
+                currentSeasonFilter = val;
+                document.querySelectorAll('.season-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                    b.classList.add('text-slate-600', 'dark:text-slate-400');
+                });
+                
+                if (val !== 'all') {
+                    const now = Date.now();
+                    
+                    // Helper to check if a conference is entirely in the past or still upcoming
+                    const isUpcoming = c => {
+                        if (c.deadline === 'TBA') return true;
+                        const d = new Date(c.deadline + 'T23:59:59-12:00');
+                        return isNaN(d) || d >= now;
+                    };
+                    
+                    // Find upcoming deadlines specifically tied to this season's abstract
+                    const upcomingForSeason = allConfs.filter(c => getSeason(c.abstract) === val && isUpcoming(c))
+                        .sort((a,b) => {
+                            if (a.abstract === 'TBA') return 1;
+                            if (b.abstract === 'TBA') return -1;
+                            return new Date(a.abstract) - new Date(b.abstract);
+                        });
+                    
+                    let targetMonth = -1;
+                    
+                    // Auto-detect the month of the first strictly upcoming abstract in that season
+                    for (let c of upcomingForSeason) {
+                        let m = getMonthIndex(c.abstract);
+                        if (m !== -1) {
+                            targetMonth = m;
+                            break;
+                        }
+                    }
+                    
+                    // Fallbacks to first month of season if no data/TBA
+                    if (targetMonth === -1) {
+                        targetMonth = { 'spring': 0, 'summer': 4, 'fall': 8 }[val];
+                    }
+                    
+                    const currentRealMonth = new Date().getMonth();
+                    monthOffset = targetMonth - currentRealMonth;
+                    activeMonthFilter = null; // Clear the specific month highlight
+                } else {
+                    monthOffset = 0; // Reset to today's current month
+                    activeMonthFilter = null;
+                }
+            }
+            
+            btn.classList.add('active', 'bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+            btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+            
+            applyFilters();
+        }
+
+        function getSeason(dateStr) {
+            if (!dateStr || dateStr === 'TBA') return 'unknown';
+            const month = parseInt(dateStr.split('-')[1], 10);
+            if (month >= 1 && month <= 4) return 'spring';
+            if (month >= 5 && month <= 8) return 'summer';
+            if (month >= 9 && month <= 12) return 'fall';
+            return 'unknown';
+        }
+        
+        function getMonthIndex(dateStr) {
+            if (!dateStr || dateStr === 'TBA') return -1;
+            const parts = dateStr.split('-');
+            if (parts.length < 2) return -1;
+            return parseInt(parts[1], 10) - 1; // 0-indexed month
+        }
+
+        // ── VIEW TOGGLE AND TABLE RENDER ─────────────────────────────────────────────
+        function switchView(view) {
+            if (currentView === view) return;
+            currentView = view;
+            
+            const btnGrid = document.getElementById('viewBtnGrid');
+            const btnTable = document.getElementById('viewBtnTable');
+            const btnMap = document.getElementById('viewBtnMap');
+            const gridCont = document.getElementById('deadlineGrid');
+            const tableCont = document.getElementById('tableContainer');
+            const mapCont = document.getElementById('mapWrapper');
+            
+            // Reset all buttons
+            [btnGrid, btnTable, btnMap].forEach(btn => {
+                btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-300/50', 'dark:hover:bg-slate-700/50');
+            });
+            
+            // Hide all containers
+            gridCont.classList.add('hidden');
+            tableCont.classList.add('hidden');
+            mapCont.classList.add('hidden');
+            
+            if (view === 'grid') {
+                btnGrid.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                gridCont.classList.remove('hidden');
+                applyFilters();
+            } else if (view === 'table') {
+                btnTable.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                tableCont.classList.remove('hidden');
+                applyFilters(); // Renders table with current filters
+            } else if (view === 'map') {
+                btnMap.classList.add('bg-white', 'dark:bg-slate-700', 'text-uaNavy', 'dark:text-blue-300', 'shadow-sm');
+                mapCont.classList.remove('hidden');
+                applyFilters(); // Renders map with current filters
+                if (leafletMap) leafletMap.invalidateSize();
+            }
+        }
+
+        // ── MAP RENDER ───────────────────────────────────────────────────────────────
+        function renderMap(filteredConfs = []) {
+            if (!leafletMap) {
+                leafletMap = L.map('mapContainer').setView([20, 0], 2);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors',
+                    maxZoom: 18,
+                }).addTo(leafletMap);
+            }
+
+            // Clear old markers
+            mapMarkers.forEach(m => leafletMap.removeLayer(m));
+            mapMarkers = [];
+
+            // Add new markers
+            filteredConfs.forEach(c => {
+                if (c.place && c.place !== 'TBA') {
+                    const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'bg-amber-50 text-amber-600 border-amber-200';
+                    const linkHtml = c.link ? `<a href="${c.link}" target="_blank" class="text-blue-500 hover:text-blue-700 transition-colors" title="Visit Conference Website"><i class="fas fa-external-link-alt text-sm ml-1"></i></a>` : '';
+                    
+                    const popupContent = `
+                        <div class="p-2 min-w-[220px]">
+                            <div class="flex items-start justify-between gap-3 mb-1">
+                                <div class="font-bold text-gray-800 text-lg leading-tight flex items-center">${c.name} ${linkHtml}</div>
+                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI' : 'Systems'}</span>
+                            </div>
+                            <div class="text-xs text-gray-500 mb-3 border-b border-gray-200 pb-2 leading-snug">${c.full}</div>
+                            
+                            <div class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1.5 text-sm text-gray-700">
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-pencil-alt text-gray-400 w-3"></i> Abstract:</span> 
+                                <span class="${c.abstract === 'TBA' ? 'text-gray-400' : (isPast(c.abstract) ? 'line-through text-gray-400' : 'font-semibold')} text-right">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</span>
+                                
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-paper-plane text-gray-400 w-3"></i> Full Paper:</span> 
+                                <span class="${c.deadline === 'TBA' ? 'text-gray-400' : (isPast(c.deadline) ? 'line-through text-gray-400' : 'font-semibold')} text-right">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</span>
+                                
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-calendar-alt text-gray-400 w-3"></i> Event:</span> 
+                                <span class="text-right">${c.date}</span>
+                                
+                                <span class="font-medium flex items-center gap-1.5"><i class="fas fa-map-marker-alt text-gray-400 w-3"></i> Location:</span> 
+                                <span class="break-words text-right">${c.place}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    // Check if abstract is upcoming
+                    const isUpcomingAbstract = c.abstract === 'TBA' || !isPast(c.abstract);
+                    const isBlackedOut = mapHighlightUpcoming && !isUpcomingAbstract;
+
+                    // Create custom themed map pin using inline SVG
+                    let pinColor = c.cat === 'ai' ? '#6366f1' : '#f59e0b'; // AI: Indigo, Sys: Amber
+                    if (isBlackedOut) pinColor = '#475569'; // Slate-600 for past/blacked out
+
+                    const opacity = isBlackedOut ? '0.5' : '1';
+                    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="width: 28px; height: 42px; fill: ${pinColor}; opacity: ${opacity}; filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.3));"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>`;
+                    
+                    const customIcon = L.divIcon({
+                        html: svgIcon,
+                        className: 'bg-transparent border-none', // overrides default Leaflet white square styles
+                        iconSize: [28, 42],
+                        iconAnchor: [14, 42], // bottom-center is the anchor point
+                        popupAnchor: [0, -42] // popup spawns right above the pin
+                    });
+
+                    let coords = GEO_CACHE[c.place];
+                    const zOffset = isBlackedOut ? 0 : 1000; // Keep colored pins on top
+                    
+                    if (coords) {
+                        const marker = L.marker(coords, { icon: customIcon, zIndexOffset: zOffset }).addTo(leafletMap);
+                        marker.bindPopup(popupContent);
+                        mapMarkers.push(marker);
+                    } else {
+                        // Fetch asynchronously to not block rendering and ensure all places are mapped
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(c.place)}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data && data.length > 0) {
+                                    const newCoords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                                    GEO_CACHE[c.place] = newCoords; // Add it to the cache so we don't query it again
+                                    
+                                    // Only add to map if the map view is active to prevent background DOM issues
+                                    if (currentView === 'map' && document.getElementById('mapContainer')) {
+                                        const marker = L.marker(newCoords, { icon: customIcon, zIndexOffset: zOffset }).addTo(leafletMap);
+                                        marker.bindPopup(popupContent);
+                                        mapMarkers.push(marker);
+                                    }
+                                }
+                            })
+                            .catch(e => console.warn("Geocoding failed for", c.place, e));
+                    }
+                }
+            });
+        }
+
+        function renderTable(filteredConfs = []) {
+            // Sort Chronologically from January to December based on Abstract (ignoring year)
+            let tableConfs = [...filteredConfs];
+            tableConfs.sort((a, b) => {
+                const getMD = d => (d && d !== 'TBA') ? d.substring(5, 10) : '99-99'; // Extract "MM-DD"
+                return getMD(a.abstract).localeCompare(getMD(b.abstract));
+            });
+            
+            let html = `
+                <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors">
+                    <h2 class="text-xl font-bold">Annual Conference Schedule</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Tracked conferences ordered chronologically by abstract deadline (January to December).</p>
+                </div>
+                <div class="overflow-x-auto bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-colors">
+                    <table class="w-full text-left border-collapse min-w-[750px]">
+                        <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold min-w-[200px] align-bottom pb-4">Conference</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Abstract</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Full Paper</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Event Date</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold align-bottom pb-4">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                     
+            if (tableConfs.length === 0) {
+                html += `<tr><td colspan="5" class="p-8 text-center text-slate-500 dark:text-slate-400 font-medium">No conferences match these filters.</td></tr>`;
+            } else {
+                tableConfs.forEach(c => {
+                    const absClass  = c.abstract  === 'TBA' ? 'text-slate-400 dark:text-slate-500' : (isPast(c.abstract)  ? 'text-slate-400 dark:text-slate-500 line-through' : 'font-semibold text-slate-800 dark:text-slate-200');
+                    const deadClass = c.deadline  === 'TBA' ? 'text-slate-400 dark:text-slate-500' : (isPast(c.deadline)  ? 'text-slate-400 dark:text-slate-500 line-through' : 'font-semibold text-slate-800 dark:text-slate-200');
+                    
+                    const themeBorder = c.cat === 'ai' ? 'border-l-[8px] border-l-aiColor' : 'border-l-[8px] border-l-sysColor';
+                    const themeHover = c.cat === 'ai' ? 'hover:bg-indigo-50/60 dark:hover:bg-indigo-900/20' : 'hover:bg-amber-50/60 dark:hover:bg-amber-900/20';
+                    
+                    html += `
+                        <tr class="border-b border-slate-100 dark:border-slate-700/50 ${themeHover} transition-colors group">
+                            <td class="py-3 pr-3 pl-4 ${themeBorder}">
+                                <div class="font-bold text-uaNavy dark:text-blue-300 flex items-center gap-2">
+                                    ${c.name}
+                                    ${c.link ? `<a href="${c.link}" target="_blank" class="text-slate-300 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><i class="fas fa-external-link-alt text-[0.7rem]"></i></a>` : ''}
+                                </div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 group-hover:line-clamp-none transition-all">${c.full}</div>
+                            </td>
+                            <td class="p-3 text-sm ${absClass} whitespace-nowrap">${c.abstract === 'TBA' ? 'TBA' : fmtDate(c.abstract)}</td>
+                            <td class="p-3 text-sm ${deadClass} whitespace-nowrap">${c.deadline === 'TBA' ? 'TBA' : fmtDate(c.deadline)}</td>
+                            <td class="p-3 text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap">${c.date}</td>
+                            <td class="p-3 text-sm text-slate-600 dark:text-slate-300">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-map-marker-alt text-slate-300 dark:text-slate-500 text-xs shrink-0"></i>
+                                    <span class="truncate max-w-[200px]" title="${c.place}">${c.place}</span>
+                                </div>
+                            </td>
+                        </tr>`;
+                });
+            }
+            
+            html += `</tbody></table></div>`;
+            document.getElementById('tableContainer').innerHTML = html;
+        }
+
+        function changeMonthOffset(delta) {
+            monthOffset += delta;
+            applyFilters();
+        }
+
+        function toggleMonthFilter(mIdx) {
+            activeMonthFilter = (activeMonthFilter === mIdx) ? null : mIdx;
+            applyFilters();
+        }
+        
+        function toggleMapHighlight(val) {
+            mapHighlightUpcoming = val;
+            if (currentView === 'map') applyFilters();
+        }
+
+        function applyFilters() {
+            const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const filtered = allConfs.filter(c => {
+                const catMatch = currentCatFilter === 'all' || c.cat === currentCatFilter;
+                const seasonMatch = currentSeasonFilter === 'all' || getSeason(c.abstract) === currentSeasonFilter;
+                const searchMatch = !q || c.name.toLowerCase().includes(q) || c.full.toLowerCase().includes(q);
+                return catMatch && seasonMatch && searchMatch;
+            });
+            
+            if (currentView === 'grid') {
+                render(filtered);
+            } else if (currentView === 'map') {
+                renderMap(filtered);
+            } else if (currentView === 'table') {
+                renderTable(filtered);
+            }
+        }
+
+        // ── THEME TOGGLE ─────────────────────────────────────────────────────────────
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Boot
+        init();
+    </script>
+</body>
+</html>

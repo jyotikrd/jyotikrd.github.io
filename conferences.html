@@ -115,19 +115,9 @@
         </div>
 
         <!-- Main Grid -->
-        <!-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-500" id="deadlineGrid">
-            <div class="col-span-full text-center py-16 text-slate-500">
-                <div class="w-9 h-9 border-4 border-slate-200 border-t-uaNavy rounded-full animate-spin mx-auto mb-4"></div>
-                <div>Fetching live deadline data from ccfddl...</div>
-                <div class="max-w-[280px] mx-auto mt-4 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div class="progress-bar h-full bg-uaNavy rounded-full w-0" id="progBar"></div>
-                </div>
-            </div>
-        </div> -->
-			
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-500" id="deadlineGrid">
-		    <!-- Cards will be injected here via JavaScript -->
-		</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-500" id="deadlineGrid">
+            <!-- Cards will be injected here via JavaScript -->
+        </div>
         
         <!-- Interactive Table View (Hidden by default) -->
         <div id="tableContainer" class="hidden transition-all duration-500 min-h-[500px]">
@@ -154,16 +144,10 @@
         </div>
         
         <hr class="my-10 border-slate-200 dark:border-slate-800 transition-colors">
-        <!-- <footer class="text-center pb-6 text-sm text-slate-500">
-            <div class="flex items-center justify-center gap-2 mb-2">
-                <span id="syncDot" class="w-2 h-2 rounded-full inline-block bg-slate-300"></span>
-                <span id="syncText" class="dark:text-slate-400">Initializing sync...</span>
-            </div>
-            <p>Data sourced and adapted from <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" class="text-blue-500 hover:underline">ccfddl GitHub</a>.</p>
-        </footer> -->
-		<footer class="text-center pb-6 text-sm text-slate-500">
-		    <p>Managed by DASS Lab.</p>
-		</footer>
+        
+        <footer class="text-center pb-6 text-sm text-slate-500">
+            <p>Managed by DASS Lab.</p>
+        </footer>
     </div>
 
     <script>
@@ -210,74 +194,6 @@
             { id:"HiPC",  name:"HiPC",  full:"IEEE International Conference on High Performance Computing", cat:"sys", sub:"DS", file:"hipc" },
         ];
 
-        // const BASE = "https://raw.githubusercontent.com/ccfddl/ccf-deadlines/refs/heads/main/conference/";
-
-        // ── YAML PARSER ─────────────────────────────────────────────────────────────
-        // function parseConf(yaml) {
-        //     const confsIdx = yaml.indexOf('confs:');
-        //     if (confsIdx === -1) return null;
-        //     const body = yaml.slice(confsIdx + 6);
-        //
-        //     const rawBlocks = body.split(/\n    - year:/);
-        //     const entries = [];
-        //
-        //     for (const raw of rawBlocks) {
-        //         if (!raw.trim()) continue;
-        //         const block = raw;
-        //
-        //         const yearM  = block.match(/^[\s:]*(\d{4})/);
-        //         const linkM  = block.match(/\n\s+link:\s*(.+)/);
-        //         const dateM  = block.match(/\n\s+date:\s*(.+)/);
-        //         const placeM = block.match(/\n\s+place:\s*(.+)/);
-        //
-        //         if (!yearM) continue;
-        //         const year  = parseInt(yearM[1]);
-        //         const link  = linkM  ? linkM[1].trim().replace(/['"]/g,'')  : '';
-        //         const date  = dateM  ? dateM[1].trim().replace(/['"]/g,'')  : 'TBA';
-        //         const place = placeM ? placeM[1].trim().replace(/['"]/g,'') : 'TBA';
-        //
-        //         const tlStart = block.indexOf('timeline:');
-        //         let abstract = null, deadline = null;
-        //
-        //         if (tlStart !== -1) {
-        //             const tlBody = block.slice(tlStart + 9);
-        //             const absM  = tlBody.match(/abstract_deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2}[\s\d:]*)/);
-        //             const deadM = tlBody.match(/deadline:\s*['"]?([\d]{4}-[\d]{2}-[\d]{2}[\s\d:]*)/);
-        //             if (absM)  abstract = absM[1].trim().slice(0,10);
-        //             if (deadM) deadline = deadM[1].trim().slice(0,10);
-        //         }
-        //
-        //         entries.push({ year, link, date, place, abstract: abstract||'TBA', deadline: deadline||'TBA' });
-        //     }
-        //
-        //     if (!entries.length) return null;
-        //
-        //     const now = Date.now();
-        //     const upcoming = entries
-        //         .filter(e => e.deadline !== 'TBA' && new Date(e.deadline + 'T23:59:59-12:00') >= now)
-        //         .sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
-        //
-        //     if (upcoming.length) return upcoming[0];
-        //     return entries.sort((a,b) => b.year - a.year)[0];
-        // }
-
-        // ── FETCH ────────────────────────────────────────────────────────────────────
-        // async function fetchConf(m) {
-     //        if (VERIFIED[m.id]) return { ...m, ...VERIFIED[m.id], source:'live' };
-     //
-     //        const url = `${BASE}${m.sub}/${m.file}.yml`;
-     //        try {
-     //            const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
-     //            if (!r.ok) throw new Error(r.status);
-     //            const yaml = await r.text();
-     //            const p = parseConf(yaml);
-     //            if (!p) throw new Error('parse');
-     //            return { ...m, ...p, source:'live' };
-     //        } catch (e) {
-     //            return { ...m, abstract:'TBA', deadline:'TBA', date:'TBA', place:'TBA', link:'', source:'fail' };
-     //        }
-     //    }
-
         // ── VERIFIED DATA (last auto-updated: 2026-08-03) ─
         const VERIFIED = {
             // Spring Submissions
@@ -299,7 +215,7 @@
             "MICRO": { abstract:"2026-03-31", deadline:"2026-04-07", date:"October 31- November 4, 2026", place:"Athens, Greece", link:"https://www.microarch.org/micro59/" },
             
             // April
-             "SC": { abstract:"2026-04-01", deadline:"2026-04-08", date:"TBA", place:"Chicago, IL", link:"https://sc26.supercomputing.org/" },
+             "SC": { abstract:"2026-04-01", deadline:"2026-04-08", date:"November 15-20, 2026", place:"Chicago, IL", link:"https://sc26.supercomputing.org/" },
             
             // Summer Submissions
             // May
@@ -308,9 +224,9 @@
              "EMNLP": { abstract:"2026-05-25", deadline:"2026-05-25", date:"October 24-29, 2026", place:"Budapest, Hungary", link:"https://2026.emnlp.org" },
             
             //July
-            "HiPC": { abstract:"2026-07-01", deadline:"2026-07-08", date:"December 16-19, 2026", place:"TBA", link:"https://hipc.org/" }, 
+            "HiPC": { abstract:"2026-07-01", deadline:"2026-07-08", date:"December 16-19, 2026", place:"Bengaluru, India", link:"https://hipc.org/" }, 
             "KDD": { abstract:"2026-07-19", deadline:"2026-07-26", date:"August 9-13, 2026", place:"Jeju, South Korea", link:"https://kdd2027.kdd.org/research-track-call-for-papers/" },
-            "AAAI": { abstract:"2026-07-21", deadline:"2026-07-28", date:"February 16-23, 2027", place:"TBA", link:"https://aaai.org/conference/aaai/aaai-27/" },
+            "AAAI": { abstract:"2026-07-21", deadline:"2026-07-28", date:"February 16-23, 2027", place:"Montréal, Canada", link:"https://aaai.org/conference/aaai/aaai-27/" },
             "HPCA": { abstract:"2026-07-24", deadline:"2026-07-31", date:"March 20-24, 2027", place:"Sydney, Australia", link:"https://2027.hpca-conf.org" },
             
             //August
@@ -324,7 +240,7 @@
             // September
             "ASPLOS": { abstract:"2026-09-09", deadline:"2026-09-09", date:"April 11-15, 2027", place:"Heraklion, Crete, Greece", link:"https://www.asplos-conference.org/asplos2027/cfp/" },
             "EuroSys": { abstract:"2026-09-17", deadline:"2026-09-24", date:"TBA", place:"Edinburgh, Scotland", link:"https://2027.eurosys.org/cfp.html" },
-            "ICLR": { abstract:"2026-09-18", deadline:"2026-09-25", date:"April 26-28, 2027", place:"TBA", link:"https://iclr.cc/Conferences/2027/Dates" },
+            "ICLR": { abstract:"2026-09-18", deadline:"2026-09-25", date:"April 26-28, 2027", place:"San Francisco, CA, USA", link:"https://iclr.cc/Conferences/2027/Dates" },
             
             //October
             "IPDPS": { abstract:"2026-10-01", deadline:"2026-10-08", date:"June 1-5, 2027", place:"Seattle, WA, USA", link:"https://www.ipdps.org/ipdps2026/" },
@@ -346,12 +262,14 @@
         const GEO_CACHE = {
             "San Diego, CA, USA": [32.7157, -117.1611],
             "Bremen, Germany": [53.0793, 8.8017],
+            "Melbourne, Australia": [-37.8136, 144.9631],
             "Seoul, Korea": [37.5665, 126.9780],
             "Seoul, South Korea": [37.5665, 126.9780],
             "Cleveland, OH, USA": [41.4993, -81.6944],
             "Belfast, Northern Ireland, UK": [54.5973, -5.9301],
             "Malmö, Sweden": [55.6050, 13.0038],
             "Hong Kong": [22.3193, 114.1694],
+            "Cordis, Hong Kong": [22.3193, 114.1694],
             "Naples, Italy": [40.8518, 14.2681],
             "Athens, Greece": [37.9838, 23.7275],
             "Chicago, IL": [41.8781, -87.6298],
@@ -359,6 +277,7 @@
             "Santa Clara, CA, USA": [37.3541, -121.9552],
             "Budapest, Hungary": [47.4979, 19.0402],
             "Jeju, South Korea": [33.4996, 126.5312],
+            "Montréal, Canada": [45.5017, -73.5673],
             "Salt Lake City, Utah, USA": [40.7608, -111.8910],
             "Phoenix, AZ, USA": [33.4484, -112.0740],
             "Orlando, FL, USA": [28.5383, -81.3792],
@@ -366,6 +285,7 @@
             "Edinburgh, Scotland": [55.9533, -3.1883],
             "Seattle, WA, USA": [47.6062, -122.3321],
             "Dublin, Ireland": [53.3498, -6.2603],
+            "Macau, China": [22.1987, 113.5439],
             "San Francisco, CA, USA": [37.7749, -122.4194],
             "Atlanta, GA, USA": [33.7490, -84.3880],
             "San Jose, CA": [37.3382, -121.8863],
@@ -377,82 +297,30 @@
         let monthOffset = 0, activeMonthFilter = null, currentView = 'grid';
         let leafletMap = null, mapMarkers = [];
         let mapHighlightUpcoming = false;
-		
-		
-		// ── INIT ─────────────────────────────────────────────────────────────────────
-		async function init() {
-		    // Theme initialization
-		    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-		        document.documentElement.classList.add('dark');
-		    } else {
-		        document.documentElement.classList.remove('dark');
-		    }
-
-		    // Combine MASTER list with the hardcoded dates in VERIFIED
-		    allConfs = MASTER.map(m => {
-		        // If the conference is in VERIFIED, use those dates. Otherwise, set to TBA.
-		        const verifiedData = VERIFIED[m.id] || { abstract: 'TBA', deadline: 'TBA', date: 'TBA', place: 'TBA', link: '' };
-		        return { ...m, ...verifiedData };
-		    });
-
-		    if (tickTimer) clearInterval(tickTimer);
-		    tickTimer = setInterval(tick, 1000);
-    
-		    // Final render
-		    applyFilters();
-		}
 
         // ── INIT ─────────────────────────────────────────────────────────────────────
-        // async function init() {
-//             // Theme initialization
-//             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-//                 document.documentElement.classList.add('dark');
-//             } else {
-//                 document.documentElement.classList.remove('dark');
-//             }
-//
-//             const prog = document.getElementById('progBar');
-//             const CHUNK = 8;
-//             let done = 0;
-//
-//             for (let i = 0; i < MASTER.length; i += CHUNK) {
-//                 const results = await Promise.all(MASTER.slice(i, i+CHUNK).map(fetchConf));
-//                 allConfs.push(...results);
-//                 done += results.length;
-//                 if (prog) prog.style.width = Math.round(done / MASTER.length * 100) + '%';
-//
-//                 applyFilters();
-//             }
-//
-//             const live = allConfs.filter(c => c.source === 'live').length;
-//             const dot  = document.getElementById('syncDot');
-//             const txt  = document.getElementById('syncText');
-//
-//             if (dot && txt) {
-//                 // Update dot colors using Tailwind classes
-//                 if (live === allConfs.length) {
-//                     dot.className = 'w-2 h-2 rounded-full inline-block bg-emerald-500 animate-blink';
-//                     txt.textContent = `All ${live} conferences synced live from ccfddl • Tickers update every second`;
-//                 } else if (live > 0) {
-//                     dot.className = 'w-2 h-2 rounded-full inline-block bg-amber-500';
-//                     txt.textContent = `${live}/${allConfs.length} synced live • ${allConfs.length-live} files not found in repo`;
-//                 } else {
-//                     dot.className = 'w-2 h-2 rounded-full inline-block bg-red-500';
-//                     txt.textContent = 'Could not reach ccfddl (CORS or network issue)';
-//                 }
-//             }
-//
-//             if (tickTimer) clearInterval(tickTimer);
-//             tickTimer = setInterval(tick, 1000);
-//
-//             // Final render
-//             applyFilters();
-//         }
+        function init() {
+            // Theme initialization
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
 
-		
+            // Populate allConfs directly from VERIFIED data
+            allConfs = MASTER.map(m => {
+                if (VERIFIED[m.id]) {
+                    return { ...m, ...VERIFIED[m.id], source: 'live' };
+                }
+                return { ...m, abstract:'TBA', deadline:'TBA', date:'TBA', place:'TBA', link:'', source:'fail' };
+            });
 
-
-
+            if (tickTimer) clearInterval(tickTimer);
+            tickTimer = setInterval(tick, 1000);
+            
+            // Final render
+            applyFilters();
+        }
 
         // ── COUNTDOWN ────────────────────────────────────────────────────────────────
         function pad2(n) { return String(n).padStart(2,'0'); }
@@ -514,7 +382,7 @@
 
         // ── CREATE CARD ───────────────────────────────────────────────────────────────
         function createCard(c) {
-            const catLabel = { ai:'AI', sys:'Systems' }[c.cat] || c.cat;
+            const catLabel = { ai:'AI/ML/NLP/CV', sys:'Systems' }[c.cat] || c.cat;
             const hasDl    = c.deadline && c.deadline !== 'TBA';
             const t        = hasDl ? timeRemaining(c.deadline) : null;
             const isExp    = t ? t.expired : false;
@@ -534,9 +402,9 @@
             const absClass  = c.abstract  === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : (isPast(c.abstract)  ? 'text-slate-300 dark:text-slate-600 line-through font-normal' : 'font-bold text-slate-800 dark:text-slate-200');
             const deadClass = c.deadline  === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : (isPast(c.deadline)  ? 'text-slate-300 dark:text-slate-600 line-through font-normal' : 'font-bold text-slate-800 dark:text-slate-200');
             const dateClass = c.date      === 'TBA' ? 'font-medium text-slate-400 dark:text-slate-500' : 'font-bold text-slate-800 dark:text-slate-200';
-            // const srcDot    = c.source === 'live'
-//                 ? `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emerald-500 animate-blink" title="Live from ccfddl"></span>`
-//                 : `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-amber-500" title="Not found in repo"></span>`;
+            const srcDot    = c.source === 'live'
+                ? `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-emerald-500 animate-blink" title="Live from ccfddl"></span>`
+                : `<span class="w-1.5 h-1.5 rounded-full shrink-0 bg-amber-500" title="Not found in repo"></span>`;
             
             const borderTopColor = c.cat === 'ai' ? 'border-t-aiColor' : 'border-t-sysColor';
             const badgeClass = c.cat === 'ai' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-aiColor dark:text-indigo-400' : 'bg-amber-50 dark:bg-amber-900/30 text-sysColor dark:text-amber-400';
@@ -573,6 +441,7 @@
                 <div class="mt-auto pt-4 text-[0.7rem] text-slate-400 dark:text-slate-500 flex items-center gap-2">
                   <i class="fas fa-map-marker-alt shrink-0"></i>
                   <span class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">${c.place}</span>
+                  ${srcDot}
                   <span class="font-bold px-2 py-0.5 rounded text-[0.6rem] uppercase whitespace-nowrap ${badgeClass}">${catLabel}</span>
                 </div>
               </div>`;
@@ -580,20 +449,25 @@
 
         // ── RENDER ───────────────────────────────────────────────────────────────────
         function render(list) {
-            const now = Date.now();
-            const isUpcoming = c => {
-                if (c.deadline === 'TBA') return true;
-                const d = new Date(c.deadline + 'T23:59:59-12:00');
-                return isNaN(d) || d >= now;
-            };
+            const isUpcoming = c => !isPast(c.abstract) || !isPast(c.deadline);
             const upcoming = list.filter(isUpcoming)
                 .sort((a,b) => {
-                    if (a.deadline==='TBA') return 1;
-                    if (b.deadline==='TBA') return -1;
-                    return new Date(a.deadline) - new Date(b.deadline);
+                    const absA = (a.abstract && a.abstract !== 'TBA') ? a.abstract : '9999-99-99';
+                    const absB = (b.abstract && b.abstract !== 'TBA') ? b.abstract : '9999-99-99';
+                    if (absA !== absB) return absA.localeCompare(absB);
+                    const deadA = (a.deadline && a.deadline !== 'TBA') ? a.deadline : '9999-99-99';
+                    const deadB = (b.deadline && b.deadline !== 'TBA') ? b.deadline : '9999-99-99';
+                    return deadA.localeCompare(deadB);
                 });
             const past = list.filter(c => !isUpcoming(c))
-                .sort((a,b) => new Date(b.deadline) - new Date(a.deadline));
+                .sort((a,b) => {
+                    const absA = (a.abstract && a.abstract !== 'TBA') ? a.abstract : '0000-00-00';
+                    const absB = (b.abstract && b.abstract !== 'TBA') ? b.abstract : '0000-00-00';
+                    if (absA !== absB) return absB.localeCompare(absA);
+                    const deadA = (a.deadline && a.deadline !== 'TBA') ? a.deadline : '0000-00-00';
+                    const deadB = (b.deadline && b.deadline !== 'TBA') ? b.deadline : '0000-00-00';
+                    return deadB.localeCompare(deadA);
+                });
 
             const filteredUpcoming = activeMonthFilter !== null
                 ? upcoming.filter(c => getMonthIndex(c.abstract) === activeMonthFilter)
@@ -658,14 +532,8 @@
                 });
                 
                 if (val !== 'all') {
-                    const now = Date.now();
-                    
                     // Helper to check if a conference is entirely in the past or still upcoming
-                    const isUpcoming = c => {
-                        if (c.deadline === 'TBA') return true;
-                        const d = new Date(c.deadline + 'T23:59:59-12:00');
-                        return isNaN(d) || d >= now;
-                    };
+                    const isUpcoming = c => !isPast(c.abstract) || !isPast(c.deadline);
                     
                     // Find upcoming deadlines specifically tied to this season's abstract
                     const upcomingForSeason = allConfs.filter(c => getSeason(c.abstract) === val && isUpcoming(c))
@@ -785,7 +653,7 @@
                         <div class="p-2 min-w-[220px]">
                             <div class="flex items-start justify-between gap-3 mb-1">
                                 <div class="font-bold text-gray-800 text-lg leading-tight flex items-center">${c.name} ${linkHtml}</div>
-                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI' : 'Systems'}</span>
+                                <span class="px-2 py-0.5 rounded border text-[0.65rem] font-bold uppercase whitespace-nowrap ${badgeClass}">${c.cat === 'ai' ? 'AI/ML/NLP/CV' : 'Systems'}</span>
                             </div>
                             <div class="text-xs text-gray-500 mb-3 border-b border-gray-200 pb-2 leading-snug">${c.full}</div>
                             
@@ -855,17 +723,29 @@
         }
 
         function renderTable(filteredConfs = []) {
-            // Sort Chronologically from January to December based on Abstract (ignoring year)
+            // Sort Chronologically based on Abstract Date then Full Paper Deadline
             let tableConfs = [...filteredConfs];
             tableConfs.sort((a, b) => {
-                const getMD = d => (d && d !== 'TBA') ? d.substring(5, 10) : '99-99'; // Extract "MM-DD"
-                return getMD(a.abstract).localeCompare(getMD(b.abstract));
+                const getStr = d => (d && d !== 'TBA') ? d : '9999-99-99';
+                
+                const abstractA = getStr(a.abstract);
+                const abstractB = getStr(b.abstract);
+                
+                // Primary sort: Abstract date
+                if (abstractA !== abstractB) {
+                    return abstractA.localeCompare(abstractB);
+                }
+                
+                // Secondary sort: Full Paper deadline date
+                const deadlineA = getStr(a.deadline);
+                const deadlineB = getStr(b.deadline);
+                return deadlineA.localeCompare(deadlineB);
             });
             
             let html = `
                 <div class="mb-4 text-uaNavy dark:text-blue-400 transition-colors">
                     <h2 class="text-xl font-bold">Annual Conference Schedule</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Tracked conferences ordered chronologically by abstract deadline (January to December).</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Tracked conferences ordered chronologically by abstract and full paper deadlines.</p>
                 </div>
                 <div class="overflow-x-auto bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-colors">
                     <table class="w-full text-left border-collapse min-w-[750px]">

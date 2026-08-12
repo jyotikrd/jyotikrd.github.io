@@ -6,8 +6,8 @@
     <title>Jyotikrishna Dass - Home</title>
     
     <!-- Google Fonts for modern typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for social icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social and UI icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -44,15 +44,13 @@
             text-align: center;
             letter-spacing: 0.5px;
         }
-        .sidebar-brand span {
-            color: #ab0520; /* UA Red */
-        }
+        .sidebar-brand span { color: #ab0520; /* UA Red */ }
 
         .menu-item { margin-bottom: 0.5rem; }
         .menu-item a {
             font-size: 1.05rem;
             font-weight: 600;
-            color: #e2e9eb; /* Light grayish white */
+            color: #e2e9eb;
             display: block;
             padding: 10px 16px;
             border-radius: 6px;
@@ -63,14 +61,14 @@
         .menu-item a:hover, .menu-item a.current {
             background-color: rgba(255, 255, 255, 0.08); 
             color: #fff;
-            border-left: 4px solid #ab0520; /* UA Red Accent */
+            border-left: 4px solid #ab0520;
         }
 
         /* Main Content Area */
         .main-content {
             margin-left: 260px;
             padding: 4rem 5rem;
-            max-width: 1100px;
+            max-width: 1400px; /* Widened for dashboard grid */
             width: 100%;
             background-color: #ffffff;
             min-height: 100vh;
@@ -78,16 +76,16 @@
         }
         h1 {
             font-size: 2.8rem;
-            color: #0c2340; /* UA Navy */
+            color: #0c2340;
             margin-bottom: 2rem;
-            border-bottom: 3px solid #ab0520; /* UA Red */
+            border-bottom: 3px solid #ab0520;
             padding-bottom: 0.8rem;
             display: inline-block;
         }
         h2 {
-            font-size: 1.75rem;
+            font-size: 1.6rem;
             color: #0c2340;
-            margin: 3rem 0 1.5rem 0;
+            margin: 0 0 1.5rem 0;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -95,25 +93,26 @@
         h2::before {
             content: '';
             display: inline-block;
-            width: 8px;
-            height: 24px;
-            background-color: #ab0520; /* UA Red */
+            width: 6px;
+            height: 20px;
+            background-color: #ab0520;
             border-radius: 2px;
         }
 
-        /* Profile Section - Light Shaded Box */
+        /* Profile Section */
         .profile-section {
             display: flex;
             gap: 2.5rem;
             align-items: center;
-            margin-bottom: 3rem;
-            background: #f4f7f9; /* Light cool-gray shaded background */
+            margin-bottom: 0;
+            height: 100%;
+            background: #f4f7f9;
             padding: 2.5rem;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Softer shadow for the shaded box */
-            border: 1px solid #e2e8f0; /* Subtle border framing the shaded box */
-            border-top: 5px solid #0c2340; /* UA Navy top border */
-            border-bottom: 5px solid #ab0520; /* UA Red bottom border */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            border-top: 5px solid #0c2340;
+            border-bottom: 5px solid #ab0520;
         }
         .profile-img {
             width: 190px;
@@ -130,25 +129,85 @@
         .social-links a { 
             font-size: 1.5rem; 
             color: #0c2340; 
-            font-weight: normal; 
-            transition: all 0.3s ease;
-            background: #ffffff; /* Solid white background to pop against the shade */
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: #ffffff; 
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
             border-radius: 50%;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
         .social-links a:hover { 
-            background: #ab0520; 
-            color: #ffffff; 
+            background: #ab0520; color: #ffffff; 
             transform: translateY(-3px); 
             box-shadow: 0 4px 10px rgba(171, 5, 32, 0.3);
         }
 
-        /* Elegant Bio Section */
+        /* Hero Section & Highlights */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3.5rem;
+            margin-bottom: 3.5rem;
+            align-items: stretch;
+        }
+        .highlights-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .highlight-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            border-left: 5px solid #ab0520;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .highlight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .highlight-card i {
+            font-size: 2.2rem;
+            color: #0c2340;
+            opacity: 0.9;
+            width: 50px;
+            text-align: center;
+        }
+        .highlight-logo {
+            width: 55px;
+            height: 50px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .hc-text strong {
+            display: block;
+            color: #0c2340;
+            font-size: 1.05rem;
+            margin-bottom: 2px;
+        }
+        .hc-text span {
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.3;
+            display: block;
+        }
+
+        /* SUGGESTION 1: Dashboard Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr; /* Bio gets slightly more room */
+            gap: 3.5rem;
+            align-items: start;
+        }
+
+        /* SUGGESTION 5: Collapsible Bio Section */
         .bio-section p {
             font-size: 1.1rem;
             color: #444;
@@ -156,11 +215,9 @@
             margin-bottom: 1.5rem;
             text-align: justify;
         }
-        .bio-section strong {
-            color: #0c2340;
-        }
+        .bio-section strong { color: #0c2340; }
         .bio-section a {
-            color: #ab0520; /* UA Red */
+            color: #ab0520;
             font-weight: 600;
             text-decoration: none;
             border-bottom: 1px solid rgba(171, 5, 32, 0.3);
@@ -170,178 +227,233 @@
             border-bottom: 1px solid #ab0520;
             background-color: rgba(171, 5, 32, 0.05);
         }
-		
-		/* Activity Feed Widget */
-		        .activity-feed-widget {
-		            background: #fff;
-		            border-radius: 12px;
-		            margin-bottom: 3rem;
-		            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-		            border: 1px solid #e2e8f0;
-		            overflow: hidden;
-		            display: flex;
-		            flex-direction: column;
-		            max-height: 480px;
-		        }
-		        .feed-header {
-		            background: #f8fafc;
-		            padding: 1.2rem 1.5rem;
-		            border-bottom: 1px solid #e2e8f0;
-		            display: flex;
-		            align-items: center;
-		            justify-content: space-between;
-		            font-weight: 700;
-		            color: #0c2340;
-		            z-index: 2;
-		        }
-		        .feed-header div { display: flex; align-items: center; gap: 0.75rem; }
-		        .feed-header i { color: #0077b5; font-size: 1.3rem; }
-		        .feed-status {
-		            font-size: 0.75rem;
-		            color: #10b981;
-		            background: #ecfdf5;
-		            padding: 2px 8px;
-		            border-radius: 12px;
-		            text-transform: uppercase;
-		        }
-		        .feed-viewport {
-		            position: relative;
-		            flex: 1;
-		            overflow: hidden;
-		            background: #fafbfc;
-		        }
-		        .feed-viewport::before, .feed-viewport::after {
-		            content: '';
-		            position: absolute;
-		            left: 0; right: 0; height: 40px; z-index: 1; pointer-events: none;
-		        }
-		        .feed-viewport::before { top: 0; background: linear-gradient(to bottom, #fafbfc, transparent); }
-		        .feed-viewport::after { bottom: 0; background: linear-gradient(to top, #fafbfc, transparent); }
-
-		        .feed-content {
-		            display: flex;
-		            flex-direction: column;
-		            animation: feedScroll 45s linear infinite;
-		        }
-		        .feed-content:hover { animation-play-state: paused; }
-
-		        .feed-item {
-		            padding: 1.25rem 1.5rem;
-		            border-bottom: 1px solid #e2e8f0;
-		            background: #fff;
-		            display: flex;
-		            gap: 1.25rem;
-		            align-items: flex-start;
-		            transition: all 0.3s ease;
-		            box-sizing: border-box;
-		        }
-		        .feed-item:hover { background: #f8fafc; border-left: 4px solid #0077b5; padding-left: calc(1.5rem - 4px); }
-
-		        .feed-date {
-		            flex-shrink: 0;
-		            width: 60px;
-		            text-align: center;
-		            padding: 0.4rem;
-		            background: #f1f5f9;
-		            border-radius: 8px;
-		            border: 1px solid #e2e8f0;
-		        }
-		        .feed-date .month {
-		            display: block; font-size: 0.65rem; font-weight: 800; color: #0077b5; text-transform: uppercase; line-height: 1;
-		        }
-		        .feed-date .year {
-		            display: block; font-size: 0.8rem; font-weight: 700; color: #1e293b; margin-top: 2px;
-		        }
-
-		        .feed-info { flex: 1; }
-		        .feed-item-title {
-		            font-weight: 700; color: #1e293b; text-decoration: none; font-size: 0.95rem; line-height: 1.4; display: block; margin-bottom: 4px;
-		        }
-		        .feed-item-title:hover { color: #0077b5; }
-		        .feed-item-desc {
-		            font-size: 0.85rem; color: #64748b; line-height: 1.5; margin: 0;
-		            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-		        }
-
-		        @keyframes feedScroll {
-		            0% { transform: translateY(0); }
-		            100% { transform: translateY(-50%); }
-		        }		
-
-        /* News Section & Filters */
-        .news-filters {
+        
+        .bio-extra {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+        }
+        .bio-extra.expanded {
+            max-height: 1500px; /* Arbitrary large number to allow full expansion */
+            opacity: 1;
+        }
+        
+        .toggle-bio-btn {
+            background: none;
+            border: none;
+            color: #0c2340;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
             display: flex;
-            gap: 12px;
-            margin-bottom: 1.5rem;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            transition: color 0.2s;
+        }
+        .toggle-bio-btn:hover { color: #ab0520; }
+        .toggle-bio-btn i { transition: transform 0.3s; }
+        .toggle-bio-btn.expanded i { transform: rotate(180deg); }
+
+        /* Scrolling News Widget */
+        .updates-widget {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 2rem;
+            height: 600px; /* Fixed height for dashboard feel */
+        }
+        
+        .widget-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0c2340;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 2;
+        }
+        .widget-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .widget-header-left i { color: #ab0520; }
+        
+        .filter-toggle-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-toggle-btn:hover {
+            background: #e2e8f0;
+            color: #0c2340;
+        }
+        .filter-toggle-btn.active {
+            background: #0c2340;
+            color: #ffffff;
+            border-color: #0c2340;
+        }
+
+        .news-filters {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            z-index: 2;
+            transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+            max-height: 500px;
+            overflow: hidden;
+            opacity: 1;
+        }
+        .news-filters.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            opacity: 0;
+            border-bottom: none;
+        }
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             flex-wrap: wrap;
         }
-        .filter-btn {
-            padding: 8px 18px;
-            border: 2px solid #0c2340; /* UA Navy */
-            background: transparent;
-            color: #0c2340;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-        }
-        .filter-btn.active, .filter-btn:hover {
-            background: #ab0520; /* UA Red active state */
-            border-color: #ab0520;
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(171, 5, 32, 0.2);
-        }
-
-        .news-container {
-            max-height: 450px;
-            overflow-y: auto;
-            background: #fbfbfc;
-            padding: 1.5rem 2rem;
-            border-radius: 8px;
-            border-left: 4px solid #0c2340;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
-        }
-        .news-item {
-            margin-bottom: 1.2rem;
-            padding-bottom: 1.2rem;
-            border-bottom: 1px solid #eaeaea;
-            font-size: 1rem;
-            line-height: 1.6;
-            animation: fadeIn 0.4s ease;
-        }
-        .news-item a {
-            color: #ab0520;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .news-item a:hover { text-decoration: underline; }
-        .news-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .news-date {
-            font-family: 'Inter', sans-serif;
+        .filter-label {
+            font-size: 0.75rem;
             font-weight: 700;
-            color: #ffffff;
-            background: #0c2340; /* UA Navy Tag */
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-right: 10px;
+            color: #64748b;
+            text-transform: uppercase;
+            width: 50px;
+        }
+        .filter-btn {
+            background: #f1f5f9;
+            border: 1px solid transparent;
+            color: #475569;
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.85rem;
-            display: inline-block;
-            margin-bottom: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .filter-btn:hover {
+            background: #e2e8f0;
+            color: #0c2340;
+        }
+        .filter-btn.active {
+            background: #0c2340;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(12, 35, 64, 0.2);
+        }
+        .filter-btn.active-theme {
+            background: #ab0520; /* Red for themes to distinguish from years */
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(171, 5, 32, 0.2);
         }
 
-        /* Custom Scrollbar for News */
-        .news-container::-webkit-scrollbar { width: 8px; }
-        .news-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        .news-container::-webkit-scrollbar-thumb { background: #0c2340; border-radius: 4px; }
-        .news-container::-webkit-scrollbar-thumb:hover { background: #ab0520; }
+        /* Feed Styles */
+        .feed-viewport {
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+            background: #fafbfc;
+        }
+        .feed-viewport::before, .feed-viewport::after {
+            content: ''; position: absolute; left: 0; right: 0; height: 30px; z-index: 1; pointer-events: none;
+        }
+        .feed-viewport::before { top: 0; background: linear-gradient(to bottom, #fafbfc, transparent); }
+        .feed-viewport::after { bottom: 0; background: linear-gradient(to top, #fafbfc, transparent); }
+        
+        /* Slowed down animation for reading */
+        .feed-content { display: flex; flex-direction: column; animation: feedScroll 90s linear infinite; }
+        .feed-content:hover { animation-play-state: paused; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        .feed-item {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 2px solid #ffffff;
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .feed-date {
+            flex-shrink: 0; width: 60px; text-align: center; padding: 0.4rem;
+            background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; opacity: 0.9;
+        }
+        .feed-date .month { display: block; font-size: 0.65rem; font-weight: 800; color: #ab0520; text-transform: uppercase; }
+        .feed-date .year { display: block; font-size: 0.8rem; font-weight: 700; color: #1e293b; }
+        .feed-item-title { font-weight: 700; color: #1e293b; text-decoration: none; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
+        .feed-item-title:hover { color: #ab0520; }
+        .feed-item-desc { font-size: 0.85rem; color: #64748b; margin: 0; line-height: 1.5; }
+        .feed-item-desc a { color: #0c2340; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(12,35,64,0.2); }
+        .feed-item-desc a:hover { border-color: #0c2340; }
+
+        /* Color-Coded Theme Rows & Icons */
+        .theme-icon { font-size: 1.1rem; margin-top: 1px; flex-shrink: 0; }
+        
+        .feed-item[data-theme="grants"] { background: #f0fdf4; }
+        .feed-item[data-theme="grants"]:hover { background: #dcfce7; border-left-color: #22c55e; }
+        .feed-item[data-theme="grants"] .theme-icon { color: #166534; }
+        
+        .feed-item[data-theme="publications"] { background: #eff6ff; }
+        .feed-item[data-theme="publications"]:hover { background: #dbeafe; border-left-color: #3b82f6; }
+        .feed-item[data-theme="publications"] .theme-icon { color: #1e40af; }
+        
+        .feed-item[data-theme="awards"] { background: #fefce8; }
+        .feed-item[data-theme="awards"]:hover { background: #fef3c7; border-left-color: #eab308; }
+        .feed-item[data-theme="awards"] .theme-icon { color: #a16207; }
+        
+        .feed-item[data-theme="events"] { background: #fff7ed; }
+        .feed-item[data-theme="events"]:hover { background: #ffedd5; border-left-color: #f97316; }
+        .feed-item[data-theme="events"] .theme-icon { color: #c2410c; }
+        
+        .feed-item[data-theme="service"] { background: #f8fafc; }
+        .feed-item[data-theme="service"]:hover { background: #f1f5f9; border-left-color: #64748b; }
+        .feed-item[data-theme="service"] .theme-icon { color: #334155; }
+
+        @keyframes feedScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
         }
 
-        /* Responsive Design */
+        /* Custom Scrollbar for Viewport fallback */
+        .feed-viewport::-webkit-scrollbar { width: 6px; }
+        .feed-viewport::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .feed-viewport::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .feed-viewport::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .dashboard-layout, .hero-section { grid-template-columns: 1fr; }
+            .updates-widget { position: static; height: 500px; margin-top: 2rem; }
+            .highlights-column { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        }
         @media (max-width: 900px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: static; display: flex; flex-direction: column; padding: 1.5rem; }
@@ -350,7 +462,86 @@
             .main-content { margin-left: 0; padding: 2rem; }
             .profile-section { flex-direction: column; text-align: center; }
             .social-links { justify-content: center; }
+            .highlights-column { grid-template-columns: 1fr; }
         }
+
+        /* */
+        .theme-toggle-wrapper {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e2e9eb;
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        /* Dark Theme Overrides */
+        body.dark-theme { background-color: #0f172a; color: #e2e8f0; }
+        body.dark-theme .main-content { background-color: #1e293b; box-shadow: none; }
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme .bio-section strong, 
+        body.dark-theme .profile-info a, body.dark-theme .hc-text strong, 
+        body.dark-theme .widget-header, body.dark-theme .feed-item-title, 
+        body.dark-theme .toggle-bio-btn { color: #f8fafc; }
+        body.dark-theme .sidebar { background-color: #020617; border-right: 1px solid #1e293b; }
+        body.dark-theme .profile-section, body.dark-theme .highlight-card, 
+        body.dark-theme .updates-widget, body.dark-theme .news-filters {
+            background: #334155; border-color: #475569;
+        }
+        body.dark-theme .profile-section { border-top-color: #020617; }
+        
+        /* Ensure logos with black text are visible in dark mode */
+        body.dark-theme .highlight-logo.dark-bg-fix { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 4px; 
+            border-radius: 6px; 
+        }
+
+        body.dark-theme .social-links a { background: #1e293b; color: #f8fafc; }
+        body.dark-theme .social-links a:hover { background: #ab0520; color: #ffffff; }
+        body.dark-theme .bio-section p, body.dark-theme .hc-text span, 
+        body.dark-theme .feed-item-desc { color: #cbd5e1; }
+        body.dark-theme .feed-item-desc a { color: #93c5fd; border-color: rgba(147, 197, 253, 0.3); }
+        body.dark-theme .feed-item-desc a:hover { border-color: #93c5fd; }
+        body.dark-theme .widget-header { background: #1e293b; border-bottom-color: #475569; }
+        body.dark-theme .feed-viewport { background: #1e293b; }
+        body.dark-theme .feed-viewport::before { background: linear-gradient(to bottom, #1e293b, transparent); }
+        body.dark-theme .feed-viewport::after { background: linear-gradient(to top, #1e293b, transparent); }
+        body.dark-theme .feed-item { border-bottom-color: #475569; }
+        body.dark-theme .feed-date { background: #475569; border-color: #64748b; }
+        body.dark-theme .feed-date .year { color: #f8fafc; }
+        body.dark-theme .filter-toggle-btn, body.dark-theme .filter-btn { background: #1e293b; border-color: #475569; color: #cbd5e1; }
+        body.dark-theme .filter-toggle-btn:hover, body.dark-theme .filter-btn:hover { background: #475569; color: #f8fafc; }
+        body.dark-theme .filter-btn.active, body.dark-theme .filter-toggle-btn.active { background: #0c2340; color: #fff; border-color: #0c2340; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        body.dark-theme .filter-btn.active-theme { background: #ab0520; color: #fff; box-shadow: 0 2px 8px rgba(171, 5, 32, 0.4); }
+        
+        /* Adjusted Feed item backgrounds for dark mode */
+        body.dark-theme .feed-item[data-theme="grants"] { background: rgba(34, 197, 94, 0.05); }
+        body.dark-theme .feed-item[data-theme="grants"]:hover { background: rgba(34, 197, 94, 0.15); border-left-color: #22c55e; }
+        body.dark-theme .feed-item[data-theme="publications"] { background: rgba(59, 130, 246, 0.05); }
+        body.dark-theme .feed-item[data-theme="publications"]:hover { background: rgba(59, 130, 246, 0.15); border-left-color: #3b82f6; }
+        body.dark-theme .feed-item[data-theme="awards"] { background: rgba(234, 179, 8, 0.05); }
+        body.dark-theme .feed-item[data-theme="awards"]:hover { background: rgba(234, 179, 8, 0.15); border-left-color: #eab308; }
+        body.dark-theme .feed-item[data-theme="events"] { background: rgba(249, 115, 22, 0.05); }
+        body.dark-theme .feed-item[data-theme="events"]:hover { background: rgba(249, 115, 22, 0.15); border-left-color: #f97316; }
+        body.dark-theme .feed-item[data-theme="service"] { background: rgba(148, 163, 184, 0.05); }
+        body.dark-theme .feed-item[data-theme="service"]:hover { background: rgba(148, 163, 184, 0.15); border-left-color: #94a3b8; }
     </style>
 </head>
 <body>
@@ -368,344 +559,844 @@
         <div class="menu-item"><a href="awards.html">Awards</a></div>
         <div class="menu-item"><a href="openpositions.html">Open Positions</a></div>
         <div class="menu-item"><a href="documents/CV_JyotikrishnaDass.pdf" target="_blank">CV</a></div>
+
+        <!-- -->
+        <div class="theme-toggle-wrapper">
+            <button id="theme-toggle-btn" class="theme-toggle-btn">
+                <i class="fas fa-moon"></i> <span>Dark Mode</span>
+            </button>
+        </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
         <h1>Jyotikrishna Dass</h1>
 
-        <!-- Profile Card -->
-        <section class="profile-section">
-            <img src="photos/jdpicture.jpg" alt="Jyotikrishna Dass" class="profile-img" />
-            
-            <div class="profile-info">
-                <p><strong>Assistant Professor</strong><br /> 
-                <a href="https://ece.engineering.arizona.edu/faculty-staff/faculty/jyotikrishna-dass" target="_blank">Department of Electrical and Computer Engineering</a> <br /> 
-                University of Arizona <br /> 
-                1230 E. Speedway Blvd., P.O. Box 210104 <br /> 
-                Tucson, AZ 85721-0104</p>
+        <!-- Hero Section (Profile + Highlights) -->
+        <div class="hero-section">
+            <!-- Profile Card -->
+            <section class="profile-section">
+                <img src="photos/jdpicture.jpg" alt="Jyotikrishna Dass" class="profile-img" onerror="this.src='https://placehold.co/190x210/0c2340/ffffff?text=JD'" />
                 
-                <p>E-mail: <i>jdass</i> [@] <i>arizona</i> [DOT] <i>edu</i></p>
-                
-                <div class="social-links">
-                    <a href="https://scholar.google.com/citations?user=dobDj4AAAAAJ&hl=en&oi=ao" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
-                    <a href="https://orcid.org/0000-0002-7552-8753" target="_blank" title="ORCID"><i class="fab fa-orcid"></i></a>
-                    <a href="https://www.linkedin.com/in/jyotikrishnadass" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://twitter.com/jyotikrd" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <div class="profile-info">
+                    <p><strong>Assistant Professor</strong><br /> 
+                    <a href="https://ece.engineering.arizona.edu/faculty-staff/faculty/jyotikrishna-dass" target="_blank">Department of Electrical and Computer Engineering</a> <br /> 
+                    University of Arizona <br /> 
+                    1230 E. Speedway Blvd., P.O. Box 210104 <br /> 
+                    Tucson, AZ 85721-0104</p>
+                    
+                    <p>E-mail: <i>jdass</i> [@] <i>arizona</i> [DOT] <i>edu</i></p>
+                    
+                    <div class="social-links">
+                        <a href="https://scholar.google.com/citations?user=dobDj4AAAAAJ&hl=en&oi=ao" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                        <a href="https://orcid.org/0000-0002-7552-8753" target="_blank" title="ORCID"><i class="fab fa-orcid"></i></a>
+                        <a href="https://www.linkedin.com/in/jyotikrishnadass" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://twitter.com/jyotikrd" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
                 </div>
-            </div>
-        </section>
-		
+            </section>
 
-        <!-- Biography -->
-        <section class="bio-section">
-            <h2>Biography</h2>
-            <p>Jyotikrishna Dass is an assistant professor in the <a href="https://ece.engineering.arizona.edu" target="_blank">Department of Electrical and Computer Engineering at The University of Arizona</a>. His research integrates machine learning, parallel computing, and hardware design to create efficient algorithms and systems for distributed edge intelligence. His work has been featured in the IEEE International Conference on Machine Learning (ICML), IEEE International Conference on Distributed Computing Systems (ICDCS), IEEE International Parallel and Distributed Processing Symposium (IPDPS), IEEE Transactions on Parallel and Distributed Systems (TPDS), IEEE International Symposium on High-Performance Computer Architecture (HPCA), IEEE Micro and IEEE Transactions on Computers (TC). He has served as instructor-of-record for several courses during his graduate studies and is eager to contribute to the department's new <a href="https://ece.engineering.arizona.edu/news-events/ece-offers-masters-and-phd-programs-computer-science-and-engineering" target="_blank">computer science and engineering program</a>.</p>
+            <!-- Highlight Cards (Vertical Stack) -->
+            <section class="highlights-column">
+                <div class="highlight-card">
+                    <img src="photos/NSF_Official_logo_Med_Res_600ppi.png" alt="NSF Logo" class="highlight-logo">
+                    <div class="hc-text">
+                        <strong>NSF Grant Awarded</strong>
+                        <span>$498K REU grant for AI Research beginning Summer 2027</span>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Nvidia_logo.svg" alt="NVIDIA Logo" class="highlight-logo dark-bg-fix">
+                    <div class="hc-text">
+                        <strong>NVIDIA Academic Grants (2025 and 2026)</strong>
+                        <span>Awarded GPU hardwares for GenAI & Federated Learning</span>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <i class="fas fa-bolt"></i>
+                    <div class="hc-text">
+                        <strong>AI SPARK Workshop and IGNITE Showcase</strong>
+                        <span>Successfully launched AI workshop series and showcase event</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+		
+        <!-- Dashboard Layout Grid -->
+        <div class="dashboard-layout">
             
-            <p>Prior to joining U of A, Dr. Dass was a research scientist and executive director at Rice University, leading the <a href="https://d2k.rice.edu/" target="_blank">Center for Transforming Data to Knowledge (D2K)</a>. From 2021-2022, he was a postdoctoral research associate at Rice, co-writing grant proposals for NSF Core Programs ($1.2 million), META Network for AI ($50K), and Rice University Creative Ventures Fund ($10K).</p>
-            
-            <p>Dr. Dass earned his PhD in Computer Science and Engineering from Texas A&M University in 2021. His research was recognized with the <strong>Best PhD Dissertation Poster Award</strong> at the Annual Computing Conference, 2019 among fourteen SEC universities. He was also a <strong>College of Engineering Graduate Teaching Fellow</strong> in 2020 and received the <strong>CSE Teaching Assistant Excellence Award</strong> in 2018. He holds a B.Tech degree in Electronics and Communication engineering with a Minor in CSE from the Indian Institute of Technology (IIT) Guwahati.</p>
-        </section>
-		
-		
-		<!-- Vertical Activity Feed Widget -->
-		        <div class="activity-feed-widget">
-		            <div class="feed-header">
-		                <div><i class="fab fa-linkedin"></i> Highlights: 2025 - 2026</div>
-		                <span class="feed-status">Live Updates</span>
-		            </div>
-		            <div class="feed-viewport">
-		                <div class="feed-content">
-		                    <!-- ORIGINAL SET (Last 1 Year) -->
-							
-		                    <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <a href="https://www.linkedin.com/posts/uarizonaece_ai-literacy-and-fluency-are-quickly-becoming-activity-7435066558089007104-SbIp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank" class="feed-item-title">AI SPARK Workshop: Unlocking Mystery of LLMs</a>
-		                            <p class="feed-item-desc">Organizing session on exploring the mathematical foundations behind large language models such as ChatGPT and Claude, breaking down how probability and pattern recognition drive human-like responses.</p>
-		                        </div>
-		                    </div>
-							
-		                    <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <a href="https://www.linkedin.com/posts/jyotikrishnadass_nsf-levelupai-cra-activity-7415803746695159808-3pDY" target="_blank" class="feed-item-title">NSF LEVEL UP AI Phase 2 (Phoenix)</a>
-		                            <p class="feed-item-desc">Representing UofA at the NSF Level Up AI workshop to shape the national AI curriculum for future engineering leaders.</p>
-		                        </div>
-		                    </div>
-							
-		                    <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Jan</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <a href="https://www.linkedin.com/posts/uarizonaece_aispark-uarizonaece-ai-ugcPost-7397003792946388993-Ft1Y" target="_blank" class="feed-item-title">AI SPARK Workshop Kickoff</a>
-		                            <p class="feed-item-desc">Launched a massive hands-on workshop for over 100 participants focusing on applied Generative AI and automation.</p>
-		                        </div>
-		                    </div>
-							
-		                    <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <a href="https://www.linkedin.com/posts/hariharan-ramesh-a6420a1a8_beardown-uarizonaece-studentsuccess-activity-7405797730775764992-Xn5O" target="_blank" class="feed-item-title">Outstanding GTA Award: Hariharan Ramesh</a>
-		                            <p class="feed-item-desc">A major milestone for the DASS Lab as Hariharan receives the prestigious Outstanding Graduate Teaching Assistant Award.</p>
-		                        </div>
-		                    </div>
-		                    <!-- <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <a href="#" class="feed-item-title">Fall Semester Research Launch</a>
-		                            <p class="feed-item-desc">Welcomed new PhD and Masters students to the DASS Lab for the Fall '25 cohort to work on Distributed AI Systems.</p>
-		                        </div>
-		                    </div> -->
-		                    <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Aug</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <a href="https://www.linkedin.com/posts/uarizonaece_nvidiagrant-generativeai-federatedlearning-activity-7376328799233200130-vHKo" target="_blank" class="feed-item-title">NVIDIA Academic Grant Awarded</a>
-		                            <p class="feed-item-desc">Received hardware support from NVIDIA to accelerate lab research in decentralized training of foundational models.</p>
-		                        </div>
-		                    </div>
-		                    <!-- <div class="feed-item">
-		                        <div class="feed-date"><span class="month">May</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <a href="#" class="feed-item-title">Spring Graduation Success</a>
-		                            <p class="feed-item-desc">Celebrating our graduating seniors and masters students as they transition to industry roles and further research.</p>
-		                        </div>
-		                    </div> -->
-		                    <!-- <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <a href="#" class="feed-item-title">Paper Presentation: Distributed Optimization</a>
-		                            <p class="feed-item-desc">Presented recent findings on scalable optimization techniques for high-dimensional data at a top-tier venue.</p>
-		                        </div>
-		                    </div> -->
-
-		                    <!-- CLONED SET (Exact copies for seamless loop) -->
-		                    <!-- <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">Current Research: Scalable Privacy in GenAI</span>
-		                            <p class="feed-item-desc">Actively developing new frameworks for efficient federated learning and data privacy in large-scale language models.</p>
-		                        </div> 
-		                    </div> -->
-								
-		                    <div class="feed-item">
-		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <a href="https://www.linkedin.com/posts/uarizonaece_ai-literacy-and-fluency-are-quickly-becoming-activity-7435066558089007104-SbIp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank" class="feed-item-title">AI SPARK Workshop: Unlocking Mystery of LLMs</a>
-		                            <p class="feed-item-desc">Organizing session on exploring the mathematical foundations behind large language models such as ChatGPT and Claude, breaking down how probability and pattern recognition drive human-like responses.</p>
-		                        </div>
-		                    </div>
-							
-							
-		                    <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">NSF LEVEL UP AI Phase 2 (Phoenix)</span>
-		                            <p class="feed-item-desc">Representing UofA at the NSF Level Up AI workshop to shape the national AI curriculum for future engineering leaders.</p>
-		                        </div>
-		                    </div>
-		                    <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Jan</span><span class="year">2026</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">AI SPARK Workshop Kickoff</span>
-		                            <p class="feed-item-desc">Launched a massive hands-on workshop for over 100 participants focusing on applied Generative AI and automation.</p>
-		                        </div>
-		                    </div>
-		                    <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">Outstanding GTA Award: Hariharan Ramesh</span>
-		                            <p class="feed-item-desc">A major milestone for the DASS Lab as Hariharan receives the prestigious Outstanding Graduate Teaching Assistant Award.</p>
-		                        </div>
-		                    </div>
-		                    <!-- <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">Fall Semester Research Launch</span>
-		                            <p class="feed-item-desc">Welcomed new PhD and Masters students to the DASS Lab for the Fall '25 cohort to work on Distributed AI Systems.</p>
-		                        </div> 
-		                    </div>-->
-		                    <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Aug</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">NVIDIA Academic Grant Awarded</span>
-		                            <p class="feed-item-desc">Received hardware support from NVIDIA to accelerate lab research in decentralized training of foundational models.</p>
-		                        </div>
-		                    </div>
-		                    <!-- <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">May</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">Spring Graduation Success</span>
-		                            <p class="feed-item-desc">Celebrating our graduating seniors and masters students as they transition to industry roles and further research.</p>
-		                        </div>
-		                    </div> -->
-		                    <!-- <div class="feed-item" aria-hidden="true">
-		                        <div class="feed-date"><span class="month">Mar</span><span class="year">2025</span></div>
-		                        <div class="feed-info">
-		                            <span class="feed-item-title">Paper Presentation: Distributed Optimization</span>
-		                            <p class="feed-item-desc">Presented recent findings on scalable optimization techniques for high-dimensional data at a top-tier venue.</p>
-		                        </div>
-		                    </div> -->
-		                </div>
-		            </div>
-		        </div>
-				
-		
-
-        <!-- News Section -->
-        <section>
-            <h2>News</h2>
-            
-            <!-- Filters -->
-            <div class="news-filters">
-                <button class="filter-btn active" onclick="filterNews('all')">All News</button>
-                <button class="filter-btn" onclick="filterNews('2026')">2026</button>
-                <button class="filter-btn" onclick="filterNews('2025')">2025</button>
-                <button class="filter-btn" onclick="filterNews('2024')">2024</button>
-                <button class="filter-btn" onclick="filterNews('older')">Older</button>
-            </div>
-
-            <!-- News Items -->
-            <div class="news-container" id="news-container">
-                <!-- 2026 -->
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Aug, 2026</span> Dr. Dass (co-PI, Award Credit: 50%) has been awarded his first National Science Foundation (NSF) grant ($498,627 for 3 years) to launch a Research Experiences for Undergraduates (REU) site <em>ARISE: AI Research for Intelligent Systems and Efficiency</em> beginning Summer 2027. Thank you NSF! | <a href="https://www.linkedin.com/posts/ai-undergraduateresearch-nsf-share-7491265875501621248-mmLK/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a> | <a href="https://ece.engineering.arizona.edu/news-events/faculty-win-nsf-grant-launch-ai-research-program-undergraduates" target="_blank">News</a>.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Aug, 2026</span> <em>SpikeFed: Federated Training of Spiking Neural Networks for Event-Based Vision</em> paper has been featured on Flower Labs behind the leading open-source framework for training better AI on distributed data | <a href="https://www.linkedin.com/posts/williamlindskog_many-federated-learning-papers-use-standard-share-7491876888886276096-yFWo/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post 1</a> | <a href="https://www.linkedin.com/posts/new-research-built-on-flower-and-great-job-share-7491878455341588482-sMbW/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post 2</a>.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Aug, 2026</span> <em>AI SPARK</em> Workshop Series and <em>AI IGNITE</em> Research Showcase have been featured on ECE News | <a href="https://ece.engineering.arizona.edu/news-events/ece-wraps-spring-ai-workshop-series-inaugural-showcase" target="_blank">News</a> | <a href="https://youtu.be/dTvTtz4M7vY" target="_blank">Video</a>.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Jul, 2026</span> Lydia Obeng and Vimal William attended DAC 2026 at Long Beach, CA, USA as part of University of Arizona Herbold Fellowship Travel Grant. Vimal was also selected as DAC Young Fellows 2026 | <a href="https://www.linkedin.com/posts/vimal-william-6b24b0165_dac-ugcPost-7487649084854530048-iFq_?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Jun, 2026</span> Dr. Dass attended ACM GLSVLSI co-located with ACM IGSC 2026 at Lake Canandaigua, NY, USA where he chaired Special Session on <em>Sustainable Distributed AI Systems</em> on served on Best Paper Award committee for ACM IGSC 2026. | <a href="https://www.linkedin.com/posts/jyotikrishnadass_federatedlearning-edgeai-share-7474880682905919488-btOS/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> <em> 
-Megan Zupancic (Undergraduate Student) mentored and nominated by Dr. Dass has been honored as <em>Outstanding Senior in Software Engineering award for 2025-2026</em> | <a href="https://www.linkedin.com/posts/megan-zupancic_feeling-incredibly-grateful-and-humbled-to-ugcPost-7452055949109800960-Z7qb/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>	
-				
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> <em>SpikeFed: Federated Training of Spiking Neural Networks for Event-Based Vision</em> has been accepted for publication at ACM IGSC 2026 (Canandaigua, NY, USA). Congratulations Lydia and Hariharan for this collaboration of DASS Lab with Dr. Ramtin Zand from University of South Carolina.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> <em>FedLLM4HW: Carbon-Aware Federated Triage of Hardware Weaknesses in LLM-Generated Verilog</em> has been accepted for publication at ACM IGSC 2026 (Canandaigua, NY, USA). Congratulations Hariharan for this collaboration of DASS Lab with Dr. Soheil Salehi, Dr. Pratik Satam, and Dr. Rozhin Yasaei at University of Arizona.</div>
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> <em>Spectral Transformation for Layer-wise Global Rank Discovery in Federated LoRA for Vision Transformers</em> has been accepted for publication at ECML-PKDD 2026 (Naples, Italy). Congratulations Hariharan on his second PhD paper as first author! Thank you NVIDIA Academic Grant!</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> <em>FLoRIST: Singular Value Thresholding for Efficient and Accurate Federated Fine-Tuning of Large Language Models</em> was presented as oral (and later in poster session) by Hariharan at MLSys 2026 in Seattle, WA, USA. Dr. Dass, Hariharan and Vimal from DASS Lab attended the conference.| <a href="https://www.linkedin.com/posts/jyotikrishnadass_florist-ugcPost-7462616079006212096-9fYI/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>	
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> Dr. Dass is serving as a reviewer for NeurIPS 2026.</div>
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">May, 2026</span> Dr. Dass is recognized as <em>Gold Reviewer (Free Registration)</em> by ICML 2026 for being among the Top 25% (4439) reviewers! | <a href="https://www.linkedin.com/posts/jyotikrishnadass_icml2026-icml-ai-ugcPost-7460782439129595904-YnTA/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>	
-					
-				
-				<div class="news-item" data-year="2025"><span class="news-date">May, 2026</span> Dr. Dass launched a new annual ECE event, <strong>AI IGNITE Research Showcase</strong> as a celebration of AI in ECE comprising AI Faculty Lightning Talks and Student Poster Competition on AI research and course projects. | <a href="https://www.linkedin.com/posts/uazece-uaengineering-ai-share-7446976300973686785-a63E/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"> Post</a> | <a href="https://www.linkedin.com/posts/ai-ignite-2026-is-a-wrap-and-what-an-incredible-ugcPost-7459666793117298688-c1kW/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Pictures</a>.</div>
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">April, 2026</span> Dr. Dass will chair Special Session on <em>Sustainable Distributed AI Systems</em> at ACM IGSC 2026.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">April, 2026</span> Dr. Dass is serving on Technical Program Committee for ACM IGSC 2026.</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">April, 2026</span> Dr. Dass is serving as a reviewer for ACM GLSVLSI 2026.</div>
-										
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Apr, 2026</span> Dr. Dass along with Hariharan Ramesh (PhD student, DASS Lab) conducted the second session of  <strong>AI SPARK: Igniting AI Curiosity and Building Networks</strong> Workshop series on topic <em>Deploying Your First Large Language Model.</em>. | <a href="https://www.linkedin.com/posts/uazece-uaengineering-aispark-share-7448065474552111104-Xn0X/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"> Post</a> | <a href="https://www.linkedin.com/posts/uazece-uaengineering-aispark-ugcPost-7453147455614894080-FVmL/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"> Pictures</a>.</div>
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Mar, 2026</span> We have received our "second" <strong>NVIDIA Academic Grant Award</strong> in 6-months !! Our project titled, "<em>Hardware-Aware Digital Twin for Federated Generative AI </em>" has been awarded 4x RTX PRO 6000 Blackwell Max-Q Workstation Edition and 2x Jetson AGX Orin Dev Kits (equivalent to USD 40,000) as a part of "Robotics and Edge AI" call.  This project is being led by our incredible PhD student, Lydia! Thank you NVIDIA for supporting our research on FL x Digital Twin! | <a href="https://www.linkedin.com/feed/update/urn:li:activity:7473534702516187136/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>
-				
-                <div class="news-item" data-year="2026"><span class="news-date">Mar, 2026</span> Dr. Dass along with Hariharan Ramesh (PhD student, DASS Lab) kicked-off Spring season of <strong>AI SPARK: Igniting AI Curiosity and Building Networks</strong> Workshop series with topic <em>Unlocking the Mystery of Large Language Models.</em>. | <a href="https://www.linkedin.com/posts/ai-literacy-and-fluency-are-quickly-becoming-share-7435062780057108480-b4TT/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"> Post</a> | <a href="https://www.linkedin.com/posts/uazece-uaengineering-aispark-ugcPost-7441982173064196096-iv3f/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"> Pictures</a>.</div>
-				
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Feb, 2026</span> <em>FLoRIST: Singular Value Thresholding for Efficient and Accurate Federated Fine-Tuning of Large Language Models</em> has been accepted for publication at MLSys 2026 (Seattle, WA, USA). Congratulations Hariharan on his first PhD paper and our first paper at DASS Lab! Thank you NSF ACCESS and NVIDIA Academic Grant!</div>
-				
-				<div class="news-item" data-year="2026"><span class="news-date">Feb, 2026</span> Dr. Dass is serving as a reviewer for ICML 2026.</div>
-				
-                <div class="news-item" data-year="2026"><span class="news-date">Feb, 2026</span> Dr. Dass was selected to attend the <em>2026 CRA Career Mentoring Workshop</em> in Washington, D.C.</div>
-				
-                <div class="news-item" data-year="2026"><span class="news-date">Jan, 2026</span> Dr. Dass was invited to participate at NSF LEVEL UP AI (Launching an Educational Vision to Expand Leadership, Understanding, and Progress in Artificial Intelligence - <a href="https://www.linkedin.com/posts/jyotikrishnadass_nsf-levelupai-cra-activity-7415803746695159808-3pDY?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Phase 2</a>) workshop in Phoenix, AZ hosted by Computing Research Association (CRA) following the virtual roundtable discussions in <a href="https://www.linkedin.com/posts/jyotikrishnadass_levelupai-nsf-computingresearch-activity-7381073872282058752-pV0z?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Phase 1</a>.</div>
+            <!-- Left Column: Biography -->
+            <section class="bio-section">
+                <h2>Biography</h2>
                 
+                <!-- Visible by default -->
+                <p>Jyotikrishna Dass is an assistant professor in the <a href="https://ece.engineering.arizona.edu" target="_blank">Department of Electrical and Computer Engineering at The University of Arizona</a>. His research integrates machine learning, parallel computing, and hardware design to create efficient algorithms and systems for distributed edge intelligence. His work has been featured in the IEEE International Conference on Machine Learning (ICML), IEEE International Conference on Distributed Computing Systems (ICDCS), IEEE International Parallel and Distributed Processing Symposium (IPDPS), IEEE Transactions on Parallel and Distributed Systems (TPDS), IEEE International Symposium on High-Performance Computer Architecture (HPCA), IEEE Micro and IEEE Transactions on Computers (TC). He has served as instructor-of-record for several courses during his graduate studies and is eager to contribute to the department's new <a href="https://ece.engineering.arizona.edu/news-events/ece-offers-masters-and-phd-programs-computer-science-and-engineering" target="_blank">computer science and engineering program</a>.</p>
                 
-				
-				
-				
-				
-				
-				<!-- 2025 -->
-                <div class="news-item" data-year="2025"><span class="news-date">Nov, 2025</span> Dr. Dass along with Dr. Huanrui Yang (ECE, UofA) launched a new hands-on workshop, <strong>AI SPARK: Igniting AI Curiosity and Building Networks</strong> for the campus community with 100+ participants. | <a href="https://www.linkedin.com/posts/uarizonaece_aispark-uarizonaece-ai-ugcPost-7397003792946388993-Ft1Y?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"> Post</a> | <a href="https://www.linkedin.com/posts/uarizonaece_artificialintelligence-aiworkshop-uarizonaece-activity-7390034078823145472-LpiI?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Event Flyer</a>.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Nov, 2025</span> Dr. Dass gave presentation on ECE Undergraduate Programs to 100+ freshman students as part of ENGR 102A, University of Arizona.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Nov, 2025</span> Dr. Dass gave Guest Lecture on <em>Distributed Edge Computing</em> in the course ECE 369A – Fundamentals of Computer Organization, University of Arizona.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Nov, 2025</span> Lydia and Vimal represented DASS Lab at the ECE Graduate Student Poster Session at UofA Homecoming 2026 where they presented their current research on <a href="https://www.linkedin.com/posts/lydia-obeng_during-university-of-arizona-homecoming-event-ugcPost-7396566713904889856-jxg7?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Visual and Interactive Platform for Distributed AI</a> and <a href="https://www.linkedin.com/posts/vimal-william-6b24b0165_is-attention-really-this-memory-hungry-activity-7392681401621467137-9GD5?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Memory-Efficient LLM with KV Cache</a>, respectively.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Oct, 2025</span> Congratulations to Hariharan for being nominated and awarded the <a href="https://www.linkedin.com/posts/hariharan-ramesh-a6420a1a8_beardown-uarizonaece-studentsuccess-activity-7405797730775764992-Xn5O?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank"><strong>2025 College of Engineering Outstanding Graduate Teaching Assistant Award in CSE</strong></a>. We are immensely proud that Hari now continues the TA Award legacy of his advisor, Dr. Dass (CSE TA Excellence Award – 2018, Texas A&M University)!</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Sep, 2025</span> Launched new course ECE 425/525: Introduction to Deep Learning - An Engineering Persepctive. The course attracted 20 Undergraduate and 29 Graduate Students. <a href="https://jyotikrd.github.io/documents/ECE425-525-DeepLearningFlyer.pdf" target="_blank">Course Flyer</a>. The teaching materials designed by Dr. Dass are being used to support the 2026 AI/ML course for Microcampus students at Sampoerna University, Jakarta, Indonesia.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Sep, 2025</span> DASS Lab welcomes its first cohort of PhD students, Hariharan Ramesh (PhD in CSE), Lydia Obeng (PhD in ECE), and Vimal William (PhD in ECE). More information can be found <a href="https://jyotikrd.github.io/dasslab.html" target="_blank">here</a>.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Sep, 2025</span> We have received <strong>NVIDIA Academic Grant Award</strong> (12K A100 GPU-Hours) under "Research: Gen AI Training and Model Development" call for the project, titled, "<em>Efficient Federated Fine-Tuning of Gen AI via Adaptive Low-Rank Aggregation</em>". This project will be led by our incredible PhD student, Hari! Thank you NVIDIA for supporting our research! | <a href="https://www.linkedin.com/posts/uarizonaece_nvidiagrant-generativeai-federatedlearning-activity-7376328799233200130-vHKo?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Sep, 2025</span> Invited to join <em>India Advisory Network</em> initiative to deepen University of Arizona long-term engagement with India. The India Advisory Network will play a central role in efforts to expand academic and research collaborations, strengthen industry and government partnerships, advance student mobility, and activate our vibrant alumni community across India.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Aug, 2025</span> Served as Reviewer for <a href="https://visxai.io" target="_blank">8th Workshop on Visualization for AI Explainability at IEEE VIS 2025</a>.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Jun, 2025</span> Served as Reviewer for <a href="https://cra.org/csgrad4us/" target="_blank">NSF Computer and Information Science and Engineering Graduate Fellowship Program (CSGrad4US) 2025</a>.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Jun, 2025</span> Served on PhD Dissertation Committee of Jesse Friedbaum (advised by: Prof. Ravi Tandon), University of Arizona.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">May, 2025</span> Served as Session Chair for <a href="https://mlsys.org/Conferences/2025" target="_blank">MLSys 2025</a> at Santa Clara, CA.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Apr, 2025</span> Participated in <a href="https://cra.org/level-up-ai/" target="_blank">NSF LEVEL UP AI</a> (Launching an Educational Vision to Expand Leadership, Understanding, and Progress in Artificial Intelligence) Roundtable (part of NSF EducateAI initiative) hosted by CRA.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Mar, 2025</span> Dr. Dass welcomed and joined the selected group of PhD students at ECE Graduate Recruiting Weekend over a fun-filled dinner.</div>
-                <div class="news-item" data-year="2025"><span class="news-date">Feb, 2025</span> Serving as a reviewer for KDD 2025.</div>
+                <!-- SUGGESTION 5: Expandable/Collapsible Biograpy Extra -->
+                <div class="bio-extra" id="bio-extra-content">
+                    <p>Prior to joining U of A, Dr. Dass was a research scientist and executive director at Rice University, leading the <a href="https://d2k.rice.edu/" target="_blank">Center for Transforming Data to Knowledge (D2K)</a>. From 2021-2022, he was a postdoctoral research associate at Rice, co-writing grant proposals for NSF Core Programs ($1.2 million), META Network for AI ($50K), and Rice University Creative Ventures Fund ($10K).</p>
+                    
+                    <p>Dr. Dass earned his PhD in Computer Science and Engineering from Texas A&M University in 2021. His research was recognized with the <strong>Best PhD Dissertation Poster Award</strong> at the Annual Computing Conference, 2019 among fourteen SEC universities. He was also a <strong>College of Engineering Graduate Teaching Fellow</strong> in 2020 and received the <strong>CSE Teaching Assistant Excellence Award</strong> in 2018. He holds a B.Tech degree in Electronics and Communication engineering with a Minor in CSE from the Indian Institute of Technology (IIT) Guwahati.</p>
+                </div>
+                
+                <button class="toggle-bio-btn" id="toggle-bio-btn" onclick="toggleBio()">
+                    Read Full Biography <i class="fas fa-chevron-down"></i>
+                </button>
+            </section>
 
-                <!-- 2024 -->
-                <div class="news-item" data-year="2024"><span class="news-date">Oct, 2024</span> Selected to attend the <a href="https://sharadonly.github.io/cise/" target="_blank">NSF CISE MSI Aspiring PI Workshop</a> at UNT, Denton, TX.</div>
-                <div class="news-item" data-year="2024"><span class="news-date">Oct, 2024</span> Serving in Technical Program Committee for DAC 2025.</div>
-                <div class="news-item" data-year="2024"><span class="news-date">Sep, 2024</span> Serving as a reviewer for ICLR 2025.</div>
-                <div class="news-item" data-year="2024"><span class="news-date">Aug, 2024</span> Joined Dept. of ECE at University of Arizona as Tenure-Track Assistant Professor, #BearDown Wildcats!</div>
-                <div class="news-item" data-year="2024"><span class="news-date">Mar, 2024</span> Serving as a reviewer for Transactions on Computers.</div>
-                <div class="news-item" data-year="2024"><span class="news-date">Feb, 2024</span> Serving as a reviewer for ICML 2024.</div>
+            <!-- Right Column: Scrolling News Widget -->
+            <aside class="updates-widget">
+                
+                <div class="widget-header">
+                    <div class="widget-header-left"><i class="fas fa-newspaper"></i> Latest News & Updates</div>
+                    <button class="filter-toggle-btn active" onclick="toggleFilters()" id="filter-toggle-btn" title="Toggle Filters">
+                        <i class="fas fa-sliders-h"></i> Hide Filters
+                    </button>
+                </div>
 
-                <!-- Older (2023 and below) -->
-                <div class="news-item" data-year="older"><span class="news-date">Oct, 2023</span> Our work on <i>&ldquo;NetDistiller: Empowering Tiny Deep Learning via In-Situ Distillation&rdquo;</i> has been accepted for publication in IEEE Micro Special Issue on tinyML.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Oct, 2023</span> Serving as a reviewer for ICLR 2024.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Mar, 2023</span> Serving as Local Chair for the <a href="https://ieeeichi.github.io/ICHI2023/" target="_blank">11th IEEE International Conference on Healthcare Informatics (ICHI 2023)</a> to be held from June 26th-June 29th in Houston, TX.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Feb, 2023</span> Presented our work <i>&ldquo;ViTALiTY&rdquo;</i> at IEEE HPCA in Montréal, CA.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Oct, 2022</span> Our work on <i>&ldquo;ViTALiTy: Unifying Low-rank and Sparse Approximation for Vision Transformer Acceleration with a Linear Taylor Attention&rdquo;</i> has been accepted for publication in IEEE HPCA 2023 (25%).</div>
-                <div class="news-item" data-year="older"><span class="news-date">Oct, 2022</span> Serving as a reviewer for ICLR 2023.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Oct, 2022</span> Attended the META Communication and Networking Faculty Summit as an awardee of <a href="https://research.facebook.com/blog/2022/8/announcing-the-winners-of-the-2022-network-for-ai-request-for-proposals/" target="_blank">META:Network for AI RFP</a>.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Aug, 2022</span> Joined The Rice University Data to Knowledge (Rice D2K) Lab as a Research Scientist.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Aug, 2022</span> Our proposal <i>&ldquo;SHF:Medium:DILSE:Codesigning Decentralized Incremental Learning System via Streaming Data Summarization on Edge&rdquo;</i> has been accepted for NSF CISE Core Programs grant ($1,200,000).</div>
-                <div class="news-item" data-year="older"><span class="news-date">Aug, 2022</span> Our proposal <i>&ldquo;MILES: Multi-device Incremental Learning on Edge via Summarization&rdquo;</i> has been accepted for META:Network for AI funding ($50,000).</div>
-                <div class="news-item" data-year="older"><span class="news-date">Jul, 2022</span> Our proposal <i>&ldquo;Tutorial on Automated Tools for Fast Development of Deep Learning Networks and Accelerators&rdquo;</i> has been accepted for MICRO 2022, Chicago, IL.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Jul, 2022</span> Chaired the research session on <i>&ldquo;Machine Learning for Resource Management: From Edge to Cloud&rdquo;</i> at DAC 2022 in San Francisco, CA.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Mar, 2022</span> Our proposal <i>&ldquo;Workshop on Automated AI Tools for Computing and Communication&rdquo;</i> has been accepted for Creative Ventures Fund: Conference and Workshop Development ($10,000) from Rice University.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Sep, 2021</span> Moved to Houston and joined Rice University as a Postdoctoral Associate.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Aug, 2021</span> Graduated from Texas A&amp;M University with a PhD degree in Computer Engineering.</div>
-                <div class="news-item" data-year="older"><span class="news-date">June, 2021</span> Defended my PhD disertation on <i>&ldquo;Efficient and Scalable Machine Learning for Distributed Edge Intelligence&rdquo;</i>.</div>
-                <div class="news-item" data-year="older"><span class="news-date">May, 2021</span> Our work on <i>&ldquo;Householder Sketch for Accurate and Accelerated Least-Mean-Squares Solvers&rdquo;</i> has been accepted at ICML 2021.</div>
-                <div class="news-item" data-year="older"><span class="news-date">May, 2021</span> Joining Dr. Yingyan Lin's lab at Rice University as a postdoc in Fall 2021.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Apr, 2021</span> Serve as invited reviewer in the Program Committee for NeurIPS 2021.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Dec, 2020</span> Serve as invited reviewer for ICML 2021.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Aug, 2020</span> Teaching <i>CSCE 312: Computer Organization</i> as Graduate Assistant Lecturer for Fall 2020 | <a href="documents/Fall2020_CSCE312_501to504_syllabus.pdf" target="_blank">Syllabus</a></div>
-                <div class="news-item" data-year="older"><span class="news-date">May, 2020</span> Our work on distributed training of SVM on multiple-FPGA system has been accepted for publication in <a href="https://scholar.google.com/citations?view_op=top_venues&amp;hl=en&amp;vq=eng_computerhardwaredesign" target="_blank">IEEE Transactions on Computers</a>, Impact factor: 3.131 with acceptance rate 21% in <i>Special Issue on Machine-Learning Architectures and Accelerators</i>.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Apr, 2020</span> As a part of community service during COVID-19,<br> - Organized a free and synchronous online educational inititiative <a href="https://www.linkedin.com/posts/jyotikrishnadass_python3-covid19-excellence-activity-6654914778999377921-6CAW" target="_blank">ShiP.py: Learning to Py while Shelter-in-Place</a> with a team of undergraduate and PhD student volunteers | <a href="https://www.youtube.com/playlist?list=PLYrR2hT6hBKqOkCDTYhvKgdkFOcDQwizn" target="_blank">Course Playlist</a> <br> - Organize and co-instructed a free online course <a href="https://shala2020.github.io/" target="_blank">Stay Home and Learn AI</a> with a team of volunteers comprising professors, industry professionals, and students working in data science, machine learning, and deep learning | <a href="https://www.youtube.com/playlist?list=PLYrR2hT6hBKoa8qWghnxlsHT7sPOtA75R" target="_blank">My SHALA Lectures</a> | <a href="https://www.youtube.com/channel/UCobe_Yc7nV6kux94A5doIiA/playlists" target="_blank">Course Playlist</a>.</div>
-                <div class="news-item" data-year="older"><span class="news-date">Feb, 2020</span> Wrote my first blog inspired by Yoshua Bengio and Carl-Johann SIMON-GABRIEL | <a href="https://jyotikrd.wordpress.com/2020/02/14/decentralizing-academic-conferences-for-a-better-climate/" target="_blank">Decentralizing Academic Conferences for a Better Climate</a>.</div>
-            </div>
-        </section>
+                <div class="news-filters" id="news-filters-container">
+                    <div class="filter-row">
+                        <span class="filter-label">Year:</span>
+                        <button class="filter-btn active" data-type="year" data-value="all" onclick="setFilter('year', 'all', this)">All</button>
+                        <button class="filter-btn" data-type="year" data-value="2026" onclick="setFilter('year', '2026', this)">2026</button>
+                        <button class="filter-btn" data-type="year" data-value="2025" onclick="setFilter('year', '2025', this)">2025</button>
+                        <button class="filter-btn" data-type="year" data-value="2024" onclick="setFilter('year', '2024', this)">2024</button>
+                        <button class="filter-btn" data-type="year" data-value="older" onclick="setFilter('year', 'older', this)">Older</button>
+                    </div>
+                    <div class="filter-row">
+                        <span class="filter-label">Theme:</span>
+                        <button class="filter-btn active-theme" data-type="theme" data-value="all" onclick="setFilter('theme', 'all', this)" title="All Themes"><i class="fas fa-layer-group"></i> All</button>
+                        <button class="filter-btn" data-type="theme" data-value="grants" onclick="setFilter('theme', 'grants', this)" title="Grants"><i class="fas fa-file-invoice-dollar"></i></button>
+                        <button class="filter-btn" data-type="theme" data-value="publications" onclick="setFilter('theme', 'publications', this)" title="Publications"><i class="fas fa-book-open"></i></button>
+                        <button class="filter-btn" data-type="theme" data-value="awards" onclick="setFilter('theme', 'awards', this)" title="Awards"><i class="fas fa-trophy"></i></button>
+                        <button class="filter-btn" data-type="theme" data-value="events" onclick="setFilter('theme', 'events', this)" title="Events"><i class="fas fa-calendar-alt"></i></button>
+                        <button class="filter-btn" data-type="theme" data-value="service" onclick="setFilter('theme', 'service', this)" title="Service"><i class="fas fa-hands-helping"></i></button>
+                    </div>
+                </div>
 
+                <div class="feed-viewport" id="feed-viewport">
+                    <div class="feed-content" id="feed-content">
+                        <div class="feed-item" data-year="2026" data-theme="grants">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">NSF REU Grant Awarded</span>
+                                <p class="feed-item-desc">Dr. Dass (co-PI, Award Credit: 50%) has been awarded his first National Science Foundation (NSF) grant ($498,627 for 3 years) to launch a Research Experiences for Undergraduates (REU) site <em>ARISE: AI Research for Intelligent Systems and Efficiency</em> beginning Summer 2027. Thank you NSF! | <a href="https://www.linkedin.com/posts/ai-undergraduateresearch-nsf-share-7491265875501621248-mmLK/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a> | <a href="https://ece.engineering.arizona.edu/news-events/faculty-win-nsf-grant-launch-ai-research-program-undergraduates" target="_blank">News</a>.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feed-item" data-year="2026" data-theme="publications">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">SpikeFed Featured on Flower Labs</span>
+                                <p class="feed-item-desc"><em>SpikeFed: Federated Training of Spiking Neural Networks for Event-Based Vision</em> paper has been featured on Flower Labs behind the leading open-source framework for training better AI on distributed data | <a href="https://www.linkedin.com/posts/williamlindskog_many-federated-learning-papers-use-standard-share-7491876888886276096-yFWo/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post 1</a> | <a href="https://www.linkedin.com/posts/new-research-built-on-flower-and-great-job-share-7491878455341588482-sMbW/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post 2</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">AI SPARK Featured on ECE News</span>
+                                <p class="feed-item-desc"><em>AI SPARK</em> Workshop Series and <em>AI IGNITE</em> Research Showcase have been featured on ECE News | <a href="https://www.linkedin.com/posts/ai-studentresearch-uarizona-share-7493345876573151232-gwzu/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a> | <a href="https://ece.engineering.arizona.edu/news-events/ece-wraps-spring-ai-workshop-series-inaugural-showcase" target="_blank">News</a> | <a href="https://youtu.be/dTvTtz4M7vY" target="_blank">Video</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">Jul</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">DAC 2026 Attendance</span>
+                                <p class="feed-item-desc">Lydia Obeng and Vimal William attended DAC 2026 at Long Beach, CA, USA as part of University of Arizona Herbold Fellowship Travel Grant. Vimal was also selected as DAC Young Fellows 2026 | <a href="https://www.linkedin.com/posts/vimal-william-6b24b0165_dac-ugcPost-7487649084854530048-iFq_?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="service">
+                            <div class="feed-date"><span class="month">Jun</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">ACM GLSVLSI & IGSC 2026</span>
+                                <p class="feed-item-desc">Dr. Dass attended ACM GLSVLSI co-located with ACM IGSC 2026 at Lake Canandaigua, NY, USA where he chaired Special Session on <em>Sustainable Distributed AI Systems</em> and served on Best Paper Award committee for ACM IGSC 2026. | <a href="https://www.linkedin.com/posts/jyotikrishnadass_federatedlearning-edgeai-share-7474880682905919488-btOS/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="awards">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Outstanding Senior Award (Mentee)</span>
+                                <p class="feed-item-desc">Megan Zupancic (Undergraduate Student) mentored and nominated by Dr. Dass has been honored as <em>Outstanding Senior in Software Engineering award for 2025-2026</em> | <a href="https://www.linkedin.com/posts/megan-zupancic_feeling-incredibly-grateful-and-humbled-to-ugcPost-7452055949109800960-Z7qb/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="publications">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">SpikeFed Accepted at ACM IGSC</span>
+                                <p class="feed-item-desc"><em>SpikeFed: Federated Training of Spiking Neural Networks for Event-Based Vision</em> has been accepted for publication at ACM IGSC 2026 (Canandaigua, NY). Congratulations Lydia and Hariharan for this collaboration with Dr. Ramtin Zand.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="publications">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">FedLLM4HW Accepted at ACM IGSC</span>
+                                <p class="feed-item-desc"><em>FedLLM4HW: Carbon-Aware Federated Triage of Hardware Weaknesses in LLM-Generated Verilog</em> accepted at ACM IGSC 2026. Congratulations Hariharan for this collaboration with Drs. Salehi, Satam, and Yasaei.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="publications">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Paper Accepted at ECML-PKDD 2026</span>
+                                <p class="feed-item-desc"><em>Spectral Transformation for Layer-wise Global Rank Discovery in Federated LoRA for Vision Transformers</em> accepted at ECML-PKDD 2026 (Naples, Italy). Congratulations Hariharan!</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">FLoRIST Presented at MLSys 2026</span>
+                                <p class="feed-item-desc"><em>FLoRIST</em> was presented as oral (and later in poster session) by Hariharan at MLSys 2026 in Seattle, WA. Dr. Dass, Hariharan and Vimal attended. | <a href="https://www.linkedin.com/posts/jyotikrishnadass_florist-ugcPost-7462616079006212096-9fYI/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="service">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for NeurIPS 2026</span>
+                                <p class="feed-item-desc">Dr. Dass is serving as a reviewer for NeurIPS 2026.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="awards">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Gold Reviewer for ICML 2026</span>
+                                <p class="feed-item-desc">Dr. Dass is recognized as <em>Gold Reviewer (Free Registration)</em> by ICML 2026 for being among the Top 25% (4439) reviewers! | <a href="https://www.linkedin.com/posts/jyotikrishnadass_icml2026-icml-ai-ugcPost-7460782439129595904-YnTA/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">AI IGNITE Research Showcase</span>
+                                <p class="feed-item-desc">Dr. Dass launched a new annual ECE event, <strong>AI IGNITE Research Showcase</strong> as a celebration of AI in ECE comprising AI Faculty Lightning Talks and Student Poster Competition. | <a href="https://www.linkedin.com/posts/uazece-uaengineering-ai-share-7446976300973686785-a63E/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a> | <a href="https://www.linkedin.com/posts/ai-ignite-2026-is-a-wrap-and-what-an-incredible-ugcPost-7459666793117298688-c1kW/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Pictures</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="service">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Session Chair ACM IGSC 2026</span>
+                                <p class="feed-item-desc">Dr. Dass will chair Special Session on <em>Sustainable Distributed AI Systems</em> at ACM IGSC 2026.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="service">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">TPC for ACM IGSC 2026</span>
+                                <p class="feed-item-desc">Dr. Dass is serving on the Technical Program Committee for ACM IGSC 2026.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="service">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ACM GLSVLSI 2026</span>
+                                <p class="feed-item-desc">Dr. Dass is serving as a reviewer for ACM GLSVLSI 2026.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">AI SPARK Session 2</span>
+                                <p class="feed-item-desc">Dr. Dass and Hariharan Ramesh conducted the second session of <strong>AI SPARK</strong> on the topic <em>Deploying Your First Large Language Model</em>. | <a href="https://www.linkedin.com/posts/uazece-uaengineering-aispark-share-7448065474552111104-Xn0X/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a> | <a href="https://www.linkedin.com/posts/uazece-uaengineering-aispark-ugcPost-7453147455614894080-FVmL/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Pictures</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="grants">
+                            <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">2nd NVIDIA Academic Grant</span>
+                                <p class="feed-item-desc">Received our second <strong>NVIDIA Academic Grant</strong> in 6 months! Awarded 4x RTX PRO 6000 and 2x Jetson AGX Orin Dev Kits (~$40k) for <em>"Hardware-Aware Digital Twin for Federated Generative AI"</em> led by Lydia. | <a href="https://www.linkedin.com/feed/update/urn:li:activity:7473534702516187136/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">Mar</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">AI SPARK Kick-off</span>
+                                <p class="feed-item-desc">Dr. Dass and Hariharan Ramesh kicked-off Spring season of <strong>AI SPARK</strong> Workshop series with <em>Unlocking the Mystery of Large Language Models</em>. | <a href="https://www.linkedin.com/posts/ai-literacy-and-fluency-are-quickly-becoming-share-7435062780057108480-b4TT/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a> | <a href="https://www.linkedin.com/posts/uazece-uaengineering-aispark-ugcPost-7441982173064196096-iv3f/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Pictures</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="publications">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">FLoRIST Accepted at MLSys 2026</span>
+                                <p class="feed-item-desc"><em>FLoRIST: Singular Value Thresholding for Efficient and Accurate Federated Fine-Tuning of Large Language Models</em> accepted at MLSys 2026. Congratulations Hariharan!</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="service">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ICML 2026</span>
+                                <p class="feed-item-desc">Dr. Dass is serving as a reviewer for ICML 2026.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">CRA Mentoring Workshop</span>
+                                <p class="feed-item-desc">Dr. Dass was selected to attend the <em>2026 CRA Career Mentoring Workshop</em> in Washington, D.C.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2026" data-theme="events">
+                            <div class="feed-date"><span class="month">Jan</span><span class="year">2026</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">NSF LEVEL UP AI Phase 2</span>
+                                <p class="feed-item-desc">Dr. Dass was invited to participate at NSF LEVEL UP AI (Phase 2) workshop in Phoenix, AZ hosted by Computing Research Association (CRA).</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="events">
+                            <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">AI SPARK Launched</span>
+                                <p class="feed-item-desc">Dr. Dass and Dr. Huanrui Yang launched a new hands-on workshop, <strong>AI SPARK: Igniting AI Curiosity and Building Networks</strong> for the campus community with 100+ participants. | <a href="https://www.linkedin.com/posts/uarizonaece_aispark-uarizonaece-ai-ugcPost-7397003792946388993-Ft1Y?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAb3lRQBwSMTU0Qu_qoWcD6_r5JYOaO8GVA" target="_blank">Post</a>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">ENGR 102A Presentation</span>
+                                <p class="feed-item-desc">Dr. Dass gave a presentation on ECE Undergraduate Programs to 100+ freshman students as part of ENGR 102A at University of Arizona.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Guest Lecture in ECE 369A</span>
+                                <p class="feed-item-desc">Dr. Dass gave a Guest Lecture on <em>Distributed Edge Computing</em> in the course ECE 369A – Fundamentals of Computer Organization.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="events">
+                            <div class="feed-date"><span class="month">Nov</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">ECE Grad Poster Session</span>
+                                <p class="feed-item-desc">Lydia and Vimal represented DASS Lab at the ECE Graduate Student Poster Session presenting research on Distributed AI and Memory-Efficient LLMs.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="awards">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Outstanding GTA Award</span>
+                                <p class="feed-item-desc">Congratulations Hariharan for receiving the <strong>2025 College of Engineering Outstanding GTA Award in CSE</strong>. He continues his advisor's legacy!</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">New Course: ECE 425/525</span>
+                                <p class="feed-item-desc">Launched new course: <em>Introduction to Deep Learning - An Engineering Perspective</em> attracting 49 students. Materials also used at Sampoerna University, Indonesia.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="events">
+                            <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">First PhD Cohort</span>
+                                <p class="feed-item-desc">DASS Lab welcomes its first cohort of PhD students: Hariharan Ramesh, Lydia Obeng, and Vimal William.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="grants">
+                            <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">NVIDIA Academic Grant</span>
+                                <p class="feed-item-desc">Received NVIDIA Academic Grant (12K A100 GPU-Hours) for <em>"Efficient Federated Fine-Tuning of Gen AI via Adaptive Low-Rank Aggregation"</em> led by Hariharan.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Sep</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">India Advisory Network</span>
+                                <p class="feed-item-desc">Invited to join the <em>India Advisory Network</em> to deepen University of Arizona's long-term engagement and research collaborations with India.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer IEEE VIS 2025</span>
+                                <p class="feed-item-desc">Served as Reviewer for 8th Workshop on Visualization for AI Explainability at IEEE VIS 2025.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Jun</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer NSF CSGrad4US</span>
+                                <p class="feed-item-desc">Served as Reviewer for NSF Computer and Information Science and Engineering Graduate Fellowship Program (CSGrad4US) 2025.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Jun</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">PhD Committee Member</span>
+                                <p class="feed-item-desc">Served on PhD Dissertation Committee of Jesse Friedbaum (advised by: Prof. Ravi Tandon), University of Arizona.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Session Chair MLSys 2025</span>
+                                <p class="feed-item-desc">Served as Session Chair for MLSys 2025 at Santa Clara, CA.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="events">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">NSF LEVEL UP AI Roundtable</span>
+                                <p class="feed-item-desc">Participated in NSF LEVEL UP AI Roundtable hosted by CRA.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="events">
+                            <div class="feed-date"><span class="month">Mar</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">ECE Grad Recruiting</span>
+                                <p class="feed-item-desc">Dr. Dass welcomed and joined the selected group of PhD students at ECE Graduate Recruiting Weekend over a fun-filled dinner.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2025" data-theme="service">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2025</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for KDD 2025</span>
+                                <p class="feed-item-desc">Serving as a reviewer for KDD 2025.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2024" data-theme="events">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2024</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">NSF CISE MSI Workshop</span>
+                                <p class="feed-item-desc">Selected to attend the NSF CISE MSI Aspiring PI Workshop at UNT, Denton, TX.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2024" data-theme="service">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2024</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">TPC for DAC 2025</span>
+                                <p class="feed-item-desc">Serving in Technical Program Committee for DAC 2025.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2024" data-theme="service">
+                            <div class="feed-date"><span class="month">Sep</span><span class="year">2024</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ICLR 2025</span>
+                                <p class="feed-item-desc">Serving as a reviewer for ICLR 2025.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2024" data-theme="events">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2024</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Joined U of A</span>
+                                <p class="feed-item-desc">Joined Dept. of ECE at University of Arizona as Tenure-Track Assistant Professor, #BearDown Wildcats!</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2024" data-theme="service">
+                            <div class="feed-date"><span class="month">Mar</span><span class="year">2024</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for IEEE TC</span>
+                                <p class="feed-item-desc">Serving as a reviewer for Transactions on Computers.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="2024" data-theme="service">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2024</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ICML 2024</span>
+                                <p class="feed-item-desc">Serving as a reviewer for ICML 2024.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="publications">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2023</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Paper in IEEE Micro</span>
+                                <p class="feed-item-desc">Our work on <em>"NetDistiller: Empowering Tiny Deep Learning via In-Situ Distillation"</em> has been accepted for publication in IEEE Micro Special Issue on tinyML.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2023</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ICLR 2024</span>
+                                <p class="feed-item-desc">Serving as a reviewer for ICLR 2024.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Mar</span><span class="year">2023</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Local Chair ICHI 2023</span>
+                                <p class="feed-item-desc">Serving as Local Chair for the 11th IEEE International Conference on Healthcare Informatics in Houston, TX.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2023</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">ViTALiTY Presented</span>
+                                <p class="feed-item-desc">Presented our work <em>"ViTALiTY"</em> at IEEE HPCA in Montréal, CA.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feed-item" data-year="older" data-theme="publications">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">ViTALiTy Accepted at HPCA</span>
+                                <p class="feed-item-desc">Our work on <em>"ViTALiTy: Unifying Low-rank and Sparse Approximation for Vision Transformer Acceleration..."</em> accepted in IEEE HPCA 2023.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ICLR 2023</span>
+                                <p class="feed-item-desc">Serving as a reviewer for ICLR 2023.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">Oct</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">META Faculty Summit</span>
+                                <p class="feed-item-desc">Attended the META Communication and Networking Faculty Summit as an awardee of META:Network for AI RFP.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Joined Rice D2K Lab</span>
+                                <p class="feed-item-desc">Joined The Rice University Data to Knowledge (Rice D2K) Lab as a Research Scientist.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="grants">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">NSF CISE Core Grant</span>
+                                <p class="feed-item-desc">Our proposal <em>"SHF:Medium:DILSE:Codesigning Decentralized Incremental Learning System..."</em> accepted for NSF CISE Core Programs grant ($1.2M).</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="grants">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">META Network for AI Grant</span>
+                                <p class="feed-item-desc">Our proposal <em>"MILES: Multi-device Incremental Learning on Edge via Summarization"</em> accepted for META:Network for AI funding ($50,000).</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="publications">
+                            <div class="feed-date"><span class="month">Jul</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Tutorial at MICRO 2022</span>
+                                <p class="feed-item-desc">Our proposal <em>"Tutorial on Automated Tools for Fast Development of Deep Learning Networks..."</em> accepted for MICRO 2022, Chicago, IL.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Jul</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Session Chair at DAC 2022</span>
+                                <p class="feed-item-desc">Chaired the research session on <em>"Machine Learning for Resource Management: From Edge to Cloud"</em> at DAC 2022 in San Francisco.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="grants">
+                            <div class="feed-date"><span class="month">Mar</span><span class="year">2022</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Rice Creative Ventures Fund</span>
+                                <p class="feed-item-desc">Our proposal <em>"Workshop on Automated AI Tools for Computing and Communication"</em> accepted for Creative Ventures Fund ($10,000) from Rice University.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">Sep</span><span class="year">2021</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Postdoc at Rice University</span>
+                                <p class="feed-item-desc">Moved to Houston and joined Rice University as a Postdoctoral Associate.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2021</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">PhD Graduation</span>
+                                <p class="feed-item-desc">Graduated from Texas A&M University with a PhD degree in Computer Engineering.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">Jun</span><span class="year">2021</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">PhD Defense</span>
+                                <p class="feed-item-desc">Defended my PhD dissertation on <em>"Efficient and Scalable Machine Learning for Distributed Edge Intelligence"</em>.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="publications">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2021</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Accepted at ICML 2021</span>
+                                <p class="feed-item-desc">Our work on <em>"Householder Sketch for Accurate and Accelerated Least-Mean-Squares Solvers"</em> has been accepted at ICML 2021.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="events">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2021</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Postdoc Offer at Rice</span>
+                                <p class="feed-item-desc">Joining Dr. Yingyan Lin's lab at Rice University as a postdoc in Fall 2021.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2021</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for NeurIPS 2021</span>
+                                <p class="feed-item-desc">Serve as invited reviewer in the Program Committee for NeurIPS 2021.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Dec</span><span class="year">2020</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Reviewer for ICML 2021</span>
+                                <p class="feed-item-desc">Serve as invited reviewer for ICML 2021.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Aug</span><span class="year">2020</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Teaching CSCE 312</span>
+                                <p class="feed-item-desc">Teaching <em>CSCE 312: Computer Organization</em> as Graduate Assistant Lecturer for Fall 2020.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="publications">
+                            <div class="feed-date"><span class="month">May</span><span class="year">2020</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">Paper in IEEE TC</span>
+                                <p class="feed-item-desc">Our work on distributed training of SVM on multiple-FPGA system accepted in IEEE Transactions on Computers, Special Issue on Machine-Learning Architectures.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="service">
+                            <div class="feed-date"><span class="month">Apr</span><span class="year">2020</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">COVID-19 AI Education</span>
+                                <p class="feed-item-desc">Organized free online initiatives <em>ShiP.py: Learning to Py while Shelter-in-Place</em> and <em>Stay Home and Learn AI (SHALA)</em> during the pandemic.</p>
+                            </div>
+                        </div>
+
+                        <div class="feed-item" data-year="older" data-theme="publications">
+                            <div class="feed-date"><span class="month">Feb</span><span class="year">2020</span></div>
+                            <div class="feed-info">
+                                <span class="feed-item-title">First Blog Published</span>
+                                <p class="feed-item-desc">Wrote my first blog inspired by Yoshua Bengio and Carl-Johann SIMON-GABRIEL | <a href="https://jyotikrd.wordpress.com/2020/02/14/decentralizing-academic-conferences-for-a-better-climate/" target="_blank">Decentralizing Academic Conferences for a Better Climate</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
     </main>
 
-    <!-- JavaScript for News Filtering -->
     <script>
-        function filterNews(year) {
-            // Update active button state
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        // 1. Toggle Bio Logic
+        function toggleBio() {
+            const bioExtra = document.getElementById('bio-extra-content');
+            const btn = document.getElementById('toggle-bio-btn');
+            
+            if (bioExtra.classList.contains('expanded')) {
+                bioExtra.classList.remove('expanded');
+                btn.classList.remove('expanded');
+                btn.innerHTML = 'Read Full Biography <i class="fas fa-chevron-down"></i>';
+            } else {
+                bioExtra.classList.add('expanded');
+                btn.classList.add('expanded');
+                btn.innerHTML = 'Show Less <i class="fas fa-chevron-up"></i>';
+            }
+        }
 
-            // Filter items
-            const items = document.querySelectorAll('.news-item');
+        // 2. Filter Toggle Logic
+        function toggleFilters() {
+            const filters = document.getElementById('news-filters-container');
+            const btn = document.getElementById('filter-toggle-btn');
+            
+            filters.classList.toggle('collapsed');
+            
+            if (filters.classList.contains('collapsed')) {
+                btn.innerHTML = '<i class="fas fa-sliders-h"></i> Show Filters';
+                btn.classList.remove('active');
+            } else {
+                btn.innerHTML = '<i class="fas fa-sliders-h"></i> Hide Filters';
+                btn.classList.add('active');
+            }
+        }
+
+        // 3. News Filter & Animation Logic
+        let activeYear = 'all';
+        let activeTheme = 'all';
+        const SECONDS_PER_ITEM = 3.5; // Constant speed modifier
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedContent = document.getElementById('feed-content');
+            const originalItemsList = Array.from(feedContent.children);
+            
+            // Theme Icons mapping
+            const themeIcons = {
+                'grants': 'fa-file-invoice-dollar',
+                'publications': 'fa-book-open',
+                'awards': 'fa-trophy',
+                'events': 'fa-calendar-alt',
+                'service': 'fa-hands-helping'
+            };
+
+            // Auto-inject Theme Icons and clone elements
+            originalItemsList.forEach(item => {
+                if(item.classList && item.classList.contains('feed-item')) {
+                    // Inject Icon before title
+                    const theme = item.dataset.theme;
+                    if (theme && themeIcons[theme]) {
+                        const icon = document.createElement('i');
+                        icon.className = `fas ${themeIcons[theme]} theme-icon`;
+                        icon.title = theme.charAt(0).toUpperCase() + theme.slice(1);
+                        
+                        const titleEl = item.querySelector('.feed-item-title');
+                        if (titleEl) {
+                            titleEl.prepend(icon);
+                        }
+                    }
+
+                    // Clone for continuous scrolling
+                    const clone = item.cloneNode(true);
+                    clone.classList.add('clone');
+                    clone.setAttribute('aria-hidden', 'true');
+                    feedContent.appendChild(clone);
+                }
+            });
+
+            // Set initial animation speed
+            updateAnimationSpeed(originalItemsList.length);
+        });
+
+        function updateAnimationSpeed(visibleOriginalCount) {
+            const feedContent = document.getElementById('feed-content');
+            
+            // If there are too few items, disable animation to prevent awkward empty scrolling space
+            if (visibleOriginalCount <= 4) {
+                feedContent.style.animationName = 'none';
+                feedContent.style.transform = 'translateY(0)';
+            } else {
+                // Ensure animation resumes and speed is proportional to the number of items (Distance = Speed * Time)
+                feedContent.style.animationName = 'feedScroll';
+                feedContent.style.animationDuration = `${visibleOriginalCount * SECONDS_PER_ITEM}s`;
+            }
+        }
+
+        function setFilter(type, value, btnElement) {
+            // Update UI for buttons
+            const buttons = document.querySelectorAll(`.filter-btn[data-type="${type}"]`);
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('active-theme');
+            });
+            
+            if (type === 'theme') {
+                btnElement.classList.add('active-theme');
+                activeTheme = value;
+            } else {
+                btnElement.classList.add('active');
+                activeYear = value;
+            }
+
+            // Filter the items and count visible originals
+            const items = document.querySelectorAll('.feed-item');
+            let visibleOriginalCount = 0;
+
             items.forEach(item => {
-                if (year === 'all' || item.getAttribute('data-year') === year) {
-                    item.style.display = 'block';
+                const matchYear = activeYear === 'all' || item.dataset.year === activeYear;
+                const matchTheme = activeTheme === 'all' || item.dataset.theme === activeTheme;
+
+                if (matchYear && matchTheme) {
+                    item.style.display = 'flex';
+                    if (!item.classList.contains('clone')) {
+                        visibleOriginalCount++;
+                    }
                 } else {
                     item.style.display = 'none';
                 }
             });
+
+            // Adjust animation speed to remain consistent
+            updateAnimationSpeed(visibleOriginalCount);
         }
+
+        /* */
+        // 4. Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeIcon = themeToggleBtn.querySelector('i');
+        const themeText = themeToggleBtn.querySelector('span');
+
+        // Check for saved user preference on load
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Toggle functionality
+        themeToggleBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            let theme = 'light';
+            
+            // Switch icon and text based on active theme
+            if (document.body.classList.contains('dark-theme')) {
+                theme = 'dark';
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                themeText.textContent = 'Dark Mode';
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('theme', theme);
+        });
     </script>
 </body>
 </html>
